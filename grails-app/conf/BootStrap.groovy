@@ -1,4 +1,5 @@
 import fr.isima.vectoroutofrange.Badge
+import fr.isima.vectoroutofrange.BadgeType
 import fr.isima.vectoroutofrange.Message
 import fr.isima.vectoroutofrange.Post
 import fr.isima.vectoroutofrange.PostType
@@ -15,8 +16,8 @@ class BootStrap {
     def init = { servletContext ->
 
         //Create some badges
-        def welcomeBadge = new Badge(name: "Welcome badge", description: "This badge is offered to all the new users of the site.")
-        def rockStarBadge = new Badge(name: "Rock Star", description: "You are a machine ! You answered to more than 10 000 000 questions on the site, congratulation !")
+        def welcomeBadge = new Badge(name: "Welcome badge", description: "This badge is offered to all the new users of the site.", type: BadgeType.BRONZE)
+        def rockStarBadge = new Badge(name: "Rock Star", description: "You are a machine ! You answered to more than 10 000 000 questions on the site, congratulation !", type: BadgeType.PLATINIUM)
 
         // Creation of a new Users
         def jeanNicInformaton = new UserInformation(firstName: "Jean", lastName: "Nic", nickname: "JeanNic", reputation: 0)
