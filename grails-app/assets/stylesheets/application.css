@@ -7,7 +7,230 @@
 * You're free to add application-wide styles to this file and they'll appear at the top of the
 * compiled file, but it's generally better to create a new file per style scope.
 *
-*= require main
-*= require mobile
+*= require foundation
+*= require normalize
 *= require_self
 */
+@import url(http://fonts.googleapis.com/css?family=Inconsolata);
+
+.panel {
+    margin-top: 1em;
+}
+
+.ribbon-warper {
+    position: absolute;
+    z-index: 1;
+    margin-left: -23px !important;
+    margin-top: -23px !important;
+    overflow: hidden;
+    height: 40px;
+    width: 40px;
+}
+.ribbon {
+    font-weight: bold;
+    font-size: 0.7em;
+    color: #fff;
+    text-shadow: 1px 4px 6px #008CBA, 0 0 0 #000, 1px 4px 6px #008CBA;
+    text-align: center;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform:    rotate(-45deg);
+    -ms-transform:     rotate(-45deg);
+    -o-transform:      rotate(-45deg);
+    position: relative;
+    padding: 1px 0;
+    left: -17px;
+    top: 4px;
+    width: 60px;
+    background-color: #008CBA;
+
+    -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+    box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+}
+.ribbon:before, .ribbon:after {
+    content: "";
+    border-top: 3px solid #005571;   
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    position:absolute;
+    bottom: -3px;
+}
+.ribbon:before {
+    left: 0;
+}
+.ribbon:after {
+    right: 0;
+}
+
+.tab-bar-section h1 {
+    font-family: 'Inconsolata', sans-serif;
+}
+
+p {
+    font-size: 0.8em;
+}
+
+code {
+    font-family: 'Inconsolata', sans-serif;
+    font-size: 0.8em;
+}
+
+.question-user-info .gold-medals {
+    margin-right: 5px;
+}
+.question-user-info .gold-medals:before {
+    content: "•";
+    font-weight: bold;
+    margin-right: 2px;
+    color: gold;
+}
+.question-user-info .silver-medals {
+    margin-right: 5px;
+}
+.question-user-info .silver-medals:before {
+    content: "•";
+    font-weight: bold;
+    margin-right: 2px;
+    color: silver;
+}
+.question-user-info .bronze-medals {
+    margin-right: 5px;
+}
+.question-user-info .bronze-medals:before {
+    content: "•";
+    font-weight: bold;
+    margin-right: 2px;
+    color: #CD7F32;
+}
+.question-user-info .reputation {
+    margin-right: 5px;
+    font-weight: bold;
+}
+.question-user-info {
+    font-size: 0.8em;
+    background-color: #e0eaf1;
+    padding-left: 0.5em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+.question-user-info span {
+    display: block;
+    float: left;
+}
+.question-user-info .user-profile {
+    display: inline-block;
+}
+.question-user-info .user-avatar {
+    display: block;
+    float: left;
+}
+.question-user-info .user-extra {
+    float: left;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 145px;
+    margin-left: 5px;
+    display: block;
+}
+
+.voter {
+    width: 100%;
+    text-align: center;
+    height: 38px;
+    margin-bottom: 8px;
+}
+.voter .downvote {
+    width: 0; 
+    height: 0; 
+    position: absolute;
+    bottom: 0;
+    margin-left: -4px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #2d2d2d;
+}
+.voter .downvote:hover {
+    bottom: -3px;
+    margin-left: -6px;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #008CBA;
+    transition: all 100ms;
+}
+.voter .upvote {
+    margin: 0 auto;
+    width: 0; 
+    height: 0;
+    position: absolute;
+    top: 0;
+    margin-left: -4px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #2d2d2d;
+}
+.voter .upvote:hover {
+    top: -3px;
+    margin-left: -6px;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #008CBA;
+    transition: all 100ms;
+}
+.voter .vote-count {
+    margin: 0 auto;
+    position: absolute;
+    top: 0.5em;
+}
+
+.question-comment {
+    background-color: #fff;
+    padding: 0.25em;
+    border-top: 1px solid #dfdfdf;
+}
+.question-comment:last-child {
+    border-bottom: 1px solid #dfdfdf;
+}
+.question-comment p {
+    margin-bottom: -5px;
+}
+
+.add-comment {
+    padding-left: 0.25em;
+    font-size: 0.8em;
+    color: #aaa;
+}
+
+.comment-editor textarea {
+    margin-bottom: 0.25em;
+}
+.comment-editor button {
+    margin-bottom: 0.25em;
+}
+
+.tag-container {
+
+}
+.tag-container p {
+    color: #333;
+    background-color: #e7e7e7;
+    font-size: 0.6875rem;
+    padding: 0.25rem 0.5rem 0.25rem;
+}
+
+.edit-tag {
+    padding-left: 0.25em;
+    font-size: 0.8em;
+    color: #aaa;
+}
+
+.question-textarea {
+    height: 16em;
+}
+
+.tag-textarea {
+    height: 24em;
+}
+
+#tag-container .label:hover {
+    background-color: #f04124;
+}
