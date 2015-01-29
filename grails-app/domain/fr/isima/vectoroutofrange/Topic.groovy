@@ -5,11 +5,12 @@ class Topic {
     String title
     Post question
 
-    static hasMany = [answers:Post]
+    static hasMany = [answers:Post, tags:Tag]
 
     static mappedBy = [question: "topic", answers: "none"]
 
     static constraints = {
         answers nullable: true
+        tags nullable: true
     }
 }

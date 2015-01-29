@@ -3,7 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="daea8d76-ce52-420f-89a7-288b265d60db" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/conf/BootStrap.groovy" afterPath="$PROJECT_DIR$/grails-app/conf/BootStrap.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Message.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Message.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Post.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Post.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Topic.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Topic.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Vote.groovy" afterPath="$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Vote.groovy" />
     </list>
     <ignored path="VectorOutOfRange.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,8 +36,8 @@
       <file leaf-file-name="BootStrap.groovy" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/grails-app/conf/BootStrap.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6433566" vertical-offset="720" max-vertical-offset="1394">
-              <caret line="64" column="61" selection-start-line="64" selection-start-column="61" selection-end-line="64" selection-end-column="61" />
+            <state vertical-scroll-proportion="0.6241259" vertical-offset="17" max-vertical-offset="1462">
+              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -45,8 +48,8 @@
       <file leaf-file-name="Topic.groovy" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Topic.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.7777777" vertical-offset="0" max-vertical-offset="357">
-              <caret line="14" column="1" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
+            <state vertical-scroll-proportion="-3.5079365" vertical-offset="0" max-vertical-offset="374">
+              <caret line="13" column="27" selection-start-line="13" selection-start-column="27" selection-end-line="13" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -58,8 +61,21 @@
       <file leaf-file-name="Post.groovy" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Post.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.5873017" vertical-offset="0" max-vertical-offset="510">
-              <caret line="17" column="29" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="29" />
+            <state vertical-scroll-proportion="-5.6666665" vertical-offset="0" max-vertical-offset="612">
+              <caret line="21" column="28" selection-start-line="21" selection-start-column="28" selection-end-line="21" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Tag.groovy" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Tag.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-2.4285715" vertical-offset="0" max-vertical-offset="340">
+              <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -71,8 +87,8 @@
       <file leaf-file-name="Message.groovy" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Message.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.1587303" vertical-offset="0" max-vertical-offset="323">
-              <caret line="8" column="28" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
+            <state vertical-scroll-proportion="-1.0793651" vertical-offset="0" max-vertical-offset="323">
+              <caret line="4" column="4" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -84,8 +100,8 @@
       <file leaf-file-name="Vote.groovy" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Vote.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.857143" vertical-offset="0" max-vertical-offset="408">
-              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+            <state vertical-scroll-proportion="-2.4285715" vertical-offset="0" max-vertical-offset="408">
+              <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -102,9 +118,10 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Vote.groovy" />
         <option value="$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Message.groovy" />
         <option value="$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Post.groovy" />
-        <option value="$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Vote.groovy" />
+        <option value="$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Tag.groovy" />
         <option value="$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Topic.groovy" />
         <option value="$PROJECT_DIR$/grails-app/conf/BootStrap.groovy" />
       </list>
@@ -176,6 +193,32 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="grails-app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VectorOutOfRange" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="VectorOutOfRange" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="grails-app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="domain" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vectoroutofrange" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Vote.groovy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -495,16 +538,16 @@
       <created>1422537150832</created>
       <option name="number" value="Default" />
       <updated>1422537150832</updated>
-      <workItem from="1422537154456" duration="2822000" />
+      <workItem from="1422537154456" duration="4713000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2822000" />
+    <option name="totallyTimeSpent" value="4713000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -515,7 +558,7 @@
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32352942" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3226164" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -565,8 +608,8 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Vote.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.857143" vertical-offset="0" max-vertical-offset="408">
-          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+        <state vertical-scroll-proportion="-2.4285715" vertical-offset="0" max-vertical-offset="408">
+          <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
           <folding />
         </state>
       </provider>
@@ -576,8 +619,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Message.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.1587303" vertical-offset="0" max-vertical-offset="323">
-          <caret line="8" column="28" selection-start-line="8" selection-start-column="28" selection-end-line="8" selection-end-column="28" />
+        <state vertical-scroll-proportion="-1.0793651" vertical-offset="0" max-vertical-offset="323">
+          <caret line="4" column="4" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
           <folding />
         </state>
       </provider>
@@ -587,8 +630,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Post.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.5873017" vertical-offset="0" max-vertical-offset="510">
-          <caret line="17" column="29" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="29" />
+        <state vertical-scroll-proportion="-5.6666665" vertical-offset="0" max-vertical-offset="612">
+          <caret line="21" column="28" selection-start-line="21" selection-start-column="28" selection-end-line="21" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="org.jetbrains.plugins.grails.perspectives.DomainClassesRelationsEditorProvider">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Tag.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.4285715" vertical-offset="0" max-vertical-offset="340">
+          <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
           <folding />
         </state>
       </provider>
@@ -598,8 +652,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/domain/fr/isima/vectoroutofrange/Topic.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.7777777" vertical-offset="0" max-vertical-offset="357">
-          <caret line="14" column="1" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
+        <state vertical-scroll-proportion="-3.5079365" vertical-offset="0" max-vertical-offset="374">
+          <caret line="13" column="27" selection-start-line="13" selection-start-column="27" selection-end-line="13" selection-end-column="27" />
           <folding />
         </state>
       </provider>
@@ -609,8 +663,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/grails-app/conf/BootStrap.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6433566" vertical-offset="720" max-vertical-offset="1394">
-          <caret line="64" column="61" selection-start-line="64" selection-start-column="61" selection-end-line="64" selection-end-column="61" />
+        <state vertical-scroll-proportion="0.6241259" vertical-offset="17" max-vertical-offset="1462">
+          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
           </folding>

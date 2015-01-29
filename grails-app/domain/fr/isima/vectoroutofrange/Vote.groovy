@@ -7,7 +7,7 @@ enum VoteType{
 
 class Vote {
 
-    //Date date
+    Date date
     //User author
     VoteType type
 

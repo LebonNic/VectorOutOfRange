@@ -2,7 +2,7 @@ package fr.isima.vectoroutofrange
 
 class Message {
 
-    //Date date
+    Date date
     //User author
     String text
 
