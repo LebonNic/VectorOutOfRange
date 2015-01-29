@@ -8,7 +8,7 @@ enum VoteType{
 class Vote {
 
     Date date
-    //User author
+    UserInformation author
     VoteType type
 
     static belongsTo = [post:Post]
