@@ -47,7 +47,10 @@ class BootStrap {
         def newTopic = new Topic(title: "L'héritage avec GORM", question: newPost)
         newTopic.addToTags(grailsTag)
         newTopic.addToTags(gormTag)
+        newPost.save(flush: true, failOnError: true)
+        newPost.topic = newTopic
         newTopic.save(flush: true, failOnError: true)
+
 
         // Correction of the post
         def postToCorrect = Post.get(1)
@@ -76,6 +79,7 @@ class BootStrap {
             Log.DEBUG("Impossible to fecth the post (comment routine)...")
         }
 
+
         // Downvote the bad comment
         def badComment = postToComment.comments.first()
 
@@ -93,6 +97,7 @@ class BootStrap {
         else {
             Log.DEBUG("Can't fetch the bad comment...")
         }
+
 
         // Add an answer to the topic
         def topicToAnswer = Topic.get(1)

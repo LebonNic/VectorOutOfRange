@@ -7,7 +7,7 @@ class Topic {
 
     static hasMany = [answers:Post, tags:Tag]
 
-    static mappedBy = [question: "topic", answers: "none"]
+    static mappedBy = [question: "none", answers: "none"]
 
     static constraints = {
         answers nullable: true

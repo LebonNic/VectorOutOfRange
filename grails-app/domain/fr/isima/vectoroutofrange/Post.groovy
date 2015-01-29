@@ -20,10 +20,11 @@ class Post {
     static constraints = {
         history nullable: true
         votes nullable: true
+        topic nullable: true
     }
 
     def replaceCurrentContent(Message newContent){
-        assert(newContent != null) : "The new content of a post can't be set to null"
+        assert(newContent != null) : "The new content of a post can't be set to null."
         this.addToHistory(this.content)
         this.content = newContent
     }
