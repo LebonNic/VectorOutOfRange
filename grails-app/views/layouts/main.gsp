@@ -13,6 +13,7 @@
     <link rel="apple-touch-icon" href="${assetPath(src: 'apple-touch-icon.png')}">
     <link rel="apple-touch-icon" sizes="114x114" href="${assetPath(src: 'apple-touch-icon-retina.png')}">
     <asset:stylesheet src="application.css"/>
+    <asset:javascript src="application.js"/>
     <g:layoutHead/>
 </head>
 
@@ -54,7 +55,9 @@
         <a class="exit-off-canvas"></a>
     </div>
 </div>
-
-<asset:javascript src="application.js"/>
+<script>
+    $(document).foundation();
+    $(".inner-wrap").css("minHeight", $("body").height());
+</script>
 </body>
 </html>

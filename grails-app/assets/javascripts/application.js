@@ -9,6 +9,3 @@
 //= require modernizr
 //= require foundation
 //= require_self
-
-$(document).foundation();
-$(".inner-wrap").css("minHeight", $("body").height());
