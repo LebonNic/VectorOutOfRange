@@ -24,7 +24,7 @@
                 <a class="left-off-canvas-toggle menu-icon" href="#"><span></span></a>
             </section>
             <section class="right tab-bar-section">
-                <a href="index.html"><h1>vector::out_of_range</h1></a>
+                <a href="${createLink(uri: '/')}"><h1>vector::out_of_range</h1></a>
             </section>
         </nav>
 
@@ -34,20 +34,22 @@
                 <li class="has-submenu"><a href="#">Questions</a>
                     <ul class="left-submenu">
                         <li class="back"><a href="#">Back</a></li>
-                        <li><a href="question_create_view.html">Ask Question</a></li>
+                        <li><a href="#">Ask Question</a></li>
                         <li><a href="${createLink(controller: 'topic')}">Browse Questions</a></li>
                     </ul>
                 </li>
-                <li><a href="tag_list_view.html">Tags</a></li>
-                <li><a href="user_list_view.html">Users</a></li>
-                <li><a href="badge_list_view.html">Badges</a></li>
+                <li><a href="#">Tags</a></li>
+                <li><a href="#">Users</a></li>
+                <li><a href="#">Badges</a></li>
                 <li><label>Profile</label></li>
-                <li><a href="user_view.html">Dramloc</a></li>
+                <li><a href="#">Dramloc</a></li>
                 <li><a href="#">Disconnect</a></li>
             </ul>
         </aside>
         <section class="container">
-            <g:layoutBody/>
+            <div class="row">
+                <g:layoutBody/>
+            </div>
         </section>
         <a class="exit-off-canvas"></a>
     </div>
