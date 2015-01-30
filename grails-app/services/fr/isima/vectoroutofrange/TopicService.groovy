@@ -36,6 +36,8 @@ class TopicService {
             newPost.topic = newTopic
             newTopic.save(flush: true, failOnError: true)
             Log.info("Creation of the topic ${title} by ${author.userInformation.nickname}.")
+
+            return newTopic
         }
         else{
             throw new TopicServiceException(TopicServiceExceptionCode.AUTHOR_NOT_FOUND, "The author's id passed to the method TopicService.createNewTopic doesn't exist.")
@@ -58,6 +60,8 @@ class TopicService {
                     postToComment.addToComments(commentPost)
                     postToComment.save(flush: true, failOnError: true)
                     Log.info("User ${author.userInformation.nickname} posted a comment on a topic entitled ${postToComment.topic.title}.")
+
+                    return postToComment
                 }
                 else{
                     throw new TopicServiceException(TopicServiceExceptionCode.BUSINESS_LOGIC_ERROR, "The post which is trying to be commented is already a comment.")
@@ -86,6 +90,8 @@ class TopicService {
                 topicToAnswer.addToAnswers(answerPost)
                 topicToAnswer.save(flush: true, failOnError: true)
                 Log.info("User ${author.userInformation.nickname} answered the question posted on the topic ${topicToAnswer.title}.")
+
+                return topicToAnswer
             }
             else{
                 throw new TopicServiceException(TopicServiceExceptionCode.TOPIC_NOT_FOUND, "The topic's id passed to the method TopicService.addAnswer doesn't exist.")
@@ -108,6 +114,8 @@ class TopicService {
                 post.replaceCurrentContent(correctedMessage)
                 post.save(flush: true, failOnError: true)
                 Log.info("User ${author.userInformation.nickname} corrected a post on the topic ${post.topic.title}.")
+
+                return post
             }
             else{
                 throw new TopicServiceException(TopicServiceExceptionCode.POST_NOT_FOUND, "The post's id passed to the method TopicService.correctPost doesn't exist.")
@@ -129,6 +137,8 @@ class TopicService {
                 post.addToVotes(vote)
                 post.save(flush: true, failOnError: true)
                 Log.info("User ${voter.userInformation.nickname} voted for a post on the topic ${post.topic.title}.")
+
+                return post
             }
             else{
                 throw new TopicServiceException(TopicServiceExceptionCode.POST_NOT_FOUND, "The post's id passed to the method TopicService.voteForPost doesn't exist.")
