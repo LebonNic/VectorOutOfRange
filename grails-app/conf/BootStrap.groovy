@@ -1,17 +1,13 @@
 import fr.isima.vectoroutofrange.Badge
 import fr.isima.vectoroutofrange.BadgeType
-import fr.isima.vectoroutofrange.Message
-import fr.isima.vectoroutofrange.Post
-import fr.isima.vectoroutofrange.PostType
-import fr.isima.vectoroutofrange.Tag
-import fr.isima.vectoroutofrange.Topic
+import fr.isima.vectoroutofrange.TopicService
 import fr.isima.vectoroutofrange.User
 import fr.isima.vectoroutofrange.UserInformation
-import fr.isima.vectoroutofrange.Vote
-import fr.isima.vectoroutofrange.VoteType
 import jline.internal.Log
 
 class BootStrap {
+
+    TopicService topicService
 
     def init = { servletContext ->
 
@@ -36,84 +32,15 @@ class BootStrap {
         goodGuy.userInformation.addToBadges(rockStarBadge)
         goodGuy.save(flush: true, failOnError: true)
 
-        // Creation of new tags
-        def grailsTag = new Tag(name: "Grails", definition: "Grails is an Open Source, full stack, web application framework for the JVM.").save(flush: true, failOnError: true)
-        def gormTag = new Tag(name: "GORM", definition: "The fantastic ORM library for Golang, aims to be developer friendly.")
+        def tags = []
+        tags << "GORM"
+        tags << "Grails"
 
-        // Creation of a new topic
-        def newMessage = new Message(text: "L'héritage avec GORM est il full bug ?", date: new Date(), author: jeanNic.userInformation)
-        jeanNic.userInformation.addToMessages(newMessage)
-        def newPost = new Post(content: newMessage, type: PostType.QUESTION)
-        def newTopic = new Topic(title: "L'héritage avec GORM", question: newPost)
-        newTopic.addToTags(grailsTag)
-        newTopic.addToTags(gormTag)
-        newPost.save(flush: true, failOnError: true)
-        newPost.topic = newTopic
-        newTopic.save(flush: true, failOnError: true)
-
-
-        // Correction of the post
-        def postToCorrect = Post.get(1)
-
-        if(postToCorrect){
-            def correctedMessage = new Message(text: "L'héritage avec GORM est il bogué ?", date: new Date(), author: jeanNic.userInformation)
-            jeanNic.userInformation.addToMessages(correctedMessage)
-            postToCorrect.replaceCurrentContent(correctedMessage)
-            postToCorrect.save(flush: true, failOnError: true)
-        }
-        else {
-            Log.DEBUG("Impossible to fecth the post (correction routine)...")
-        }
-
-        // Add a comment on the post
-        def postToComment = Post.get(1)
-
-        if(postToComment){
-            def message = new Message(text: "Your question is damn shit mothafuka !", date: new Date(), author: badAss.userInformation)
-            badAss.userInformation.addToMessages(message)
-            def post = new Post(topic: postToComment.topic, content: message, type: PostType.COMMENT)
-            postToComment.addToComments(post)
-            postToComment.save(flush: true, failOnError: true)
-        }
-        else {
-            Log.DEBUG("Impossible to fecth the post (comment routine)...")
-        }
-
-
-        // Downvote the bad comment
-        def badComment = postToComment.comments.first()
-
-        if(badComment){
-            def downVote = new Vote(type: VoteType.DOWNVOTE, date: new Date(), author: jeanNic.userInformation)
-            def anOtherDownVote = new Vote(type: VoteType.DOWNVOTE, date: new Date(), author: goodGuy.userInformation)
-
-            jeanNic.userInformation.addToVotes(downVote)
-            goodGuy.userInformation.addToVotes(anOtherDownVote)
-
-            badComment.addToVotes(downVote)
-            badComment.addToVotes(anOtherDownVote)
-            badComment.save(flush: true, failOnError: true)
-        }
-        else {
-            Log.DEBUG("Can't fetch the bad comment...")
-        }
-
-
-        // Add an answer to the topic
-        def topicToAnswer = Topic.get(1)
-        if(topicToAnswer){
-            def answerText = new Message(text: "Oui il existe des bugs non corrigés dans la gestion de l'héritage faite par GORM...", date: new Date(), author: goodGuy.userInformation)
-            goodGuy.userInformation.addToMessages(answerText)
-            def answerPost = new Post(topic: topicToAnswer, content: answerText, type: PostType.ANSWER)
-            topicToAnswer.addToAnswers(answerPost)
-            topicToAnswer.save(flush: true, failOnError: true)
-        }
-        else {
-            Log.DEBUG("Can't fetch the topic...")
-        }
+        topicService.createNewTopic(jeanNic.id, "L'héritage avec GORM", "L'héritage avec GORM est il full bug ?", tags)
+        topicService.addComment(badAss.id, 1, "Your question is damn shit mothafuka !")
+        topicService.addAnswer(goodGuy.id, 1, "Oui il existe des bugs non corrigés dans la gestion de l'héritage faite par GORM...")
 
         Log.info("End of BootStrap ! =)")
-
     }
     def destroy = {
     }

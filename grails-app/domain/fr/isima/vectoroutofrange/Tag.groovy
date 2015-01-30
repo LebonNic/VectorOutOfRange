@@ -10,5 +10,6 @@ class Tag {
     static hasMany = [topics:Topic]
 
     static constraints = {
+        definition nullable: true
     }
 }
