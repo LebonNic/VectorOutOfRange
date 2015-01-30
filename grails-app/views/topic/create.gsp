@@ -134,6 +134,10 @@
                     tags: tags
                 },
                 type: 'POST'
+            }).success(function(data) {
+                window.location.href = "${createLink(controller: 'topic', action: 'view')}/" + data;
+            }).error(function() {
+
             })
         }
     });

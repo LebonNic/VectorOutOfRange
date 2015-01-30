@@ -38,15 +38,12 @@ class TopicController {
             try {
                 Topic topic = topicService.createNewTopic(id, title, text, tags)
 
-                response.status = 201
-                render(message: topic.id)
+                render(status: 201, text: topic.id)
             } catch (TopicServiceException e) {
-                response.status = 403
-                render(message: 'ajax.failure.user.not.found')
+                render(status: 403, text: 'ajax.failure.user.not.found')
             }
         } else {
-            reponse.status = 401
-            render(message: 'ajax.failure.user.not.logged.in')
+            render(status: 403, text: 'ajax.failure.user.not.logged.in')
         }
     }
 
