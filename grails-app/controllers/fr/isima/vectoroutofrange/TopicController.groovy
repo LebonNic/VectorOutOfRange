@@ -1,9 +1,12 @@
 package fr.isima.vectoroutofrange
 
+import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.annotation.Secured
-import jline.internal.Log
 
 class TopicController {
+
+    TopicService topicService
+    SpringSecurityService springSecurityService
 
     static allowedMethods = [save: "POST"]
 
@@ -24,9 +27,27 @@ class TopicController {
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def save() {
-        Log.debug(params.title)
-        Log.debug(params.text)
-        Log.debug(params.tags)
+        String title = params.title
+        String text = params.text
+        List<String> tags = params.list('tags[]')
+        User user = (User) springSecurityService.currentUser
+
+        if (user != null) {
+            long id = user.id
+
+            try {
+                Topic topic = topicService.createNewTopic(id, title, text, tags)
+
+                response.status = 201
+                render(message: topic.id)
+            } catch (TopicServiceException e) {
+                response.status = 403
+                render(message: 'ajax.failure.user.not.found')
+            }
+        } else {
+            reponse.status = 401
+            render(message: 'ajax.failure.user.not.logged.in')
+        }
     }
 
 }
