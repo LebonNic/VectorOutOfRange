@@ -126,19 +126,41 @@ class TopicService {
         }
     }
 
+    private def boolean userCanVoteOnPost(User user, Post post){
+
+        def hasUserAllReadyVote = false
+
+        for(vote in post.votes){
+            if(vote.author.id == user.id)
+            {
+                hasUserAllReadyVote = true
+                break
+            }
+        }
+
+        return !hasUserAllReadyVote
+    }
+
     def voteForPost(long postId, long voterId, VoteType type){
         def voter = User.get(voterId)
         if(voter){
             def post = Post.get(postId)
 
             if(post){
-                def vote = new Vote(type: type, date: new Date(), author: voter.userInformation)
-                voter.userInformation.addToVotes(vote)
-                post.addToVotes(vote)
-                post.save(flush: true, failOnError: true)
-                Log.info("User ${voter.userInformation.nickname} voted for a post on the topic ${post.topic.title}.")
+                if(userCanVoteOnPost(voter, post))
+                {
+                    def vote = new Vote(type: type, date: new Date(), author: voter.userInformation)
+                    voter.userInformation.addToVotes(vote)
+                    post.addToVotes(vote)
+                    post.save(flush: true, failOnError: true)
+                    Log.info("User ${voter.userInformation.nickname} voted for a post on the topic ${post.topic.title}.")
 
-                return post
+                    return post
+                }
+                else
+                {
+                    throw new TopicServiceException(TopicServiceExceptionCode.BUSINESS_LOGIC_ERROR, "User ${voter.userInformation.nickname} has already voted on this post (post id: ${post.id}).")
+                }
             }
             else{
                 throw new TopicServiceException(TopicServiceExceptionCode.POST_NOT_FOUND, "The post's id passed to the method TopicService.voteForPost doesn't exist.")
