@@ -3,6 +3,7 @@ import fr.isima.vectoroutofrange.BadgeType
 import fr.isima.vectoroutofrange.TopicService
 import fr.isima.vectoroutofrange.User
 import fr.isima.vectoroutofrange.UserInformation
+import fr.isima.vectoroutofrange.VoteType
 import jline.internal.Log
 
 class BootStrap {
@@ -11,7 +12,7 @@ class BootStrap {
 
     def init = { servletContext ->
 
-        //Create some badges
+        // Create some badges
         def welcomeBadge = new Badge(name: "Welcome badge", description: "This badge is offered to all the new users of the site.", type: BadgeType.BRONZE)
         def rockStarBadge = new Badge(name: "Rock Star", description: "You are a machine ! You answered to more than 10 000 000 questions on the site, congratulation !", type: BadgeType.PLATINIUM)
 
@@ -36,9 +37,13 @@ class BootStrap {
         tags << "GORM"
         tags << "Grails"
 
+        // Try to use the TopicService
         topicService.createNewTopic(jeanNic.id, "L'héritage avec GORM", "L'héritage avec GORM est il full bug ?", tags)
-        topicService.addComment(badAss.id, 1, "Your question is damn shit mothafuka !")
-        topicService.addAnswer(goodGuy.id, 1, "Oui il existe des bugs non corrigés dans la gestion de l'héritage faite par GORM...")
+        topicService.correctPost(1, jeanNic.id, "L'héritage avec GORM est il bogué ?")
+        topicService.addComment(1, badAss.id, "Your question is damn shit mothafuka !")
+        topicService.voteForPost(2, jeanNic.id, VoteType.DOWNVOTE)
+        topicService.voteForPost(2, goodGuy.id, VoteType.DOWNVOTE)
+        topicService.addAnswer(1, goodGuy.id, "Oui il existe des bugs non corrigés dans la gestion de l'héritage faite par GORM...")
 
         Log.info("End of BootStrap ! =)")
     }
