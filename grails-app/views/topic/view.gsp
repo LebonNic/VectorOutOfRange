@@ -22,7 +22,7 @@
 
             <div class="row">
                 <div class="large-12 columns">
-                    <span class="secondary label radius">0 views</span>
+                    <span class="secondary label radius">0 <g:if test="${0 != 1}"><g:message code="voor.topic.views"/></g:if><g:else><g:message code="voor.topic.view"/></g:else></span>
                 </div>
             </div>
         </div>
@@ -42,7 +42,7 @@
 
                 <div class="large-3 small-12 columns">
                     <div class="question-user-info">
-                        <span>Asked ${topic.question.content.date}</span>
+                        <span><g:message code="voor.topic.asked" args="[topic.question.content.date]"/></span>
                         <br>
 
                         <div class="user-profile">
@@ -69,20 +69,20 @@
                     <g:each var="comment" in="${topic.question.content}">
                         <div class="question-comment">
                             <p class="text-justify">${comment.text}</p>
-                            <span class="secondary label">by <a href="#">${comment.author.nickname}</a> ${comment.date}
+                            <span class="secondary label"><g:message code="voor.topic.by"/> <a href="#">${comment.author.nickname}</a> ${comment.date}
                             </span>
                         </div>
                     </g:each>
                     <div class="comment-editor">
-                        <a class="add-comment" id="add-comment-${topic.question.id}">Add a comment</a>
+                        <a class="add-comment" id="add-comment-${topic.question.id}"><g:message code="voor.topic.add.comment"/></a>
 
                         <form id="add-comment-form-${topic.question.id}" class="hide">
                             <div class="row">
                                 <div class="large-12 columns">
-                                    <label>Your comment
+                                    <label><g:message code="voor.topic.your.comment"/>
                                         <textarea></textarea>
                                     </label>
-                                    <button type="submit" class="tiny button right">Post your comment</button>
+                                    <button type="submit" class="tiny button right"><g:message code="voor.topic.post.your.comment"/></button>
                                 </div>
                             </div>
                         </form>
@@ -93,7 +93,7 @@
     </div>
 </div>
 
-<h5>${topic.answers.size()} answers</h5>
+<h5>${topic.answers.size()} <g:if test="${topic.answers.size() != 1}"><g:message code="voor.topic.answers"/></g:if><g:else><g:message code="voor.topic.answer"/></g:else></h5>
 
 <div class="panel">
     <g:each in="${topic.answers}" var="answer">
@@ -116,7 +116,7 @@
                 <div class="row">
                     <div class="large-3 small-12 columns right">
                         <div class="question-user-info">
-                            <span>Answered ${answer.content.date}</span>
+                            <span><g:message code="voor.topic.answered" args="[answer.content.date]"/></span>
                             <br>
 
                             <div class="user-profile">
@@ -141,20 +141,19 @@
                         <g:each var="comment" in="${answer.comments}">
                             <div class="question-comment">
                                 <p class="text-justify">${comment.content.text}</p>
-                                <span class="secondary label">by <a
-                                        href="#">${comment.content.author.nickname}</a> ${comment.content.date}</span>
+                                <span class="secondary label">by <a href="#">${comment.content.author.nickname}</a> ${comment.content.date}</span>
                             </div>
                         </g:each>
                         <div class="comment-editor">
-                            <a class="add-comment" id="add-comment-${answer.id}">Add a comment</a>
+                            <a class="add-comment" id="add-comment-${answer.id}"><g:message code="voor.topic.add.comment"/></a>
 
                             <form id="add-comment-form-${answer.id}" class="hide">
                                 <div class="row">
                                     <div class="large-12 columns">
-                                        <label>Your comment
+                                        <label><g:message code="voor.topic.your.comment"/>
                                             <textarea></textarea>
                                         </label>
-                                        <button type="submit" class="tiny button right">Post your comment</button>
+                                        <button type="submit" class="tiny button right"><g:message code="voor.topic.post.your.comment"/></button>
                                     </div>
                                 </div>
                             </form>
@@ -169,10 +168,10 @@
 <form id="add-answer">
     <div class="row">
         <div class="large-12 columns">
-            <label>Your answer
+            <label><g:message code="voor.topic.your.answer"/>
                 <textarea class="answer-textarea"></textarea>
             </label>
-            <button type="submit" class="tiny button right">Post your answer</button>
+            <button type="submit" class="tiny button right"><g:message code="voor.topic.post.your.answer"/></button>
         </div>
     </div>
 </form>

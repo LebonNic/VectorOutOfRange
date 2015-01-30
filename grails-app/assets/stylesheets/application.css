@@ -225,6 +225,7 @@ code {
 
 .question-textarea {
     height: 16em;
+    margin-bottom: 1em;
 }
 
 .tag-textarea {
