@@ -23,9 +23,24 @@ class Post {
         topic nullable: true
     }
 
+    static transients = ['getScore']
+
     def replaceCurrentContent(Message newContent){
         assert(newContent != null) : "The new content of a post can't be set to null."
         this.addToHistory(this.content)
         this.content = newContent
+    }
+
+    def int getScore(){
+        def score = 0
+
+        for(vote in this.votes){
+            if(vote.type == VoteType.UPVOTE)
+                score += 1
+            else
+                score -=1
+        }
+
+        return score
     }
 }

@@ -2,11 +2,21 @@ package fr.isima.vectoroutofrange
 
 import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.annotation.Secured
+import jline.internal.Log
+
+import javax.annotation.PostConstruct
 
 class TopicController {
 
     TopicService topicService
+    UserService userService
     SpringSecurityService springSecurityService
+
+    @PostConstruct
+    void init(){
+        Log.info("Post construction of the TopicController.")
+        topicService.addObserver(userService)
+    }
 
     static allowedMethods = [save: "POST"]
 

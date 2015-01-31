@@ -3,171 +3,174 @@ package fr.isima.vectoroutofrange
 import grails.transaction.Transactional
 import jline.internal.Log
 
+enum TopicEventCode {
+    NEW_TOPIC_CREATED,
+    NEW_COMMENT_ON_POST,
+    NEW_ANSWER_ON_TOPIC,
+    POST_CORRECTED,
+    POST_VOTED
+}
+
 @Transactional
-class TopicService {
+class TopicService extends Subject{
 
-    def createNewTopic(long authorId, String title, String text, List<String> tagsName){
-        def author = User.get(authorId)
-
-        if(author){
-            def collectedTags = []
-
-            for(name in tagsName){
-                def tag = Tag.findByName(name)
-                if(tag){
-                    collectedTags << tag
-                }
-                else{
-                    def newTag = new Tag(name: name, definition: "").save(flush: true, failOnError: true)
-                    collectedTags << newTag
-                }
-            }
-
-            def questionText = new Message(text: text, date: new Date(), author: author.userInformation)
-            author.userInformation.addToMessages(questionText)
-            def newPost = new Post(content: questionText, type: PostType.QUESTION)
-            def newTopic = new Topic(title: title, question: newPost)
-
-            for(tag in collectedTags){
-                newTopic.addToTags(tag)
-            }
-
-            newPost.save(flush: true, failOnError: true)
-            newPost.topic = newTopic
-            newTopic.save(flush: true, failOnError: true)
-            Log.info("Creation of the topic ${title} by ${author.userInformation.nickname}.")
-
-            return newTopic
+    def getUser(long userId){
+        def user = User.get(userId)
+        if(user){
+            return user
         }
         else{
-            throw new TopicServiceException(TopicServiceExceptionCode.AUTHOR_NOT_FOUND, "The author's id passed to the method TopicService.createNewTopic doesn't exist.")
+            throw new TopicServiceException(TopicServiceExceptionCode.AUTHOR_NOT_FOUND, "The author's id passed to the method TopicService.getUser doesn't exist.")
         }
     }
 
-    def addComment(long postId, long authorId, String text){
+    def getPost(long postId){
+        def post = Post.get(postId)
+        if(post){
+            return post
+        }
+        else {
+            throw new TopicServiceException(TopicServiceExceptionCode.POST_NOT_FOUND, "The post's id passed to the method TopicService.getPost doesn't exist.")
+        }
+    }
 
-        def author = User.get(authorId)
-
-        if(author){
-            def postToComment = Post.get(postId)
-
-            if(postToComment){
-
-                if(postToComment.type != PostType.COMMENT){
-                    def commentText = new Message(text: text, date: new Date(), author: author.userInformation)
-                    author.userInformation.addToMessages(commentText)
-                    def commentPost = new Post(topic: postToComment.topic, content: commentText, type: PostType.COMMENT)
-                    postToComment.addToComments(commentPost)
-                    postToComment.save(flush: true, failOnError: true)
-                    Log.info("User ${author.userInformation.nickname} posted a comment on a topic entitled ${postToComment.topic.title}.")
-
-                    return postToComment
-                }
-                else{
-                    throw new TopicServiceException(TopicServiceExceptionCode.BUSINESS_LOGIC_ERROR, "The post which is trying to be commented is already a comment.")
-                }
-
-            }
-            else{
-                throw new TopicServiceException(TopicServiceExceptionCode.POST_NOT_FOUND, "The post's id passed to the method TopicService.addComment doesn't exist.")
-            }
+    def getTopic(long topicId){
+        def topic = Topic.get(topicId)
+        if(topic){
+            return topic
         }
         else{
-            throw new TopicServiceException(TopicServiceExceptionCode.AUTHOR_NOT_FOUND, "The author's id passed to the method TopicService.addComment doesn't exist.")
+            throw new TopicServiceException(TopicServiceExceptionCode.TOPIC_NOT_FOUND, "The topic's id passed to the method TopicService.getTopic doesn't exist.")
+        }
+    }
+
+    def createNewTopic(long authorId, String title, String text, List<String> tagsName) {
+        def author = this.getUser(authorId)
+
+        def collectedTags = []
+
+        for (name in tagsName) {
+            def tag = Tag.findByName(name)
+            if (tag) {
+                collectedTags << tag
+            } else {
+                def newTag = new Tag(name: name, definition: "").save(flush: true, failOnError: true)
+                collectedTags << newTag
+            }
+        }
+
+        def questionText = new Message(text: text, date: new Date(), author: author.userInformation)
+        author.userInformation.addToMessages(questionText)
+        def newPost = new Post(content: questionText, type: PostType.QUESTION)
+        def newTopic = new Topic(title: title, question: newPost)
+
+        for (tag in collectedTags) {
+            newTopic.addToTags(tag)
+        }
+
+        newPost.save(flush: true, failOnError: true)
+        newPost.topic = newTopic
+        newTopic.save(flush: true, failOnError: true)
+        Log.info("Creation of the topic ${title} by ${author.userInformation.nickname}.")
+        this.notifyObservers(newTopic, TopicEventCode.NEW_TOPIC_CREATED)
+
+        return newTopic
+    }
+
+    def addComment(long postId, long authorId, String text){
+        def author = this.getUser(authorId)
+        def postToComment = this.getPost(postId)
+
+        if(postToComment.type != PostType.COMMENT){
+            def commentText = new Message(text: text, date: new Date(), author: author.userInformation)
+            author.userInformation.addToMessages(commentText)
+            def commentPost = new Post(topic: postToComment.topic, content: commentText, type: PostType.COMMENT)
+            postToComment.addToComments(commentPost)
+            postToComment.save(flush: true, failOnError: true)
+            Log.info("User ${author.userInformation.nickname} posted a comment on a topic entitled ${postToComment.topic.title}.")
+            this.notifyObservers(postToComment,  TopicEventCode.NEW_COMMENT_ON_POST)
+
+            return postToComment
+        }
+        else{
+            throw new TopicServiceException(TopicServiceExceptionCode.BUSINESS_LOGIC_ERROR, "The post which is trying to be commented is already a comment.")
         }
     }
 
     def addAnswer(long topicId, long authorId, String text){
-        def author = User.get(authorId)
+        def author = this.getUser(authorId)
+        def topicToAnswer = this.getTopic(topicId)
 
-        if(author){
-            def topicToAnswer = Topic.get(topicId)
+        def answerText = new Message(text: text, date: new Date(), author: author.userInformation)
+        author.userInformation.addToMessages(answerText)
+        def answerPost = new Post(topic: topicToAnswer, content: answerText, type: PostType.ANSWER)
+        topicToAnswer.addToAnswers(answerPost)
+        topicToAnswer.save(flush: true, failOnError: true)
+        Log.info("User ${author.userInformation.nickname} answered the question posted on the topic ${topicToAnswer.title}.")
+        this.notifyObservers(topicToAnswer,  TopicEventCode.NEW_ANSWER_ON_TOPIC)
 
-            if(topicToAnswer){
-                def answerText = new Message(text: text, date: new Date(), author: author.userInformation)
-                author.userInformation.addToMessages(answerText)
-                def answerPost = new Post(topic: topicToAnswer, content: answerText, type: PostType.ANSWER)
-                topicToAnswer.addToAnswers(answerPost)
-                topicToAnswer.save(flush: true, failOnError: true)
-                Log.info("User ${author.userInformation.nickname} answered the question posted on the topic ${topicToAnswer.title}.")
-
-                return topicToAnswer
-            }
-            else{
-                throw new TopicServiceException(TopicServiceExceptionCode.TOPIC_NOT_FOUND, "The topic's id passed to the method TopicService.addAnswer doesn't exist.")
-            }
-        }
-        else{
-            throw new TopicServiceException(TopicServiceExceptionCode.AUTHOR_NOT_FOUND, "The author's id passed to the method TopicService.addAnswer doesn't exist.")
-        }
+        return topicToAnswer
     }
 
     def correctPost(long postId, long authorId, String text){
-        def author = User.get(authorId)
+        def author = this.getUser(authorId)
+        def post = this.getPost(postId)
 
-        if(author){
-            def post = Post.get(postId)
+        def correctedMessage = new Message(text: text, date: new Date(), author: author.userInformation)
+        author.userInformation.addToMessages(correctedMessage)
+        post.replaceCurrentContent(correctedMessage)
+        post.save(flush: true, failOnError: true)
+        Log.info("User ${author.userInformation.nickname} corrected a post on the topic ${post.topic.title}.")
+        this.notifyObservers(post,  TopicEventCode.POST_CORRECTED)
 
-            if(post){
-                def correctedMessage = new Message(text: text, date: new Date(), author: author.userInformation)
-                author.userInformation.addToMessages(correctedMessage)
-                post.replaceCurrentContent(correctedMessage)
-                post.save(flush: true, failOnError: true)
-                Log.info("User ${author.userInformation.nickname} corrected a post on the topic ${post.topic.title}.")
-
-                return post
-            }
-            else{
-                throw new TopicServiceException(TopicServiceExceptionCode.POST_NOT_FOUND, "The post's id passed to the method TopicService.correctPost doesn't exist.")
-            }
-        }
-        else{
-            throw new TopicServiceException(TopicServiceExceptionCode.AUTHOR_NOT_FOUND, "The author's id passed to the method TopicService.correctPost doesn't exist.")
-        }
+        return post
     }
 
-    private def boolean userCanVoteOnPost(User user, Post post){
-
-        def hasUserAllReadyVote = false
+    def getUserVoteOnPost(long postId, long userId){
+        def user = this.getUser(userId)
+        def post = this.getPost(postId)
+        def userVote = null
 
         for(vote in post.votes){
-            if(vote.author.id == user.id)
+            if(vote.author.id == user.userInformation.id)
             {
-                hasUserAllReadyVote = true
+                userVote = vote
                 break
             }
         }
 
-        return !hasUserAllReadyVote
+        return userVote
+    }
+
+    def getScoreForPost(long postId){
+        def post = this.getPost(postId)
+        return post.getScore()
     }
 
     def voteForPost(long postId, long voterId, VoteType type){
-        def voter = User.get(voterId)
-        if(voter){
-            def post = Post.get(postId)
+        def voter = this.getUser(voterId)
+        def post = this.getPost(postId)
 
-            if(post){
-                if(userCanVoteOnPost(voter, post))
-                {
-                    def vote = new Vote(type: type, date: new Date(), author: voter.userInformation)
-                    voter.userInformation.addToVotes(vote)
-                    post.addToVotes(vote)
-                    post.save(flush: true, failOnError: true)
-                    Log.info("User ${voter.userInformation.nickname} voted for a post on the topic ${post.topic.title}.")
+        def Vote vote = getUserVoteOnPost(post.id, voter.id)
 
-                    return post
-                }
-                else
-                {
-                    throw new TopicServiceException(TopicServiceExceptionCode.BUSINESS_LOGIC_ERROR, "User ${voter.userInformation.nickname} has already voted on this post (post id: ${post.id}).")
-                }
-            }
-            else{
-                throw new TopicServiceException(TopicServiceExceptionCode.POST_NOT_FOUND, "The post's id passed to the method TopicService.voteForPost doesn't exist.")
-            }
+        if(vote)
+        {
+            vote.type = type
+            vote.save(flush: true, failOnError: true)
+            Log.info("User ${voter.userInformation.nickname} updated his vote for a post on the topic ${post.topic.title}.")
+            this.notifyObservers(post, TopicEventCode.POST_VOTED)
         }
-        else{
-            throw new TopicServiceException(TopicServiceExceptionCode.AUTHOR_NOT_FOUND, "The author's id passed to the method TopicService.voteForPost doesn't exist.")
+
+        else
+        {
+            vote = new Vote(type: type, date: new Date(), author: voter.userInformation)
+            voter.userInformation.addToVotes(vote)
+            post.addToVotes(vote)
+            post.save(flush: true, failOnError: true)
+            Log.info("User ${voter.userInformation.nickname} voted for a post on the topic ${post.topic.title}.")
+            this.notifyObservers(post, TopicEventCode.POST_VOTED)
         }
+
+        return vote
     }
 }
