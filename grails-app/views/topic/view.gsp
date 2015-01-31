@@ -14,9 +14,9 @@
         <div class="large-1 small-12 columns">
             <div class="row">
                 <div class="large-12 columns voter">
-                    <a class="upvote" href="#"></a>
-                    <a class="downvote" href="#"></a>
-                    <span class="vote-count">${topic.question.votes.size()}</span>
+                    <a id="${topic.question.id}" class="upvote"></a>
+                    <a id="${topic.question.id}" class="downvote"></a>
+                    <span id="${topic.question.id}" class="vote-count">${topic.question.getScore()}</span>
                 </div>
             </div>
 
@@ -76,16 +76,17 @@
                         </div>
                     </g:each>
                     <div class="comment-editor">
-                        <a class="add-comment" id="add-comment-${topic.question.id}"><g:message
+                        <a class="add-comment" id="${topic.question.id}"><g:message
                                 code="voor.topic.add.comment"/></a>
 
-                        <form id="add-comment-form-${topic.question.id}" class="hide">
+                        <form id="${topic.question.id}" class="add-comment-form hide">
                             <div class="row">
                                 <div class="large-12 columns">
                                     <label><g:message code="voor.topic.your.comment"/>
-                                        <textarea></textarea>
+                                        <textarea class="comment-text" id="${topic.question.id}"></textarea>
                                     </label>
-                                    <button type="submit" class="tiny button right"><g:message
+                                    <button id="${topic.question.id}" type="button"
+                                            class="add-comment-button tiny button right" disabled><g:message
                                             code="voor.topic.post.your.comment"/></button>
                                 </div>
                             </div>
@@ -100,15 +101,15 @@
 <h5>${topic.answers.size()} <g:if test="${topic.answers.size() != 1}"><g:message
         code="voor.topic.answers"/></g:if><g:else><g:message code="voor.topic.answer"/></g:else></h5>
 
-<div class="panel">
-    <g:each in="${topic.answers}" var="answer">
+<g:each in="${topic.answers}" var="answer">
+    <div class="panel">
         <div class="row">
             <div class="large-1 small-12 columns">
                 <div class="row">
                     <div class="large-12 columns voter">
-                        <a class="upvote" href="#"></a>
-                        <a class="downvote" href="#"></a>
-                        <span class="vote-count">${answer.votes.size()}</span>
+                        <a id="${answer.id}" class="upvote"></a>
+                        <a id="${answer.id}" class="downvote"></a>
+                        <span id="${answer.id}" class="vote-count">${answer.getScore()}</span>
                     </div>
                 </div>
             </div>
@@ -152,16 +153,17 @@
                             </div>
                         </g:each>
                         <div class="comment-editor">
-                            <a class="add-comment" id="add-comment-${answer.id}"><g:message
+                            <a class="add-comment" id="${answer.id}"><g:message
                                     code="voor.topic.add.comment"/></a>
 
-                            <form id="add-comment-form-${answer.id}" class="hide">
+                            <form class="add-comment-form hide" id="${answer.id}">
                                 <div class="row">
                                     <div class="large-12 columns">
                                         <label><g:message code="voor.topic.your.comment"/>
-                                            <textarea></textarea>
+                                            <textarea class="comment-text" id="${answer.id}"></textarea>
                                         </label>
-                                        <button type="submit" class="tiny button right"><g:message
+                                        <button id="${answer.id}" type="button"
+                                                class="add-comment-button tiny button right" disabled><g:message
                                                 code="voor.topic.post.your.comment"/></button>
                                     </div>
                                 </div>
@@ -171,26 +173,124 @@
                 </div>
             </div>
         </div>
-    </g:each>
-</div>
+    </div>
+</g:each>
 
-<form id="add-answer">
+<form id="add-answer-form">
     <div class="row">
         <div class="large-12 columns">
             <label><g:message code="voor.topic.your.answer"/>
-                <textarea class="answer-textarea"></textarea>
+                <textarea id="answer-text" class="answer-textarea"></textarea>
             </label>
-            <button type="submit" class="tiny button right"><g:message code="voor.topic.post.your.answer"/></button>
+            <button id="add-answer-button" type="button" class="tiny button right" disabled><g:message
+                    code="voor.topic.post.your.answer"/></button>
         </div>
     </div>
 </form>
 
-<script>
-    $(".add-comment").on("click", function () {
+<!-- Comment handling -->
+<script type="text/javascript">
+    var addCommentReveal = $(".add-comment");
+    var addCommentForm = $(".add-comment-form");
+    var commentText = $(".comment-text");
+    var addCommentButton = $(".add-comment-button");
+
+    addCommentReveal.click(function () {
         var splitId = $(this).attr("id").split('-');
         var id = splitId[splitId.length - 1];
         $(this).addClass("hide");
-        $("#add-comment-form-" + id).removeClass("hide");
+        $("#" + id + ".add-comment-form").removeClass("hide");
+    });
+
+    commentText.keyup(function () {
+        if ($(this).val() !== "") {
+            $("#" + $(this).attr("id") + ".add-comment-button").removeAttr("disabled");
+        } else {
+            $("#" + $(this).attr("id") + ".add-comment-button").attr("disabled", "disabled");
+        }
+    });
+
+    addCommentForm.submit(function (event) {
+        event.preventDefault();
+    });
+
+    addCommentButton.click(function () {
+        var id = $(this).attr("id");
+        var commentText = $("#" + id + ".comment-text").val();
+
+        if (commentText !== "") {
+            $.ajax({
+                url: "${createLink(controller: 'topic', action: 'comment')}/" + id,
+                data: {
+                    text: commentText
+                },
+                type: "POST"
+            }).success(function () {
+                window.location.href = "${createLink(controller: 'topic', action: 'view', id: topic.id)}";
+            })
+        }
+    });
+</script>
+
+<!-- Votes handling -->
+<script type="text/javascript">
+    var upvote = $(".upvote");
+    upvote.click(function () {
+        var id = $(this).attr("id");
+        $.ajax({
+            url: "${createLink(controller: 'topic', action: 'upvote')}/" + id,
+            type: "POST"
+        }).success(function (data) {
+            $("#" + id + ".vote-count").text(data);
+            $("#" + id + ".upvote").addClass("active");
+            $("#" + id + ".downvote").removeClass("active");
+        })
+    });
+
+    var downvote = $(".downvote");
+    downvote.click(function () {
+        var id = $(this).attr("id");
+        $.ajax({
+            url: "${createLink(controller: 'topic', action: 'downvote')}/" + id,
+            type: "POST"
+        }).success(function (data) {
+            $("#" + id + ".vote-count").text(data);
+            $("#" + id + ".downvote").addClass("active");
+            $("#" + id + ".upvote").removeClass("active");
+        })
+    });
+</script>
+
+<!-- Answer handling -->
+<script type="text/javascript">
+    var addAnswerForm = $("#add-answer-form");
+    var addAnswerButton = $("#add-answer-button");
+    var answerText = $("#answer-text");
+
+    addAnswerButton.submit(function (event) {
+        event.preventDefault();
+    });
+
+    answerText.keyup(function () {
+        if (answerText.val() !== "") {
+            addAnswerButton.removeAttr("disabled");
+        } else {
+            addAnswerButton.attr("disabled", "disabled");
+        }
+    });
+
+    addAnswerButton.click(function () {
+        if (answerText.val() !== "") {
+            $.ajax({
+                url: "${createLink(controller: 'topic', action: 'answer', id: topic.id)}",
+                data: {
+                    text: answerText.val()
+                },
+                type: 'POST'
+            }).success(function () {
+                window.location.href = "${createLink(controller: 'topic', action: 'view', id: topic.id)}";
+            });
+        }
     });
 </script>
 

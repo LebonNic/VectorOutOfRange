@@ -32,6 +32,7 @@
         <aside class="left-off-canvas-menu">
             <ul class="off-canvas-list">
                 <li><label><g:message code="voor.layout.menu"/></label></li>
+                <sec:ifLoggedIn>
                 <li class="has-submenu"><a href="#"><g:message code="voor.layout.questions"/></a>
                     <ul class="left-submenu">
                         <li class="back"><a href="#"><g:message code="voor.layout.back"/></a></li>
@@ -39,12 +40,22 @@
                         <li><a href="${createLink(controller: 'topic')}"><g:message code="voor.layout.browse.questions"/></a></li>
                     </ul>
                 </li>
-                <li><a href="#"><g:message code="voor.layout.tags"/></a></li>
-                <li><a href="#"><g:message code="voor.layout.users"/></a></li>
-                <li><a href="#"><g:message code="voor.layout.badges"/></a></li>
+                </sec:ifLoggedIn>
+                <sec:ifNotLoggedIn>
+                    <li><a href="${createLink(controller: 'topic')}"><g:message code="voor.layout.browse.questions"/></a></li>
+                </sec:ifNotLoggedIn>
+                <li><a href="${createLink(controller: 'tag', action: 'index')}"><g:message code="voor.layout.tags"/></a></li>
+                <li><a href="${createLink(controller: 'user', action: 'index')}"><g:message code="voor.layout.users"/></a></li>
+                <li><a href="${createLink(controller: 'badge', action: 'index')}"><g:message code="voor.layout.badges"/></a></li>
                 <li><label><g:message code="voor.layout.profile"/></label></li>
-                <li><a href="#">Dramloc</a></li>
-                <li><a href="#"><g:message code="voor.layout.logout"/></a></li>
+                <sec:ifLoggedIn>
+                    <li><a href="${createLink(controller: 'user', action: 'view', id: sec.loggedInUserInfo(field: 'id'))}"><sec:loggedInUserInfo field="username"/></a></li>
+                    <li><a id="logout-button"><g:message code="voor.layout.log.out"/></a></li>
+                </sec:ifLoggedIn>
+                <sec:ifNotLoggedIn>
+                    <li><a href="${createLink(controller: 'login')}"><g:message code="voor.layout.log.in"/></a></li>
+                    <li><a href="${createLink(controller: 'user', action: 'create')}"><g:message code="voor.layout.sign.in"/></a></li>
+                </sec:ifNotLoggedIn>
             </ul>
         </aside>
         <section class="container">
@@ -58,6 +69,14 @@
 <script>
     $(document).foundation();
     $(".inner-wrap").css("minHeight", $("body").height());
+    $("#logout-button").click(function() {
+        $.ajax({
+            url: "${createLink(controller: 'logout')}",
+            type: 'POST'
+        }).success(function() {
+            window.location.href = "${createLink(uri: '/')}";
+        })
+    });
 </script>
 </body>
 </html>

@@ -90,7 +90,7 @@ class TopicService extends Subject{
             Log.info("User ${author.userInformation.nickname} posted a comment on a topic entitled ${postToComment.topic.title}.")
             this.notifyObservers(postToComment,  TopicEventCode.NEW_COMMENT_ON_POST)
 
-            return postToComment
+            return commentPost
         }
         else{
             throw new TopicServiceException(TopicServiceExceptionCode.BUSINESS_LOGIC_ERROR, "The post which is trying to be commented is already a comment.")
@@ -109,7 +109,7 @@ class TopicService extends Subject{
         Log.info("User ${author.userInformation.nickname} answered the question posted on the topic ${topicToAnswer.title}.")
         this.notifyObservers(topicToAnswer,  TopicEventCode.NEW_ANSWER_ON_TOPIC)
 
-        return topicToAnswer
+        return answerPost
     }
 
     def correctPost(long postId, long authorId, String text){
