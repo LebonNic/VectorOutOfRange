@@ -1,5 +1,7 @@
 import fr.isima.vectoroutofrange.Badge
 import fr.isima.vectoroutofrange.BadgeType
+import fr.isima.vectoroutofrange.Tag
+import fr.isima.vectoroutofrange.TagService
 import fr.isima.vectoroutofrange.TopicService
 import fr.isima.vectoroutofrange.UserService
 import fr.isima.vectoroutofrange.VoteType
@@ -9,6 +11,7 @@ class BootStrap {
 
     TopicService topicService
     UserService userService
+    TagService tagService
 
     def init = { servletContext ->
 

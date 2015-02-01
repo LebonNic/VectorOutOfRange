@@ -56,6 +56,12 @@ class TagService {
      */
     def deleteTag(long tagId){
         def tag = this.getTag(tagId)
+
+        for(topic in tag.topics){
+            topic.tags.remove(tag)
+            topic.save(flush: true, failOnError: true)
+        }
+
         tag.delete()
     }
 }
