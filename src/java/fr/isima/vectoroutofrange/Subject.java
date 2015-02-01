@@ -1,13 +1,14 @@
 package fr.isima.vectoroutofrange;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by LebonNic on 31/01/2015.
  */
 public class Subject {
 
-    ArrayList<Observer> observers;
+    List<Observer> observers;
 
     public Subject(){
         observers = new ArrayList<Observer>();
@@ -23,7 +24,7 @@ public class Subject {
 
     public void notifyObservers(Object entity, Object event){
         for(Observer observer : observers){
-            observer.onNotify(entity, event);
+            observer.update(entity, event);
         }
     }
 }

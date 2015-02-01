@@ -15,54 +15,39 @@ class UserService implements Observer{
     }
 
     @Override
-    void onNotify(Object entity, Object event) {
-
-        if(event instanceof TopicEventCode)
+    void update(Object event, Object eventCode) {
+        if(event instanceof TopicServiceEvent && eventCode instanceof TopicServiceEventCode)
         {
-            def code = (TopicEventCode) event
+            def code = (TopicServiceEventCode) eventCode
+            def topicEvent = (TopicServiceEvent) event
 
             switch (code){
-                case TopicEventCode.NEW_TOPIC_CREATED:
-                    if(entity instanceof Topic){
-                        def topic = (Topic)entity
-                        Log.info("UserService is trying to update user ${topic.question.content.author.nickname} (potential award for a topic creation).")
-                        //TODO Add the code to manage a user when he creates a new topic.
-                    }
+                case TopicServiceEventCode.NEW_TOPIC_CREATED:
+                    Log.info("UserService is trying to update user ${topicEvent.actor.userInformation.nickname} (potential reward for a topic creation).")
+                    //TODO Add the code to manage a user when he creates a new topic.
                     break
 
-                case TopicEventCode.NEW_COMMENT_ON_POST:
-                    if(entity instanceof Post){
-                        def post = (Post) entity
-                        Log.info("UserService is trying to update user ${post.content.author.nickname} (potential award for a comment).")
-                        //TODO Add the code to manage a user when he creates a new post.
-                    }
+                case TopicServiceEventCode.NEW_COMMENT_ON_POST:
+                    Log.info("UserService is trying to update user ${topicEvent.actor.userInformation.nickname} (potential reward for a comment).")
+                    //TODO Add the code to manage a user when he creates a new post.
                     break
 
-                case TopicEventCode.NEW_ANSWER_ON_TOPIC:
-                    if(entity instanceof Post){
-                        def post = (Post) entity
-                        Log.info("UserService is trying to update user ${post.content.author.nickname} (potential award for an answer).")
-                        //TODO Add the code to manage a user when he answers a question.
-                    }
+                case TopicServiceEventCode.NEW_ANSWER_ON_TOPIC:
+                    Log.info("UserService is trying to update user ${topicEvent.actor.userInformation.nickname} (potential reward for an answer).")
+                    //TODO Add the code to manage a user when he answers a question.
                     break
 
-                case TopicEventCode.POST_CORRECTED:
-                    if(entity instanceof Post){
-                        def post = (Post) entity
-                        Log.info("UserService is trying to update user ${post.content.author.nickname} (potential award for a post correction).")
-                        //TODO Add the code to manage a user when he corrects a post.
-                    }
-
+                case TopicServiceEventCode.POST_CORRECTED:
+                    Log.info("UserService is trying to update user ${topicEvent.actor.userInformation.nickname} (potential reward for a post correction).")
+                    //TODO Add the code to manage a user when he corrects a post.
                     break
 
-                case TopicEventCode.POST_VOTED:
-                    if(entity instanceof Post){
-                        def post = (Post) entity
-                        Log.info("UserService is trying to update user ${post.content.author.nickname} (potential award for a vote on a post).")
-                        //TODO Add the code to manage a user when he votes on a post.
-                    }
+                case TopicServiceEventCode.POST_VOTED:
+                    Log.info("UserService is trying to update user ${topicEvent.actor.userInformation.nickname} (potential reward for a vote on a post).")
+                    //TODO Add the code to manage a user when he votes on a post.
                     break
             }
         }
+
     }
 }

@@ -3,14 +3,6 @@ package fr.isima.vectoroutofrange
 import grails.transaction.Transactional
 import jline.internal.Log
 
-enum TopicEventCode {
-    NEW_TOPIC_CREATED,
-    NEW_COMMENT_ON_POST,
-    NEW_ANSWER_ON_TOPIC,
-    POST_CORRECTED,
-    POST_VOTED
-}
-
 @Transactional
 class TopicService extends Subject{
 
@@ -44,9 +36,7 @@ class TopicService extends Subject{
         }
     }
 
-    def createNewTopic(long authorId, String title, String text, List<String> tagsName) {
-        def author = this.getUser(authorId)
-
+    private def getAssociatedTags(List<String> tagsName){
         def collectedTags = []
 
         for (name in tagsName) {
@@ -59,10 +49,18 @@ class TopicService extends Subject{
             }
         }
 
+        return collectedTags
+    }
+
+    def createNewTopic(long authorId, String title, String text, List<String> tagsName) {
+        def author = this.getUser(authorId)
+
         def questionText = new Message(text: text, date: new Date(), author: author.userInformation)
         author.userInformation.addToMessages(questionText)
         def newPost = new Post(content: questionText, type: PostType.QUESTION)
         def newTopic = new Topic(title: title, question: newPost)
+
+        def collectedTags = this.getAssociatedTags(tagsName)
 
         for (tag in collectedTags) {
             newTopic.addToTags(tag)
@@ -72,7 +70,7 @@ class TopicService extends Subject{
         newPost.topic = newTopic
         newTopic.save(flush: true, failOnError: true)
         Log.info("Creation of the topic ${title} by ${author.userInformation.nickname}.")
-        this.notifyObservers(newTopic, TopicEventCode.NEW_TOPIC_CREATED)
+        this.notifyObservers(new TopicServiceEvent(actor: author, post: newPost, topic: newTopic), TopicServiceEventCode.NEW_TOPIC_CREATED)
 
         return newTopic
     }
@@ -88,7 +86,7 @@ class TopicService extends Subject{
             postToComment.addToComments(commentPost)
             postToComment.save(flush: true, failOnError: true)
             Log.info("User ${author.userInformation.nickname} posted a comment on a topic entitled ${postToComment.topic.title}.")
-            this.notifyObservers(postToComment,  TopicEventCode.NEW_COMMENT_ON_POST)
+            this.notifyObservers(new TopicServiceEvent(actor: author, post: postToComment, topic: postToComment.topic),  TopicServiceEventCode.NEW_COMMENT_ON_POST)
 
             return commentPost
         }
@@ -107,7 +105,7 @@ class TopicService extends Subject{
         topicToAnswer.addToAnswers(answerPost)
         topicToAnswer.save(flush: true, failOnError: true)
         Log.info("User ${author.userInformation.nickname} answered the question posted on the topic ${topicToAnswer.title}.")
-        this.notifyObservers(topicToAnswer,  TopicEventCode.NEW_ANSWER_ON_TOPIC)
+        this.notifyObservers(new TopicServiceEvent(actor: author, post: answerPost, topic: topicToAnswer),  TopicServiceEventCode.NEW_ANSWER_ON_TOPIC)
 
         return answerPost
     }
@@ -121,7 +119,7 @@ class TopicService extends Subject{
         post.replaceCurrentContent(correctedMessage)
         post.save(flush: true, failOnError: true)
         Log.info("User ${author.userInformation.nickname} corrected a post on the topic ${post.topic.title}.")
-        this.notifyObservers(post,  TopicEventCode.POST_CORRECTED)
+        this.notifyObservers(new TopicServiceEvent(actor: author, post: post, topic: post.topic),  TopicServiceEventCode.POST_CORRECTED)
 
         return post
     }
@@ -158,7 +156,6 @@ class TopicService extends Subject{
             vote.type = type
             vote.save(flush: true, failOnError: true)
             Log.info("User ${voter.userInformation.nickname} updated his vote for a post on the topic ${post.topic.title}.")
-            this.notifyObservers(post, TopicEventCode.POST_VOTED)
         }
 
         else
@@ -168,8 +165,9 @@ class TopicService extends Subject{
             post.addToVotes(vote)
             post.save(flush: true, failOnError: true)
             Log.info("User ${voter.userInformation.nickname} voted for a post on the topic ${post.topic.title}.")
-            this.notifyObservers(post, TopicEventCode.POST_VOTED)
         }
+
+        this.notifyObservers(new TopicServiceEvent(actor: voter, post: post, topic: post.topic), TopicServiceEventCode.POST_VOTED)
 
         return vote
     }
