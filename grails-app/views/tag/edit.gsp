@@ -39,7 +39,8 @@
             $.ajax({
                 url: "${createLink(controller: 'tag', action: 'save', id: tag.id)}",
                 data: {
-                    text: tagText.val()
+                    name: "${tag.name}",
+                    definition: tagText.val()
                 },
                 type: "POST"
             }).success(function () {

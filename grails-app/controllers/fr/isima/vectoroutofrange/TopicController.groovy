@@ -53,9 +53,13 @@ class TopicController {
 
         if (user != null) {
             try {
-                Topic topic = topicService.createNewTopic(user.id, title, text, tags)
-
-                render(status: 201, text: topic.id)
+                if (params.id) {
+                    Post post = topicService.correctPost(Long.parseLong(params.id), user.id, params.text)
+                    render(status: 200, text: post.topic.id)
+                } else {
+                    Topic topic = topicService.createNewTopic(user.id, title, text, tags)
+                    render(status: 201, text: topic.id)
+                }
             } catch (TopicServiceException e) {
                 render(status: 401, text: e.getCode())
             }
@@ -142,6 +146,21 @@ class TopicController {
         } else {
             // TODO: remove when security is added
             render(status: 403, text: 'ajax.failure.user.not.logged.in')
+        }
+    }
+
+    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    def edit() {
+        render(view: 'edit', model: [post: Post.get(params.id)])
+    }
+
+    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    def delete() {
+        try {
+
+            render(status: 201)
+        } catch (TopicServiceException e) {
+            render(status: 401, text: e.getCode())
         }
     }
 }

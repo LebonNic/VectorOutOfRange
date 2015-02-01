@@ -9,6 +9,7 @@
 *
 *= require foundation
 *= require normalize
+*= require font-awesome
 *= require_self
 */
 @import url(http://fonts.googleapis.com/css?family=Inconsolata);
@@ -233,7 +234,7 @@ code {
     padding: 0.25rem 0.5rem 0.25rem;
 }
 
-.edit-tag {
+.action-link {
     padding-left: 0.25em;
     font-size: 0.8em;
     color: #aaa;

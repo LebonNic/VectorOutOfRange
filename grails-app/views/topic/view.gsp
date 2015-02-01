@@ -19,7 +19,6 @@
                     <span id="${topic.question.id}" class="vote-count">${topic.question.getScore()}</span>
                 </div>
             </div>
-
             <div class="row">
                 <div class="large-12 columns">
                     <span class="secondary label radius">0 <g:if test="${0 != 1}"><g:message
@@ -34,10 +33,22 @@
             <p class="text-justify">${topic.question.content.text}</p>
 
             <div class="row">
+                <a id="edit-question" href="${createLink(controller: 'topic', action: 'edit', id: topic.question.id)}"><i class="fa fa-pencil action-link" title="<g:message code="voor.topic.edit.post"/>"></i></a>
+                <a data-reveal-id="delete-question-modal"><i class="fa fa-times action-link" title="<g:message code="voor.topic.delete.question"/>"></i></a>
+                <div id="delete-question-modal" class="reveal-modal" data-reveal>
+                    <h3><g:message code="voor.topic.delete.confirmation"/></h3>
+                    <p><g:message code="voor.topic.delete.confirmation.message"/></p>
+                    <a class="close-reveal-modal">&#215;</a>
+                    <button id="delete-question" class="button right"><g:message code="voor.confirm"/></button>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="large-9 small-12 columns">
                     <g:each var="tag" in="${topic.tags}">
-                        <a href="${createLink(controller: 'tag', action: 'view', id: tag.id)}" title="${tag.definition}"><span
-                                class="label radius">${tag.name}</span></a>
+                        <a href="${createLink(controller: 'tag', action: 'view', id: tag.id)}"
+                           title="${tag.definition}">
+                            <span class="label radius">${tag.name}</span></a>
                     </g:each>
                 </div>
 
@@ -291,6 +302,15 @@
                 window.location.href = "${createLink(controller: 'topic', action: 'view', id: topic.id)}";
             });
         }
+    });
+</script>
+
+<!-- Question editing handling -->
+<script type="text/javascript">
+    var deleteQuestion = $("#delete-question");
+
+    deleteQuestion.click(function() {
+        console.log("Deleting question");
     });
 </script>
 
