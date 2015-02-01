@@ -1,9 +1,8 @@
 package fr.isima.vectoroutofrange
 
 /**
- * Created by LebonNic on 30/01/2015.
+ * Represents the codes associated to the exceptions that the TopicService can throw.
  */
-
 enum TopicServiceExceptionCode {
     AUTHOR_NOT_FOUND,
     POST_NOT_FOUND,
@@ -11,6 +10,9 @@ enum TopicServiceExceptionCode {
     BUSINESS_LOGIC_ERROR
 }
 
+/**
+ * Represents an exception potentially thrown by the TopicService.
+ */
 class TopicServiceException extends Exception{
 
     protected TopicServiceExceptionCode code;

@@ -1,13 +1,15 @@
 package fr.isima.vectoroutofrange
 
 /**
- * Created by LebonNic on 01/02/2015.
+ * Represents the codes associated to the exceptions that the TagService can throw.
  */
-
 enum TagServiceExceptionCode{
     TAG_NOT_FOUND
 }
 
+/**
+ * Represents an exception potentially thrown by the TagService.
+ */
 class TagServiceException extends Exception{
     protected TagServiceExceptionCode code;
 
