@@ -48,6 +48,5 @@ class UserService implements Observer{
                     break
             }
         }
-
     }
 }

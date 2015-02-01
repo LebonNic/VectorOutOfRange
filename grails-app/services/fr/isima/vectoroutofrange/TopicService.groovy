@@ -6,6 +6,8 @@ import jline.internal.Log
 @Transactional
 class TopicService extends Subject{
 
+    TagService tagService
+
     def getUser(long userId){
         def user = User.get(userId)
         if(user){
@@ -44,7 +46,7 @@ class TopicService extends Subject{
             if (tag) {
                 collectedTags << tag
             } else {
-                def newTag = new Tag(name: name, definition: "").save(flush: true, failOnError: true)
+                def newTag = tagService.createTag(name)
                 collectedTags << newTag
             }
         }
