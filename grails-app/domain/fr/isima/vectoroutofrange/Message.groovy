@@ -9,5 +9,6 @@ class Message {
     static belongsTo = [post: Post]
 
     static constraints = {
+        post nullable: true
     }
 }
