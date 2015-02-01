@@ -1,7 +1,6 @@
 package fr.isima.vectoroutofrange
 
 import grails.transaction.Transactional
-import jline.internal.Log
 
 @Transactional
 class TopicService extends Subject{
@@ -101,7 +100,7 @@ class TopicService extends Subject{
         newPost.save(flush: true, failOnError: true)
         newPost.topic = newTopic
         newTopic.save(flush: true, failOnError: true)
-        Log.info("Creation of the topic ${title} by ${author.userInformation.nickname}.")
+        log.info("Creation of the topic ${title} by ${author.userInformation.nickname}.")
         this.notifyObservers(new TopicServiceEvent(actor: author, post: newPost, topic: newTopic), TopicServiceEventCode.NEW_TOPIC_CREATED)
 
         return newTopic
@@ -124,7 +123,7 @@ class TopicService extends Subject{
             def commentPost = new Post(topic: postToComment.topic, content: commentText, type: PostType.COMMENT)
             postToComment.addToComments(commentPost)
             postToComment.save(flush: true, failOnError: true)
-            Log.info("User ${author.userInformation.nickname} posted a comment on a topic entitled ${postToComment.topic.title}.")
+            log.info("User ${author.userInformation.nickname} posted a comment on a topic entitled ${postToComment.topic.title}.")
             this.notifyObservers(new TopicServiceEvent(actor: author, post: postToComment, topic: postToComment.topic),  TopicServiceEventCode.NEW_COMMENT_ON_POST)
 
             return commentPost
@@ -150,7 +149,7 @@ class TopicService extends Subject{
         def answerPost = new Post(topic: topicToAnswer, content: answerText, type: PostType.ANSWER)
         topicToAnswer.addToAnswers(answerPost)
         topicToAnswer.save(flush: true, failOnError: true)
-        Log.info("User ${author.userInformation.nickname} answered the question posted on the topic ${topicToAnswer.title}.")
+        log.info("User ${author.userInformation.nickname} answered the question posted on the topic ${topicToAnswer.title}.")
         this.notifyObservers(new TopicServiceEvent(actor: author, post: answerPost, topic: topicToAnswer),  TopicServiceEventCode.NEW_ANSWER_ON_TOPIC)
 
         return answerPost
@@ -171,7 +170,7 @@ class TopicService extends Subject{
         author.userInformation.addToMessages(correctedMessage)
         post.replaceCurrentContent(correctedMessage)
         post.save(flush: true, failOnError: true)
-        Log.info("User ${author.userInformation.nickname} corrected a post on the topic ${post.topic.title}.")
+        log.info("User ${author.userInformation.nickname} corrected a post on the topic ${post.topic.title}.")
         this.notifyObservers(new TopicServiceEvent(actor: author, post: post, topic: post.topic),  TopicServiceEventCode.POST_CORRECTED)
 
         return post
@@ -227,7 +226,7 @@ class TopicService extends Subject{
         {
             vote.type = type
             vote.save(flush: true, failOnError: true)
-            Log.info("User ${voter.userInformation.nickname} updated his vote for a post on the topic ${post.topic.title}.")
+            log.info("User ${voter.userInformation.nickname} updated his vote for a post on the topic ${post.topic.title}.")
         }
 
         else
@@ -236,7 +235,7 @@ class TopicService extends Subject{
             voter.userInformation.addToVotes(vote)
             post.addToVotes(vote)
             post.save(flush: true, failOnError: true)
-            Log.info("User ${voter.userInformation.nickname} voted for a post on the topic ${post.topic.title}.")
+            log.info("User ${voter.userInformation.nickname} voted for a post on the topic ${post.topic.title}.")
         }
 
         if(type == VoteType.UPVOTE)

@@ -5,7 +5,6 @@ import fr.isima.vectoroutofrange.TagService
 import fr.isima.vectoroutofrange.TopicService
 import fr.isima.vectoroutofrange.UserService
 import fr.isima.vectoroutofrange.VoteType
-import jline.internal.Log
 
 class BootStrap {
 
@@ -45,7 +44,7 @@ class BootStrap {
         topicService.voteForPost(2, goodGuy.id, VoteType.DOWNVOTE)
         topicService.addAnswer(1, goodGuy.id, "Oui il existe des bugs non corrigés dans la gestion de l'héritage faite par GORM...")
 
-        Log.info("End of BootStrap ! =)")
+        log.info("End of BootStrap ! =)")
     }
 
     def destroy = {
