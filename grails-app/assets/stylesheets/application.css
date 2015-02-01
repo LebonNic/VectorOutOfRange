@@ -246,6 +246,7 @@ code {
 
 .tag-textarea {
     height: 24em;
+    margin-bottom: 1em;
 }
 
 .answer-textarea {

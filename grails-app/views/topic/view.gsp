@@ -36,7 +36,7 @@
             <div class="row">
                 <div class="large-9 small-12 columns">
                     <g:each var="tag" in="${topic.tags}">
-                        <a href="${createLink(controller: 'tag', action: 'view', id: tag.id)}"><span
+                        <a href="${createLink(controller: 'tag', action: 'view', id: tag.id)}" title="${tag.definition}"><span
                                 class="label radius">${tag.name}</span></a>
                     </g:each>
                 </div>
