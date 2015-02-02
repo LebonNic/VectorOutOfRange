@@ -4,6 +4,7 @@ class Topic {
 
     String title
     Post question
+    int views
 
     static hasMany = [answers:Post, tags:Tag]
 

@@ -57,22 +57,77 @@ class UserService implements Observer{
                     break
 
                 case TopicServiceEventCode.POST_UPVOTED:
-                    log.info("UserService is trying to update user ${topicEvent.actor.userInformation.nickname} (potential reward for a vote on a post).")
-                    def postAuthor = topicEvent.post.content.author
-                    postAuthor.reputation += 5
-                    postAuthor.save(flush: true, failOnError: true)
-                    log.info("User ${postAuthor.nickname} gains 5 points of reputation.")
+                    this.increaseAuthorReputation(event)
                     break
 
                 case TopicServiceEventCode.POST_DOWNVOTED:
-                    log.info("UserService is trying to update user ${topicEvent.actor.userInformation.nickname} (potential reward for a vote on a post).")
-                    //TODO Add the code to manage a user when he votes on a post.
-                    def postAuthor = topicEvent.post.content.author
-                    postAuthor.reputation -= 5
-                    postAuthor.save(flush: true, failOnError: true)
-                    log.info("User ${postAuthor.nickname} loses 5 points of reputation.")
+                    this.decreaseVoterReputation(event)
+                    this.decreaseAuthorReputation(event)
                     break
             }
         }
+    }
+
+    /**
+     * Decreases the reputation of a user for a downvote on an answer.
+     * @param event The event containing information about the vote.
+     * @return The voter.
+     */
+    def private decreaseVoterReputation(TopicServiceEvent event){
+        if(event.post.type == PostType.ANSWER){
+            def voter = event.actor
+            voter.userInformation.reputation -= 1
+            log.info("User ${voter.userInformation.nickname} loses 1 points of reputation because he downvoted an answer.")
+
+            // The reputation can't be lower than 1
+            if(voter.userInformation.reputation < 1)
+                voter.userInformation.reputation = 1
+
+            voter.save(flush: true, failOnError: true)
+        }
+    }
+
+    /**
+     * Decreases the reputation of a user because one of his posts has been downvoted.
+     * @param event The event containing information about the vote.
+     * @return The author of the post which has been downvoted.
+     */
+    def private decreaseAuthorReputation(TopicServiceEvent event){
+        def author = event.post.content.author
+
+        if(event.post.type == PostType.QUESTION){
+            author.reputation -= 2
+            log.info("User ${author.nickname} loses 2 points of reputation for a downvote on his question.")
+        }
+        else if(event.post.type == PostType.ANSWER){
+            author.reputation -= 2
+            log.info("User ${author.nickname} loses 2 points of reputation for a downvote on his answer.")
+        }
+
+        // The reputation can't be lower than 1
+        if(author.reputation < 1)
+            author.reputation = 1
+
+        author.save(flush: true, failOnError: true)
+    }
+
+    /**
+     * Increases the reputation of a user because one of his posts has been upvoted.
+     * @param event The event containing information about the vote.
+     * @return The author of the post which has been upvoted
+     */
+    def private increaseAuthorReputation(TopicServiceEvent event){
+        def author = event.post.content.author
+
+        if(event.post.type == PostType.QUESTION){
+            author.reputation += 5
+            log.info("User ${author.nickname} gains 5 points of reputation for an upvote on his question.")
+        }
+        else if(event.post.type == PostType.ANSWER){
+            author.reputation += 10
+            log.info("User ${author.nickname} gains 10 points of reputation for an upvote on his answer.")
+        }
+
+        author.save(flush: true, failOnError: true)
     }
 }

@@ -10,7 +10,6 @@ class BootStrap {
 
     TopicService topicService
     UserService userService
-    TagService tagService
 
     def init = { servletContext ->
 
