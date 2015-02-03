@@ -8,7 +8,7 @@
             <br/>
             <voor:answerCount value="${topic.answers.size()}"/>
             <br/>
-            <voor:viewCount value="0"/>
+            <voor:viewCount value="${topic.views}"/>
         </div>
 
         <div class="large-11 small-9 columns">

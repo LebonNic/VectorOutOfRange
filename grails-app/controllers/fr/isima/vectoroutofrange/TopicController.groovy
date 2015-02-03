@@ -33,7 +33,11 @@ class TopicController {
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def view() {
-        render(view: 'view', model: [topic: Topic.get(params.id)])
+        Topic topic = Topic.get(params.id)
+        topic.views++
+        topic.save(flush: true, failOnError: true)
+
+        render(view: 'view', model: [topic: topic])
     }
 
     // @Secured(['CAN_CREATE_QUESTION'])

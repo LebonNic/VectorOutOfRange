@@ -6,7 +6,7 @@
             <!-- Up/Down voter -->
             <voor:voter post="${topic.question}"/>
             <!-- View count on topic -->
-            <voor:viewCount value="0"/>
+            <voor:viewCount value="${topic.views}"/>
             <!-- Edit and delete buttons -->
             <voor:editPostButton post="${topic.question}"/>
             <voor:deletePostButton post="${topic.question}"/>
