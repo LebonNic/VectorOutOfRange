@@ -89,7 +89,7 @@ class TopicService extends Subject{
         def questionText = new Message(text: text, date: new Date(), author: author.userInformation)
         author.userInformation.addToMessages(questionText)
         def newPost = new Post(content: questionText, type: PostType.QUESTION)
-        def newTopic = new Topic(title: title, question: newPost)
+        def newTopic = new Topic(title: title, question: newPost, views: 0)
 
         def collectedTags = this.getAssociatedTags(tagsName)
 
@@ -221,10 +221,15 @@ class TopicService extends Subject{
         def post = this.getPost(postId)
 
         def Vote vote = getUserVoteOnPost(post.id, voter.id)
+        def boolean voteTypeHasChanged = true
 
         if(vote)
         {
-            vote.type = type
+            if(vote.type == type)
+                voteTypeHasChanged = false
+            else
+                vote.type = type
+
             vote.save(flush: true, failOnError: true)
             log.info("User ${voter.userInformation.nickname} updated his vote for a post on the topic ${post.topic.title}.")
         }
@@ -238,10 +243,12 @@ class TopicService extends Subject{
             log.info("User ${voter.userInformation.nickname} voted for a post on the topic ${post.topic.title}.")
         }
 
-        if(type == VoteType.UPVOTE)
-            this.notifyObservers(new TopicServiceEvent(actor: voter, post: post, topic: post.topic), TopicServiceEventCode.POST_UPVOTED)
-        else
-            this.notifyObservers(new TopicServiceEvent(actor: voter, post: post, topic: post.topic), TopicServiceEventCode.POST_DOWNVOTED)
+        if(voteTypeHasChanged){
+            if(type == VoteType.UPVOTE)
+                this.notifyObservers(new TopicServiceEvent(actor: voter, post: post, topic: post.topic), TopicServiceEventCode.POST_UPVOTED)
+            else
+                this.notifyObservers(new TopicServiceEvent(actor: voter, post: post, topic: post.topic), TopicServiceEventCode.POST_DOWNVOTED)
+        }
 
         return vote
     }

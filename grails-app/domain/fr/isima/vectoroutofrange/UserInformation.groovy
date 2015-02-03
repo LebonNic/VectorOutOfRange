@@ -14,6 +14,7 @@ class UserInformation {
     static constraints = {
         messages nullable: true
         votes nullable: true
+        reputation min: 1
     }
 
     def getBadges(BadgeType type) {
