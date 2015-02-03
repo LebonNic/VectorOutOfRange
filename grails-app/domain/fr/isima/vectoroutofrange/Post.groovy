@@ -10,10 +10,11 @@ class Post {
 
     Message content
     PostType type
+    Post parentPost
 
     static hasMany = [history: Message, comments: Post, votes:Vote]
 
-    static mappedBy = [content: "post", history: "none"]
+    static mappedBy = [content: "none", history: "none", comments: "parentPost"]
 
     static belongsTo = [topic: Topic]
 
@@ -21,6 +22,7 @@ class Post {
         history nullable: true
         votes nullable: true
         topic nullable: true
+        parentPost nullable: true
     }
 
     static transients = ['getScore']

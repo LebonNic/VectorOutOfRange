@@ -40,6 +40,10 @@ class BootStrap {
         topicService.voteForPost(2, jeanNic.id, VoteType.DOWNVOTE)
         topicService.voteForPost(2, goodGuy.id, VoteType.DOWNVOTE)
         topicService.addAnswer(1, goodGuy.id, "Oui il existe des bugs non corrigés dans la gestion de l'héritage faite par GORM...")
+        topicService.addComment(3, badAss.id, "Your answer is damn shit mothafuka !")
+        topicService.addComment(3, badAss.id, "You noob !")
+
+        //topicService.deletePost(3)
 
         log.info("End of BootStrap ! =)")
     }

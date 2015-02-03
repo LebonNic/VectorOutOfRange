@@ -28,7 +28,7 @@ class UserService implements Observer{
      * @param event An object which contains some information about the event.
      * @param eventCode The code corresponding to the event.
      */
-    @Override
+    /*@Override
     void update(Object event, Object eventCode) {
         if(event instanceof TopicServiceEvent && eventCode instanceof TopicServiceEventCode)
         {
@@ -66,7 +66,7 @@ class UserService implements Observer{
                     break
             }
         }
-    }
+    }*/
 
     /**
      * Decreases the reputation of a user for a downvote on an answer.
@@ -129,5 +129,45 @@ class UserService implements Observer{
         }
 
         author.save(flush: true, failOnError: true)
+    }
+
+    @Override
+    void update(Object event, Object eventCode) {
+        if(event instanceof TopicServiceEvent && eventCode instanceof TopicServiceEventCode)
+        {
+            def code = (TopicServiceEventCode) eventCode
+            def topicEvent = (TopicServiceEvent) event
+
+            switch (code){
+                case TopicServiceEventCode.NEW_TOPIC_CREATED:
+                    log.info("UserService is trying to update user ${topicEvent.actor.userInformation.nickname} (potential reward for a topic creation).")
+                    //TODO Add the code to manage a user when he creates a new topic.
+                    break
+
+                case TopicServiceEventCode.NEW_COMMENT_ON_POST:
+                    log.info("UserService is trying to update user ${topicEvent.actor.userInformation.nickname} (potential reward for a comment).")
+                    //TODO Add the code to manage a user when he creates a new post.
+                    break
+
+                case TopicServiceEventCode.NEW_ANSWER_ON_TOPIC:
+                    log.info("UserService is trying to update user ${topicEvent.actor.userInformation.nickname} (potential reward for an answer).")
+                    //TODO Add the code to manage a user when he answers a question.
+                    break
+
+                case TopicServiceEventCode.POST_CORRECTED:
+                    log.info("UserService is trying to update user ${topicEvent.actor.userInformation.nickname} (potential reward for a post correction).")
+                    //TODO Add the code to manage a user when he corrects a post.
+                    break
+
+                case TopicServiceEventCode.POST_UPVOTED:
+                    this.increaseAuthorReputation(event)
+                    break
+
+                case TopicServiceEventCode.POST_DOWNVOTED:
+                    this.decreaseVoterReputation(event)
+                    this.decreaseAuthorReputation(event)
+                    break
+            }
+        }
     }
 }

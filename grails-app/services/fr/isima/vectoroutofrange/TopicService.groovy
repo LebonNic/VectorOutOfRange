@@ -100,6 +100,10 @@ class TopicService extends Subject{
         newPost.save(flush: true, failOnError: true)
         newPost.topic = newTopic
         newTopic.save(flush: true, failOnError: true)
+
+        questionText.post = newPost
+        questionText.save(flush: true, failOnError: true)
+
         log.info("Creation of the topic ${title} by ${author.userInformation.nickname}.")
         this.notifyObservers(new TopicServiceEvent(actor: author, post: newPost, topic: newTopic), TopicServiceEventCode.NEW_TOPIC_CREATED)
 
@@ -123,6 +127,10 @@ class TopicService extends Subject{
             def commentPost = new Post(topic: postToComment.topic, content: commentText, type: PostType.COMMENT)
             postToComment.addToComments(commentPost)
             postToComment.save(flush: true, failOnError: true)
+
+            commentText.post = commentPost
+            commentText.save(flush: true, failOnError: true)
+
             log.info("User ${author.userInformation.nickname} posted a comment on a topic entitled ${postToComment.topic.title}.")
             this.notifyObservers(new TopicServiceEvent(actor: author, post: postToComment, topic: postToComment.topic),  TopicServiceEventCode.NEW_COMMENT_ON_POST)
 
@@ -149,6 +157,10 @@ class TopicService extends Subject{
         def answerPost = new Post(topic: topicToAnswer, content: answerText, type: PostType.ANSWER)
         topicToAnswer.addToAnswers(answerPost)
         topicToAnswer.save(flush: true, failOnError: true)
+
+        answerText.post = answerPost
+        answerText.save(flush: true, failOnError: true)
+
         log.info("User ${author.userInformation.nickname} answered the question posted on the topic ${topicToAnswer.title}.")
         this.notifyObservers(new TopicServiceEvent(actor: author, post: answerPost, topic: topicToAnswer),  TopicServiceEventCode.NEW_ANSWER_ON_TOPIC)
 
@@ -170,10 +182,62 @@ class TopicService extends Subject{
         author.userInformation.addToMessages(correctedMessage)
         post.replaceCurrentContent(correctedMessage)
         post.save(flush: true, failOnError: true)
+
+        correctedMessage.post = post
+        correctedMessage.save(flush: true, failOnError: true)
+
         log.info("User ${author.userInformation.nickname} corrected a post on the topic ${post.topic.title}.")
         this.notifyObservers(new TopicServiceEvent(actor: author, post: post, topic: post.topic),  TopicServiceEventCode.POST_CORRECTED)
 
         return post
+    }
+
+    def deletePost(long postId){
+        def postToDelete = this.getPost(postId)
+
+        if(postToDelete.type == PostType.COMMENT){
+            log.info("Delete a comment from ${postToDelete.content.author.nickname}.")
+            postToDelete.parent.removeFromComments(postToDelete)
+            this.deleteContentAssociateToPost(postToDelete)
+        }
+
+        else if(postToDelete.type == PostType.ANSWER){
+            log.info("Delete a message.")
+            postToDelete.topic.removeFromAnswers(postToDelete)
+            this.deleteContentAssociateToPost(postToDelete)
+        }
+
+        else{
+        }
+
+        postToDelete.delete()
+    }
+
+    def private deleteContentAssociateToPost(Post post){
+
+        // Delete the content
+        log.info("Deletes the content.")
+        post.content.author.removeFromMessages(post.content)
+
+        // Delete the history
+        for(message in post.history){
+            log.info("Deletes the history.")
+            message.author.removeFromMessages(message)
+        }
+
+        // Delete the votes
+        for(vote in post.votes){
+            log.info("Deletes the votes.")
+            vote.author.removeFromVotes(vote)
+        }
+
+        // Delete the comments
+        log.info("Deletes the comments (post).")
+        for(comment in post.comments){
+            /*log.info("Inside the loop to delete all associated comments.")
+            post.removeFromComments(comment)
+            deleteContentAssociateToPost(comment)*/
+        }
     }
 
     /**
