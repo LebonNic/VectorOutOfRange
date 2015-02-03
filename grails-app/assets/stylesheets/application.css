@@ -76,60 +76,69 @@ code {
     font-size: 0.8em;
 }
 
-.question-user-info .gold-medals {
+.user-badge .platinum-medals {
     margin-right: 5px;
 }
-.question-user-info .gold-medals:before {
+.user-badge .platinum-medals:before {
+    content: "•";
+    font-weight: bold;
+    margin-right: 2px;
+    color: #E5E4E2;
+}
+.user-badge .gold-medals {
+    margin-right: 5px;
+}
+.user-badge .gold-medals:before {
     content: "•";
     font-weight: bold;
     margin-right: 2px;
     color: gold;
 }
-.question-user-info .silver-medals {
+.user-badge .silver-medals {
     margin-right: 5px;
 }
-.question-user-info .silver-medals:before {
+.user-badge .silver-medals:before {
     content: "•";
     font-weight: bold;
     margin-right: 2px;
     color: silver;
 }
-.question-user-info .bronze-medals {
+.user-badge .bronze-medals {
     margin-right: 5px;
 }
-.question-user-info .bronze-medals:before {
+.user-badge .bronze-medals:before {
     content: "•";
     font-weight: bold;
     margin-right: 2px;
     color: #CD7F32;
 }
-.question-user-info .reputation {
+.user-badge .reputation {
     margin-right: 5px;
     font-weight: bold;
 }
-.question-user-info {
+.user-badge {
     font-size: 0.8em;
     background-color: #e0eaf1;
     padding-left: 0.5em;
+    padding-top: 0.4em;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
 }
-.question-user-info span {
+.user-badge span {
     display: block;
     float: left;
 }
-.question-user-info .user-profile {
+.user-badge .user-profile {
     display: inline-block;
 }
-.question-user-info .user-avatar {
+.user-badge .user-avatar {
     display: block;
     float: left;
 }
-.question-user-info .user-extra {
+.user-badge .user-extra {
     float: left;
     overflow: hidden;
     white-space: nowrap;
-    width: 145px;
     margin-left: 5px;
     display: block;
 }
@@ -137,66 +146,32 @@ code {
 .voter {
     width: 100%;
     text-align: center;
-    height: 38px;
-    margin-bottom: 8px;
 }
 .voter .downvote {
-    width: 0; 
-    height: 0; 
-    position: absolute;
-    bottom: 0;
-    margin-left: -4px;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-top: 8px solid #2d2d2d;
+    display: block;
+    margin-top: -0.25em;
+    color: #2d2d2d;
 }
 .voter .downvote:hover {
-    bottom: -3px;
-    margin-left: -6px;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 10px solid #008CBA;
-    transition: all 100ms;
+    color: #008CBA;
 }
 .voter .downvote.active {
-    bottom: -3px;
-    margin-left: -6px;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 10px solid #008CBA;
-    transition: all 100ms;
+    color: #008CBA;
 }
 .voter .upvote {
-    margin: 0 auto;
-    width: 0; 
-    height: 0;
-    position: absolute;
-    top: 0;
-    margin-left: -4px;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 8px solid #2d2d2d;
+    display: block;
+    margin-bottom: -0.25em;
+    color: #2d2d2d;
 }
 .voter .upvote:hover {
-    top: -3px;
-    margin-left: -6px;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid #008CBA;
-    transition: all 100ms;
+    color: #008CBA;
 }
 .voter .upvote.active {
-    top: -3px;
-    margin-left: -6px;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid #008CBA;
-    transition: all 100ms;
+    color: #008CBA;
 }
 .voter .vote-count {
-    margin: 0 auto;
-    position: absolute;
-    top: 0.5em;
+    display: block;
+    color: #2d2d2d;
 }
 
 .question-comment {

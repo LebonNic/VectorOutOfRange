@@ -28,7 +28,7 @@ class TopicController {
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def index() {
-        render(view: 'index', model: [topics: Topic.getAll()])
+        render(view: 'index', model: [topics: Topic.list(params), topicCount: Topic.count()])
     }
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
@@ -156,8 +156,16 @@ class TopicController {
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def delete() {
         try {
+            Post post = Post.get(params.id)
 
-            render(status: 201)
+            if (post.type == PostType.QUESTION) {
+                log.info 'Deleting topic'
+                post.topic.delete()
+            } else {
+                log.info 'Deleting comment or post'
+                post.delete()
+            }
+            render(status: 205)
         } catch (TopicServiceException e) {
             render(status: 401, text: e.getCode())
         }

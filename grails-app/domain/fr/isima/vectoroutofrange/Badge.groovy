@@ -1,7 +1,7 @@
 package fr.isima.vectoroutofrange
 
 enum BadgeType{
-    PLATINIUM,
+    PLATINUM,
     GOLD,
     SILVER,
     BRONZE

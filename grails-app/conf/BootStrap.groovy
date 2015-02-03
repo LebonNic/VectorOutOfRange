@@ -1,10 +1,4 @@
-import fr.isima.vectoroutofrange.Badge
-import fr.isima.vectoroutofrange.BadgeType
-import fr.isima.vectoroutofrange.Tag
-import fr.isima.vectoroutofrange.TagService
-import fr.isima.vectoroutofrange.TopicService
-import fr.isima.vectoroutofrange.UserService
-import fr.isima.vectoroutofrange.VoteType
+import fr.isima.vectoroutofrange.*
 
 class BootStrap {
 
@@ -16,7 +10,9 @@ class BootStrap {
 
         // Create some badges
         def welcomeBadge = new Badge(name: "Welcome badge", description: "Congratulation you just joined the wonderful community of VectorOutOfRange !", type: BadgeType.BRONZE)
-        def rockStarBadge = new Badge(name: "Rock Star", description: "You are a machine ! You answered to more than 10 000 000 questions on the site, congratulation !", type: BadgeType.PLATINIUM)
+        def coolBadge = new Badge(name: "Cool Badge", description: "Congratulation, you've commented 10 times.", type: BadgeType.SILVER)
+        def awesomeBadge = new Badge(name: "Welcome badge", description: "Congratulation, one of your answer has been upvoted 100 times", type: BadgeType.GOLD)
+        def rockStarBadge = new Badge(name: "Rock Star", description: "You are a machine ! You answered to more than 10 000 000 questions on the site, congratulation !", type: BadgeType.PLATINUM)
 
         // Use a service to create new users
         def jeanNic = userService.createUser("jeannic", "pwd", "Jean", "Nic", "JeanNic")
@@ -29,6 +25,8 @@ class BootStrap {
 
         def goodGuy = userService.createUser("goodguy", "pwd", "Good", "Guy", "GoodGuy")
         goodGuy.userInformation.addToBadges(welcomeBadge)
+        goodGuy.userInformation.addToBadges(coolBadge)
+        goodGuy.userInformation.addToBadges(awesomeBadge)
         goodGuy.userInformation.addToBadges(rockStarBadge)
         goodGuy.save(flush: true, failOnError: true)
 

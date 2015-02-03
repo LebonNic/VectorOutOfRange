@@ -5,7 +5,7 @@
 </head>
 
 <body>
-<h3><g:message code="voor.topic.ask.question"/></h3>
+<h3><g:message code="voor.layout.ask.question"/></h3>
 
 <form id="post-question-form">
     <div class="row collapse prefix-radius">

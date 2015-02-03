@@ -5,7 +5,7 @@
 </head>
 
 <body>
-<h3><g:message code="voor.tag.tags"/></h3>
+<h3><g:message code="voor.layout.tags"/></h3>
 
 <g:each var="tag" in="${tags}">
     <div class="row tag-container">

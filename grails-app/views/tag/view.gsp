@@ -12,9 +12,12 @@
         <g:if test="${tag.definition}">${tag.definition}</g:if>
         <g:else><g:message code="voor.tag.has.no.definition" args="[tag.name]"/>.</g:else>
     </p>
-    <a class="action-link" href="${createLink(controller: 'tag', action: 'edit', id: tag.id)}"><g:message
-            code="voor.tag.edit"/></a>
-    <a class="action-link"><g:message code="voor.tag.delete"/></a>
+    <a class="action-link" href="${createLink(controller: 'tag', action: 'edit', id: tag.id)}" title="${message(code: 'voor.tag.edit')}">
+        <i class="fa fa-pencil"></i>
+    </a>
+    <a id="delete-tag" class="action-link" title="${message(code: 'voor.tag.delete')}">
+        <i class="fa fa-times"></i>
+    </a>
 </div>
 
 <h3><g:message code="voor.topic.questions"/></h3>
@@ -29,19 +32,27 @@
             <div class="large-1 small-3 columns">
                 <div class="row">
                     <div class="large-12 columns">
-                        <span class="secondary label radius">${topic.question.votes.size()} <g:if
-                                test="${topic.question.votes.size() != 1}"><g:message
-                                    code="voor.topic.votes"/></g:if><g:else><g:message
-                                code="voor.topic.vote"/></g:else></span>
+                        <span class="secondary label radius">${topic.question.votes.size()}
+                        <g:if test="${topic.question.votes.size() != 1}"><g:message
+                                code="voor.topic.votes"/>
+                        </g:if>
+                        <g:else>
+                            <g:message code="voor.topic.vote"/>
+                        </g:else>
+                        </span>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="large-12 columns">
-                        <span class="secondary label radius">${topic.answers.size()} <g:if
-                                test="${topic.answers.size() != 1}"><g:message
-                                    code="voor.topic.answers"/></g:if><g:else><g:message
-                                code="voor.topic.answer"/></g:else></span>
+                        <span class="secondary label radius">${topic.answers.size()}
+                        <g:if test="${topic.answers.size() != 1}">
+                            <g:message code="voor.topic.answers"/>
+                        </g:if>
+                        <g:else>
+                            <g:message code="voor.topic.answer"/>
+                        </g:else>
+                        </span>
                     </div>
                 </div>
 
@@ -76,8 +87,9 @@
         </div>
     </div>
 </g:each>
+
 <script type="text/javascript">
-    var deleteTag = $(".delete-tag");
+    var deleteTag = $("#delete-tag");
     deleteTag.click(function () {
         $.ajax({
             url: "${createLink(controller: 'tag', action: 'delete', id: tag.id)}",

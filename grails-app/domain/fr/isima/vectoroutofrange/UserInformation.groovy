@@ -15,4 +15,10 @@ class UserInformation {
         messages nullable: true
         votes nullable: true
     }
+
+    def getBadges(BadgeType type) {
+        return badges.findAll({
+            it.type == type
+        })
+    }
 }
