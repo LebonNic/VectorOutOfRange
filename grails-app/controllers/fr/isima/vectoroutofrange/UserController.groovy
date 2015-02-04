@@ -42,9 +42,13 @@ class UserController {
 
             render(status: 200)
         } else {
-            // Create
-            User user = userService.createUser(params.username, params.password, params.firstname, params.lastname, params.username)
-            render(status: 201, text: user.id)
+            try {
+                // Create
+                User user = userService.createUser(params.username, params.password, params.firstname, params.lastname, params.username)
+                render(status: 201, text: user.id)
+            } catch (Exception e) {
+                render(status: 409, text: e.getMessage())
+            }
         }
     }
 

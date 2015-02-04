@@ -18,7 +18,7 @@
     <div class="user-profile">
 
         <div class="user-avatar">
-            <img src="${createLink(uri: '/images/avatar.png')}" alt="User avatar" width="32" height="32"/>
+            <canvas id="${user.id}" class="avatar"></canvas>
         </div>
 
         <div class="user-extra">

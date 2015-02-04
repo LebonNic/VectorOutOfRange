@@ -10,7 +10,7 @@
 <div class="row user-profile">
     <div class="large-2 small-4 columns text-center">
         <div class="user-avatar">
-            <img src="${createLink(uri: '/images/avatar.png')}"/>
+            <canvas id="${user.id}" class="avatar"></canvas>
         </div>
         <span class="label secondary"><g:message code="voor.user.reputation"/> ${user.userInformation.reputation}</span>
         <br/>
@@ -99,9 +99,7 @@
     </div>
 
     <div class="large-6 small-12 columns">
-        <textarea id="about-input">
-            ${user.userInformation.about}
-        </textarea>
+        <textarea id="about-input">${user.userInformation.about}</textarea>
 
         <button id="edit-profile-button" class="small button right"><g:message code="voor.user.edit"/></button>
 

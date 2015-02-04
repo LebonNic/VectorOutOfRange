@@ -11,9 +11,9 @@ class UserInformation {
     String location
     String about
 
-    static belongsTo = [user:User]
+    static belongsTo = [user: User]
 
-    static hasMany = [messages:Message, votes:Vote, badges:Badge]
+    static hasMany = [messages: Message, votes: Vote, badges: Badge]
 
     static constraints = {
         firstName nullable: true

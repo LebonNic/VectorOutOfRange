@@ -2,7 +2,7 @@
 <div class="row user-profile">
     <div class="large-2 small-4 columns text-center">
         <div class="user-avatar">
-            <img src="${createLink(uri: '/images/avatar.png')}"/>
+            <canvas id="${user.id}" class="avatar"></canvas>
         </div>
         <span class="label secondary"><g:message code="voor.user.reputation"/> ${user.userInformation.reputation}</span>
         <br/>

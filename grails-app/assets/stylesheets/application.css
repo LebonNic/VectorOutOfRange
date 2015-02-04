@@ -150,6 +150,8 @@ code {
 .user-badge .user-avatar {
     display: block;
     float: left;
+    height: 40px;
+    width: 40px;
 }
 
 .user-badge .user-extra {

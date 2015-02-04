@@ -8,4 +8,5 @@
 //= require jquery
 //= require modernizr
 //= require foundation
+//= require avatar
 //= require_self

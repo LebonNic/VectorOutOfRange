@@ -12,6 +12,7 @@
     <div class="row collapse">
         <div class="small-3 large-2 columns">
             <span class="prefix"><g:message code="voor.user.username"/></span>
+            <small id="invalid-username" class="error hide"><g:message code="voor.error.username.already.exists"/></small>
         </div>
 
         <div class="small-9 large-10 columns">
@@ -69,6 +70,8 @@
     var firstnameInput = $("#firstname-input");
     var lastnameInput = $("#lastname-input");
 
+    var invalidUsername = $("#invalid-username");
+
     function isFormValid() {
         return usernameInput.val() !== "" && passwordInput.val() !== "" &&
                         passwordInput.val() === passwordConfirmInput.val() &&
@@ -82,6 +85,10 @@
         } else {
             createUserButton.attr("disabled", "disabled");
         }
+    }
+
+    function resetForm() {
+        invalidUsername.addClass("hide");
     }
 
     updateForm();
@@ -116,6 +123,7 @@
 
     createUserButton.click(function() {
         if (isFormValid()) {
+            resetForm();
             $.ajax({
                 url: "${createLink(controller: 'user', action: 'save')}",
                 data: {
@@ -127,6 +135,9 @@
                 type: "POST"
             }).success(function(data) {
                 window.location.href = "${createLink(controller: 'login')}";
+            }).error(function(data) {
+                console.log("failed");
+                invalidUsername.removeClass("hide");
             });
         }
     });
