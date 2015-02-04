@@ -160,15 +160,8 @@ class TopicController {
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def delete() {
         try {
-            Post post = Post.get(params.id)
+            topicService.deletePost(Long.parseLong((String) params.id))
 
-            if (post.type == PostType.QUESTION) {
-                log.info 'Deleting topic'
-                post.topic.delete()
-            } else {
-                log.info 'Deleting comment or post'
-                post.delete()
-            }
             render(status: 205)
         } catch (TopicServiceException e) {
             render(status: 401, text: e.getCode())
