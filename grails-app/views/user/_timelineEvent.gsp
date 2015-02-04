@@ -10,7 +10,7 @@
                 <h2><g:message code="voor.topic.asked.question"/></h2>
 
                 <p>${message.text}</p>
-                <a href="${createLink(controller: 'topic', action: 'view', id: message.post.topic.id)}"><g:message code="voor.topic.go.to.question"/></a>
+                <a class="cd-read-more" href="${createLink(controller: 'topic', action: 'view', id: message.post.topic.id)}"><g:message code="voor.topic.go.to.question"/></a>
                 <span class="cd-date"><g:formatDate date="${message.date}" type="datetime"
                                                     style="MEDIUM"/></span>
             </div>
@@ -24,7 +24,7 @@
                 <h2><g:message code="voor.topic.edited.question"/></h2>
 
                 <p>${message.text}</p>
-                <a href="${createLink(controller: 'topic', action: 'view', id: message.post.topic.id)}"><g:message code="voor.topic.go.to.question"/></a>
+                <a class="cd-read-more" href="${createLink(controller: 'topic', action: 'view', id: message.post.topic.id)}"><g:message code="voor.topic.go.to.question"/></a>
                 <span class="cd-date"><g:formatDate date="${message.date}" type="datetime"
                                                     style="MEDIUM"/></span>
             </div>
@@ -40,7 +40,7 @@
                 <h2><g:message code="voor.topic.answered.question"/></h2>
 
                 <p>${message.text}</p>
-                <a href="${createLink(controller: 'topic', action: 'view', id: message.post.topic.id)}"><g:message code="voor.topic.go.to.question"/></a>
+                <a class="cd-read-more" href="${createLink(controller: 'topic', action: 'view', id: message.post.topic.id)}"><g:message code="voor.topic.go.to.question"/></a>
                 <span class="cd-date"><g:formatDate date="${message.date}" type="datetime"
                                                     style="MEDIUM"/></span>
             </div>
@@ -54,7 +54,7 @@
                 <h2><g:message code="voor.topic.edited.answer"/></h2>
 
                 <p>${message.text}</p>
-                <a href="${createLink(controller: 'topic', action: 'view', id: message.post.topic.id)}"><g:message code="voor.topic.go.to.question"/></a>
+                <a class="cd-read-more" href="${createLink(controller: 'topic', action: 'view', id: message.post.topic.id)}"><g:message code="voor.topic.go.to.question"/></a>
                 <span class="cd-date"><g:formatDate date="${message.date}" type="datetime"
                                                     style="MEDIUM"/></span>
             </div>
@@ -70,7 +70,7 @@
                 <h2><g:message code="voor.topic.commented"/></h2>
 
                 <p>${message.text}</p>
-                <a href="${createLink(controller: 'topic', action: 'view', id: message.post.topic.id)}"><g:message code="voor.topic.go.to.question"/></a>
+                <a class="cd-read-more" href="${createLink(controller: 'topic', action: 'view', id: message.post.topic.id)}"><g:message code="voor.topic.go.to.question"/></a>
                 <span class="cd-date"><g:formatDate date="${message.date}" type="datetime"
                                                     style="MEDIUM"/></span>
             </div>
@@ -84,7 +84,7 @@
                 <h2><g:message code="voor.topic.edited.comment"/></h2>
 
                 <p>${message.text}</p>
-                <a href="${createLink(controller: 'topic', action: 'view', id: message.post.topic.id)}"><g:message code="voor.topic.go.to.question"/></a>
+                <a class="cd-read-more" href="${createLink(controller: 'topic', action: 'view', id: message.post.topic.id)}"><g:message code="voor.topic.go.to.question"/></a>
                 <span class="cd-date"><g:formatDate date="${message.date}" type="datetime"
                                                     style="MEDIUM"/></span>
             </div>

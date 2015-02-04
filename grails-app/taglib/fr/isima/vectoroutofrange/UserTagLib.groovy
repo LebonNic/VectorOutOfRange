@@ -9,7 +9,11 @@ class UserTagLib {
         User user = attrs['user']
 
         if (post) {
-            user = post.content.author.user
+            if (post.history.empty) {
+                user = post.content.author.user
+            } else {
+                user = post.history[0].author.user
+            }
         }
         if (type == 'full') {
             out << render(template: '/user/userBadgeFull', model: ['post': post, 'user': user])
