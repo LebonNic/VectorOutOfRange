@@ -196,18 +196,26 @@ class TopicService extends Subject{
         def postToDelete = this.getPost(postId)
 
         if(postToDelete.type == PostType.COMMENT){
-            log.info("Delete a comment from ${postToDelete.content.author.nickname}.")
-            postToDelete.parent.removeFromComments(postToDelete)
+            log.info("Deletes a comment from ${postToDelete.content.author.nickname}.")
+            postToDelete.parentPost.removeFromComments(postToDelete)
             this.deleteContentAssociateToPost(postToDelete)
         }
 
         else if(postToDelete.type == PostType.ANSWER){
-            log.info("Delete a message.")
+            log.info("Deletes a answer from ${postToDelete.content.author.nickname}.")
             postToDelete.topic.removeFromAnswers(postToDelete)
             this.deleteContentAssociateToPost(postToDelete)
         }
 
-        else{
+        else if(postToDelete.type == PostType.QUESTION){
+            log.info("Deletes a question from ${postToDelete.content.author.nickname}.")
+            def topic = postToDelete.topic
+            topic.answers.each { answer ->
+                this.deleteContentAssociateToPost(answer)
+                answer.delete()
+            }
+            this.deleteContentAssociateToPost(postToDelete)
+            topic.delete()
         }
 
         postToDelete.delete()
@@ -216,27 +224,28 @@ class TopicService extends Subject{
     def private deleteContentAssociateToPost(Post post){
 
         // Delete the content
-        log.info("Deletes the content.")
+        log.debug("Deletes the content of the post.")
         post.content.author.removeFromMessages(post.content)
+        post.content.delete()
 
         // Delete the history
         for(message in post.history){
-            log.info("Deletes the history.")
+            log.debug("Deletes an history message from ${message.author.nickname}.")
             message.author.removeFromMessages(message)
+            message.delete()
         }
 
         // Delete the votes
         for(vote in post.votes){
-            log.info("Deletes the votes.")
+            log.debug("Deletes a vote from ${vote.author.nickname}.")
             vote.author.removeFromVotes(vote)
         }
 
         // Delete the comments
-        log.info("Deletes the comments (post).")
         for(comment in post.comments){
-            /*log.info("Inside the loop to delete all associated comments.")
-            post.removeFromComments(comment)
-            deleteContentAssociateToPost(comment)*/
+            log.debug("Deletes a comment from ${comment.content.author.nickname}.")
+            deleteContentAssociateToPost(comment)
+            comment.delete()
         }
     }
 

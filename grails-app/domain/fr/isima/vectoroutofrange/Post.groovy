@@ -23,6 +23,7 @@ class Post {
         votes nullable: true
         topic nullable: true
         parentPost nullable: true
+        content nullable: true
     }
 
     static transients = ['getScore']
