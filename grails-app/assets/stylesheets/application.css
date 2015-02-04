@@ -27,6 +27,7 @@
     height: 40px;
     width: 40px;
 }
+
 .ribbon {
     font-weight: bold;
     font-size: 0.7em;
@@ -34,9 +35,9 @@
     text-shadow: 1px 4px 6px #008CBA, 0 0 0 #000, 1px 4px 6px #008CBA;
     text-align: center;
     -webkit-transform: rotate(-45deg);
-    -moz-transform:    rotate(-45deg);
-    -ms-transform:     rotate(-45deg);
-    -o-transform:      rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
     position: relative;
     padding: 1px 0;
     left: -17px;
@@ -44,21 +45,24 @@
     width: 60px;
     background-color: #008CBA;
 
-    -webkit-box-shadow: 0 0 3px rgba(0,0,0,0.3);
-    -moz-box-shadow: 0 0 3px rgba(0,0,0,0.3);
-    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+    -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
 }
+
 .ribbon:before, .ribbon:after {
     content: "";
-    border-top: 3px solid #005571;   
+    border-top: 3px solid #005571;
     border-left: 3px solid transparent;
     border-right: 3px solid transparent;
-    position:absolute;
+    position: absolute;
     bottom: -3px;
 }
+
 .ribbon:before {
     left: 0;
 }
+
 .ribbon:after {
     right: 0;
 }
@@ -76,46 +80,55 @@ code {
     font-size: 0.8em;
 }
 
-.user-badge .platinum-medals {
+.platinum-medals {
     margin-right: 5px;
 }
-.user-badge .platinum-medals:before {
+
+.platinum-medals:before {
     content: "•";
     font-weight: bold;
     margin-right: 2px;
     color: #E5E4E2;
 }
-.user-badge .gold-medals {
+
+.gold-medals {
     margin-right: 5px;
 }
-.user-badge .gold-medals:before {
+
+.gold-medals:before {
     content: "•";
     font-weight: bold;
     margin-right: 2px;
     color: gold;
 }
-.user-badge .silver-medals {
+
+.silver-medals {
     margin-right: 5px;
 }
-.user-badge .silver-medals:before {
+
+.silver-medals:before {
     content: "•";
     font-weight: bold;
     margin-right: 2px;
     color: silver;
 }
-.user-badge .bronze-medals {
+
+.bronze-medals {
     margin-right: 5px;
 }
-.user-badge .bronze-medals:before {
+
+.bronze-medals:before {
     content: "•";
     font-weight: bold;
     margin-right: 2px;
     color: #CD7F32;
 }
+
 .user-badge .reputation {
     margin-right: 5px;
     font-weight: bold;
 }
+
 .user-badge {
     font-size: 0.8em;
     background-color: #e0eaf1;
@@ -124,17 +137,21 @@ code {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
 }
+
 .user-badge span {
     display: block;
     float: left;
 }
+
 .user-badge .user-profile {
     display: inline-block;
 }
+
 .user-badge .user-avatar {
     display: block;
     float: left;
 }
+
 .user-badge .user-extra {
     float: left;
     overflow: hidden;
@@ -143,32 +160,103 @@ code {
     display: block;
 }
 
+.user-profile {
+
+}
+
+.user-profile .reputation {
+
+}
+
+.user-profile .user-avatar {
+    display: block;
+}
+
+.user-profile .section {
+    margin-bottom: 1em;
+}
+
+.user-profile .section-name {
+    font-style: italic;
+    color: #a0a0a0;
+    font-size: 0.8em;
+}
+
+.user-profile .category {
+    font-size: 0.8em;
+}
+
+.user-profile .entry {
+    margin-left: 0.5em;
+    font-size: 0.8em;
+    color: gray;
+}
+
+.user-profile blockquote {
+    font-size: 0.8em;
+}
+
+.user-activities {
+    list-style: none;
+}
+
+.user-activities .activity {
+    width: 6px;
+    height: 6px;
+    border-radius: 100%;
+    background-color: #008CBA;
+    overflow: hidden;
+}
+
+.user-activities .activity:hover {
+    width: 8px;
+    height: 8px;
+    margin-left: -1px;
+    margin-top: -1px;
+    transition: all 100ms;
+}
+
+.tooltip {
+
+}
+
+.user-activity .activity:hover {
+
+}
+
 .voter {
     width: 100%;
     text-align: center;
 }
+
 .voter .downvote {
     display: block;
     margin-top: -0.25em;
     color: #2d2d2d;
 }
+
 .voter .downvote:hover {
     color: #008CBA;
 }
+
 .voter .downvote.active {
     color: #008CBA;
 }
+
 .voter .upvote {
     display: block;
     margin-bottom: -0.25em;
     color: #2d2d2d;
 }
+
 .voter .upvote:hover {
     color: #008CBA;
 }
+
 .voter .upvote.active {
     color: #008CBA;
 }
+
 .voter .vote-count {
     display: block;
     color: #2d2d2d;
@@ -179,9 +267,11 @@ code {
     padding: 0.25em;
     border-top: 1px solid #dfdfdf;
 }
+
 .question-comment:last-child {
     border-bottom: 1px solid #dfdfdf;
 }
+
 .question-comment p {
     margin-bottom: -5px;
 }
@@ -195,6 +285,7 @@ code {
 .comment-editor textarea {
     margin-bottom: 0.25em;
 }
+
 .comment-editor button {
     margin-bottom: 0.25em;
 }
@@ -202,6 +293,7 @@ code {
 .tag-container {
 
 }
+
 .tag-container p {
     color: #333;
     background-color: #e7e7e7;

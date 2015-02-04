@@ -11,6 +11,6 @@
     <g:render template="topic" model="[topic: topic]"/>
 </g:each>
 
-<g:paginate controller="topic" action="index" total="${topicCount}"/>
+<voor:paginate controller="topic" action="index" total="${topicCount}"/>
 </body>
 </html>
