@@ -2,7 +2,6 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <asset:stylesheet href="timeline.css"/>
 </head>
 
 <body>

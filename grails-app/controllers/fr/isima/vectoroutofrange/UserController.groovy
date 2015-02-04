@@ -4,6 +4,8 @@ import grails.plugin.springsecurity.annotation.Secured
 
 class UserController {
 
+    def userService
+
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def index() {
         render(view: 'index', model: [users: User.list(params), userCount: User.count()])
@@ -17,6 +19,11 @@ class UserController {
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def edit() {
         render(view: 'edit', model: [user: User.get(params.id)])
+    }
+
+    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    def create() {
+        render(view: 'create')
     }
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
@@ -36,6 +43,8 @@ class UserController {
             render(status: 200)
         } else {
             // Create
+            User user = userService.createUser(params.username, params.password, params.firstname, params.lastname, params.username)
+            render(status: 201, text: user.id)
         }
     }
 
