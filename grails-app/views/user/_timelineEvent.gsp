@@ -1,7 +1,7 @@
 <%@ page import="fr.isima.vectoroutofrange.PostType" %>
 <div class="cd-timeline-block">
     <g:if test="${message.post.type == PostType.QUESTION}">
-        <g:if test="${message.post.history[0] == message}">
+        <g:if test="${message.post.history[0] == message || message.post.history.empty}">
             <div class="cd-timeline-img">
                 <i class="fa fa-question"></i>
             </div>
@@ -31,7 +31,7 @@
         </g:else>
     </g:if>
     <g:elseif test="${message.post.type == PostType.ANSWER}">
-        <g:if test="${message.post.history[0] == message}">
+        <g:if test="${message.post.history[0] == message || message.post.history.empty}">
             <div class="cd-timeline-img">
                 <i class="fa fa-reply"></i>
             </div>
@@ -61,7 +61,7 @@
         </g:else>
     </g:elseif>
     <g:elseif test="${message.post.type == PostType.COMMENT}">
-        <g:if test="${message.post.history[0] == message}">
+        <g:if test="${message.post.history[0] == message || message.post.history.empty}">
             <div class="cd-timeline-img">
                 <i class="fa fa-comment"></i>
             </div>
