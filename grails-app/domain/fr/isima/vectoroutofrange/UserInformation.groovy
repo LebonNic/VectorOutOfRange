@@ -11,6 +11,8 @@ class UserInformation {
     String location
     String about
 
+    List<Badge> badges
+
     static belongsTo = [user: User]
 
     static hasMany = [messages: Message, votes: Vote, badges: Badge]
@@ -33,6 +35,12 @@ class UserInformation {
     def getBadges(BadgeType type) {
         return badges.findAll({
             it.type == type
+        })
+    }
+
+    def getBadges(long id) {
+        return badges.findAll({
+            it.id == id
         })
     }
 }

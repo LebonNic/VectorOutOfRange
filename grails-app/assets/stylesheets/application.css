@@ -327,3 +327,40 @@ code {
 #tag-container .label:hover {
     background-color: #f04124;
 }
+
+.medal {
+    height: 16px;
+    width: 16px;
+    background-size: 100%;
+    margin-top: -8px;
+}
+
+.medal.sample {
+    opacity: 0.8;
+}
+
+.medal-group {
+    display: inline-block;
+}
+
+.medal:hover {
+    margin-top: -12px;
+    margin-bottom: 4px;
+    transition: all 0.25s;
+}
+
+.medal.bronze {
+    background-image: url(../images/bronze-medal.png);
+}
+
+.medal.silver {
+    background-image: url(../images/silver-medal.png);
+}
+
+.medal.gold {
+    background-image: url(../images/gold-medal.png);
+}
+
+.medal.platinum {
+    background-image: url(../images/platinum-medal.png);
+}

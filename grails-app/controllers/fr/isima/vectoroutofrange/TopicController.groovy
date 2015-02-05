@@ -1,15 +1,14 @@
 package fr.isima.vectoroutofrange
 
-import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.annotation.Secured
 
 import javax.annotation.PostConstruct
 
 class TopicController {
 
-    TopicService topicService
-    UserService userService
-    SpringSecurityService springSecurityService
+    def topicService
+    def userService
+    def springSecurityService
 
     @PostConstruct
     void init() {
@@ -19,6 +18,7 @@ class TopicController {
 
     static allowedMethods = [index   : 'GET',
                              view    : 'GET',
+                             edit    : 'GET',
                              create  : 'GET',
                              save    : 'POST',
                              upvote  : 'POST',
@@ -40,13 +40,16 @@ class TopicController {
         render(view: 'view', model: [topic: topic])
     }
 
-    // @Secured(['CAN_CREATE_QUESTION'])
+    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    def edit() {
+        render(view: 'edit', model: [post: Post.get(Long.parseLong((String) params.id))])
+    }
+
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def create() {
         render(view: 'create')
     }
 
-    // @Secured(['CAN_CREATE_QUESTION'])
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def save() {
         String title = params.title
@@ -57,64 +60,56 @@ class TopicController {
         if (user != null) {
             try {
                 if (params.id) {
-                    Post post = topicService.correctPost(Long.parseLong(params.id), user.id, params.text)
+                    Post post = topicService.correctPost(Long.parseLong((String) params.id), user.id, (String) params.text)
                     render(status: 200, text: post.topic.id)
                 } else {
                     Topic topic = topicService.createNewTopic(user.id, title, text, tags)
                     render(status: 201, text: topic.id)
                 }
             } catch (TopicServiceException e) {
-                render(status: 401, text: e.getCode())
+                render(status: 404, text: e.getCode())
             }
         } else {
-            // TODO: remove when security is added
             render(status: 403, text: 'ajax.failure.user.not.logged.in')
         }
     }
 
-    // @Secured(['CAN_UPVOTE'])
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def upvote() {
         User user = (User) springSecurityService.currentUser
         if (user != null) {
-            long id = Long.parseLong(params.id);
-
             try {
+                def id = Long.parseLong((String) params.id)
                 topicService.voteForPost(id, user.id, VoteType.UPVOTE)
-                render(status: 200, text: topicService.getScoreForPost(id))
+                render(status: 201, text: topicService.getScoreForPost(id))
             } catch (TopicServiceException e) {
-                render(status: 401, text: e.getCode())
+                render(status: 404, text: e.getCode())
             }
         } else {
-            // TODO: remove when security is added
             render(status: 403, text: 'ajax.failure.user.not.logged.in')
         }
     }
 
-    // @Secured(['CAN_DOWNVOTE'])
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def downvote() {
         User user = (User) springSecurityService.currentUser
         if (user != null) {
-            long id = Long.parseLong(params.id);
-
             try {
+                def id = Long.parseLong((String) params.id)
                 topicService.voteForPost(id, user.id, VoteType.DOWNVOTE)
-                render(status: 200, text: topicService.getScoreForPost(id))
+                render(status: 201, text: topicService.getScoreForPost(id))
             } catch (TopicServiceException e) {
-                render(status: 401, text: e.getCode())
+                render(status: 404, text: e.getCode())
             }
         } else {
-            // TODO: remove when security is added
             render(status: 403, text: 'ajax.failure.user.not.logged.in')
         }
     }
 
-    // @Secured(['CAN_CREATE_ANSWER'])
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def answer() {
         String text = params.text
-        long id = Long.parseLong(params.id);
+        long id = Long.parseLong((String) params.id);
         User user = (User) springSecurityService.currentUser
 
         if (user != null) {
@@ -123,19 +118,17 @@ class TopicController {
 
                 render(status: 201, text: answer.id)
             } catch (TopicServiceException e) {
-                render(status: 401, text: e.getCode())
+                render(status: 404, text: e.getCode())
             }
         } else {
-            // TODO: remove when security is added
             render(status: 403, text: 'ajax.failure.user.not.logged.in')
         }
     }
 
-    // @Secured(['CAN_CREATE_COMMENT'])
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def comment() {
         String text = params.text
-        long id = Long.parseLong(params.id);
+        long id = Long.parseLong((String) params.id);
         User user = (User) springSecurityService.currentUser
 
         if (user != null) {
@@ -144,17 +137,11 @@ class TopicController {
 
                 render(status: 201, text: comment.id)
             } catch (TopicServiceException e) {
-                render(status: 401, text: e.getCode())
+                render(status: 404, text: e.getCode())
             }
         } else {
-            // TODO: remove when security is added
             render(status: 403, text: 'ajax.failure.user.not.logged.in')
         }
-    }
-
-    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
-    def edit() {
-        render(view: 'edit', model: [post: Post.get(params.id)])
     }
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
@@ -164,7 +151,7 @@ class TopicController {
 
             render(status: 205)
         } catch (TopicServiceException e) {
-            render(status: 401, text: e.getCode())
+            render(status: 404, text: e.getCode())
         }
     }
 }

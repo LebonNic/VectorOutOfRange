@@ -27,14 +27,12 @@ class TagController {
         render(view: 'edit', model: [tag: Tag.get((String) params.id)])
     }
 
-    /**
-     *
-     * @return
-     */
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def save() {
         try {
-            Tag tag = tagService.updateTag(Long.parseLong((String) params.id), (String) params.name, (String) params.definition)
+            Tag tag = tagService.updateTag(Long.parseLong((String) params.id),
+                    (String) params.name,
+                    (String) params.definition)
             render(status: 200, text: tag.id)
         } catch (TagServiceException e) {
             render(status: 404, text: e.getCode())

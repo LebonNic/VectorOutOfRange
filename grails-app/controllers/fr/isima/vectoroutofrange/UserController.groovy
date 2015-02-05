@@ -6,6 +6,13 @@ class UserController {
 
     def userService
 
+    static allowedMethods = [index : 'GET',
+                             view  : 'GET',
+                             edit  : 'GET',
+                             create: 'GET',
+                             save  : 'POST',
+                             delete: 'POST']
+
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def index() {
         render(view: 'index', model: [users: User.list(params), userCount: User.count()])
@@ -13,12 +20,12 @@ class UserController {
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def view() {
-        render(view: 'view', model: [user: User.get(params.id)])
+        render(view: 'view', model: [user: User.get(Long.parseLong((String) params.id))])
     }
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def edit() {
-        render(view: 'edit', model: [user: User.get(params.id)])
+        render(view: 'edit', model: [user: User.get(Long.parseLong((String) params.id))])
     }
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
@@ -28,32 +35,35 @@ class UserController {
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def save() {
-        if (params.id) {
-            // Update
-            User user = User.get(params.id)
-            user.userInformation.nickname = params.nickname
-            user.userInformation.firstName = params.firstname
-            user.userInformation.lastName = params.lastname
-            user.userInformation.website = params.website
-            user.userInformation.location = params.location
-            user.userInformation.about = params.about
-
-            user.save(flush: true, failOnError: true)
-
-            render(status: 200)
-        } else {
-            try {
-                // Create
-                User user = userService.createUser(params.username, params.password, params.firstname, params.lastname, params.username)
+        try {
+            if (params.id) {
+                // Update user
+                User user = userService.updateUser(Long.parseLong((String) params.id),
+                        (String) params.firstname,
+                        (String) params.lastname,
+                        (String) params.nickname,
+                        (String) params.website,
+                        (String) params.location,
+                        (String) params.about)
+                render(status: 200, text: user.id)
+            } else {
+                // Create user
+                User user = userService.createUser((String) params.username,
+                        (String) params.password,
+                        (String) params.firstname,
+                        (String) params.lastname,
+                        (String) params.username)
                 render(status: 201, text: user.id)
-            } catch (Exception e) {
-                render(status: 409, text: e.getMessage())
             }
+        } catch (UserServiceException e) {
+            render(status: 404, text: e.getCode())
         }
     }
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def delete() {
+        // TODO: Add deleteUser to userService
         render(status: 404)
     }
+
 }
