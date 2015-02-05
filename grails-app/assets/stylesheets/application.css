@@ -336,11 +336,30 @@ code {
 }
 
 .medal.sample {
-    opacity: 0.8;
+    opacity: 0.2;
+}
+
+.medal.sample:hover {
+    opacity: 1.0;
 }
 
 .medal-group {
     display: inline-block;
+    line-height: 1.5em;
+}
+
+.medal-container {
+    margin: 3.0em auto;
+    line-height: 8em;
+    display: table;
+}
+
+.medal-container .label {
+    margin-left: -0.25em;
+}
+
+.medal-container {
+
 }
 
 .medal:hover {
