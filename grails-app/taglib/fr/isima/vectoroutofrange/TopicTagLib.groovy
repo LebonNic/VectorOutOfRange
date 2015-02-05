@@ -66,4 +66,8 @@ class TopicTagLib {
     def deletePostButton = { attrs ->
         out << render(template: '/topic/deletePostButton', model: ['post': attrs['post']])
     }
+
+    def chooseBestAnswer = { attrs ->
+        out << render(template: '/topic/chooseBestAnswer', model: ['post': attrs['post']])
+    }
 }

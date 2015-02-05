@@ -34,6 +34,7 @@
 
                     <div class="large-8 small-6 columns">
                         <input id="nickname-input" class="entry" value="${user.userInformation.nickname}"/>
+                        <small id="invalid-nickname" class="error hide"><g:message code="voor.error.nickname.already.exists"/></small>
                     </div>
                 </div>
 
@@ -44,6 +45,7 @@
 
                     <div class="large-8 small-6 columns">
                         <input id="website-input" class="entry" value="${user.userInformation.website}"/>
+                        <small id="invalid-website" class="error hide"><g:message code="voor.error.website.invalid"/></small>
                     </div>
                 </div>
 
@@ -115,6 +117,9 @@
     var lastnameInput = $("#lastname-input");
     var aboutInput = $("#about-input");
 
+    var websiteInvalid = $("#invalid-website");
+    var nicknameInvalid = $("#invalid-nickname");
+
     nicknameInput.keyup(function() {
         if (nicknameInput.val() !== "") {
             editProfileButton.removeAttr("disabled");
@@ -127,6 +132,12 @@
 
     editProfileButton.click(function() {
         if (nicknameInput.val() !== "") {
+            websiteInvalid.addClass("hide");
+            nicknameInvalid.addClass("hide");
+            if (websiteInput.val().indexOf("http://") !== 0) {
+                websiteInput.val("http://" + websiteInput.val());
+            }
+
             $.ajax({
                 url: "${createLink(controller: 'user', action: 'save', id: user.id)}",
                 data: {
@@ -140,6 +151,12 @@
                 type: "POST"
             }).success(function () {
                 window.location.href = "${createLink(controller: 'user', action: 'view', id: user.id)}";
+            }).error(function(data) {
+                if (data.responseText === "USER_WEBSITE_INVALID") {
+                    websiteInvalid.removeClass("hide");
+                } else if (data.responseText === "USER_NICKNAME_INVALID") {
+                    nicknameInvalid.removeClass("hide");
+                }
             });
         }
     });

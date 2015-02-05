@@ -16,15 +16,16 @@ class TopicController {
         topicService.addObserver(userService)
     }
 
-    static allowedMethods = [index   : 'GET',
-                             view    : 'GET',
-                             edit    : 'GET',
-                             create  : 'GET',
-                             save    : 'POST',
-                             upvote  : 'POST',
-                             downvote: 'POST',
-                             answer  : 'POST',
-                             comment : 'POST']
+    static allowedMethods = [index       : 'GET',
+                             view        : 'GET',
+                             edit        : 'GET',
+                             create      : 'GET',
+                             save        : 'POST',
+                             upvote      : 'POST',
+                             downvote    : 'POST',
+                             answer      : 'POST',
+                             comment     : 'POST',
+                             chooseAnswer: 'POST']
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def index() {
@@ -33,11 +34,13 @@ class TopicController {
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def view() {
-        Topic topic = Topic.get(params.id)
-        topic.views++
-        topic.save(flush: true, failOnError: true)
-
-        render(view: 'view', model: [topic: topic])
+        try {
+            long id = Long.parseLong((String) params.id)
+            topicService.incrementViewsCount(id)
+            render(view: 'view', model: [topic: topicService.getTopic(id)])
+        } catch (TopicServiceException e) {
+            render(status: 404, text: e.getCode())
+        }
     }
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
@@ -150,6 +153,19 @@ class TopicController {
             topicService.deletePost(Long.parseLong((String) params.id))
 
             render(status: 205)
+        } catch (TopicServiceException e) {
+            render(status: 404, text: e.getCode())
+        }
+    }
+
+    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    def chooseAnswer() {
+        try {
+            // TODO: remove when service is modified
+            def id = Long.parseLong((String) params.id)
+            def topicId = Post.get(id).topic.id
+            topicService.tagPostAsBestAnswer(topicId, id)
+            render(status: 200)
         } catch (TopicServiceException e) {
             render(status: 404, text: e.getCode())
         }

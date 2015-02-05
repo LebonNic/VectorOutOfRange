@@ -6,7 +6,7 @@
 </g:else>
 </h5>
 
-<g:each var="answer" in="${topic.answers}">
+<g:each var="answer" in="${topic.answers.sort { -it.score }}">
     <voor:answer answer="${answer}"/>
 </g:each>
 

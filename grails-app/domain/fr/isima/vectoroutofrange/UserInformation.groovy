@@ -18,9 +18,10 @@ class UserInformation {
     static hasMany = [messages: Message, votes: Vote, badges: Badge]
 
     static constraints = {
+        nickname unique: true
         firstName nullable: true
         lastName nullable: true
-        website nullable: true
+        website nullable: true, url: true
         location nullable: true
         about nullable: true
         messages nullable: true

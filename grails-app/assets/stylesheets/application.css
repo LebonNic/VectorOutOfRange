@@ -383,3 +383,7 @@ code {
 .medal.platinum {
     background-image: url(../images/platinum-medal.png);
 }
+
+.best-answer {
+    font-size: 32px;
+}

@@ -50,14 +50,25 @@ class UserService implements Observer{
      */
     def updateUser(long userId, String firstName, String lastName, String nickname, String website, String location, String about){
         def user = this.getUser(userId)
-        user.userInformation.firstName = firstName
-        user.userInformation.lastName = lastName
-        user.userInformation.nickname = nickname
-        user.userInformation.website = website
-        user.userInformation.location = location
-        user.userInformation.about = about
-        user.save(flush: true, failOnError: true)
-        log.info("User ${user.userInformation.nickname} (username : ${user.username}) has been updated.")
+
+        try {
+            user.userInformation.firstName = firstName
+            user.userInformation.lastName = lastName
+            user.userInformation.nickname = nickname
+            user.userInformation.website = website
+            user.userInformation.location = location
+            user.userInformation.about = about
+            user.save(flush: true, failOnError: true)
+            log.info("User ${user.userInformation.nickname} (username : ${user.username}) has been updated.")
+        } catch (Exception e) {
+            user.errors.each {
+                if (it.fieldError.field == "userInformation.website") {
+                    throw new UserServiceException(UserServiceExceptionCode.USER_WEBSITE_INVALID, "User website is not a valid url")
+                } else if (it.fieldError.field == "userInformation.nickname") {
+                    throw new UserServiceException(UserServiceExceptionCode.USER_NICKNAME_INVALID, "User nickname is already used")
+                }
+            }
+        }
 
         return user
     }

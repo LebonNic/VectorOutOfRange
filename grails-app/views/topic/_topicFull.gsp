@@ -146,7 +146,7 @@
 </script>
 
 
-<!-- Question delete handling -->
+<!-- Post delete handling -->
 <script type="text/javascript">
     var deletePostButton = $(".delete-post-button");
 
@@ -164,5 +164,20 @@
                 window.location.href = "${createLink(controller: 'topic', action: 'view', id: topic.id)}";
             }
         });
+    });
+</script>
+
+<!-- Choose Answer handling -->
+<script type="text/javascript">
+    var chooseBestAnswer = $(".choose-best-answer");
+
+    chooseBestAnswer.click(function() {
+        var id = $(this).attr("id");
+        $.ajax({
+            url: "${createLink(controller: 'topic', action: 'chooseAnswer')}/" + id,
+            type: "POST"
+        }).success(function() {
+            window.location.href = "${createLink(controller: 'topic', action: 'view', id: topic.id)}";
+        })
     });
 </script>

@@ -4,7 +4,9 @@ package fr.isima.vectoroutofrange
  * Represents the codes associated to the exceptions that the UserService can throw
  */
 enum UserServiceExceptionCode{
-    USER_NOT_FOUND
+    USER_NOT_FOUND,
+    USER_WEBSITE_INVALID,
+    USER_NICKNAME_INVALID
 }
 
 /**

@@ -1,5 +1,5 @@
 <!-- Display comments -->
-<g:each var="comment" in="${post.comments}">
+<g:each var="comment" in="${post.comments.sort {a,b -> a.content.date <=> b.content.date}}">
     <voor:comment comment="${comment}"/>
 </g:each>
 

@@ -56,7 +56,11 @@ class UserController {
                 render(status: 201, text: user.id)
             }
         } catch (UserServiceException e) {
-            render(status: 404, text: e.getCode())
+            if (e.code == UserServiceExceptionCode.USER_NOT_FOUND) {
+                render(status: 404, text: e.getCode())
+            } else {
+                render(status: 403, text: e.getCode())
+            }
         }
     }
 
