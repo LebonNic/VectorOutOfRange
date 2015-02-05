@@ -45,6 +45,8 @@ class BootStrap {
         topicService.addComment(3, badAss.id, "Your answer is damn shit mothafuka !")
         topicService.addComment(3, badAss.id, "You noob !")
 
+        topicService.tagPostAsBestAnswer(1,3)
+
         log.info("End of BootStrap ! =)")
     }
 

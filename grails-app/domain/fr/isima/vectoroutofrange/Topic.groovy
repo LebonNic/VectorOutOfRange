@@ -15,13 +15,17 @@ class Topic {
         answers nullable: true
         tags nullable: true
         bestAnswer nullable: true, validator: {val, obj ->
-            if(obj.bestAnswer){
-                if(valtype != PostType.QUESTION)
-                    return false
-                }
-                else{
-                    return true
+            def boolean isValid = false
+            if(obj.bestAnswer) {
+                if (val.type == PostType.ANSWER){
+                    isValid = true
                 }
             }
+            else{
+                isValid = true
+            }
+
+            return isValid
+        }
     }
 }

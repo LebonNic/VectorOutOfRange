@@ -336,4 +336,36 @@ class TopicService extends Subject{
 
         return vote
     }
+
+    /**
+     * Allows to tag a post as the best answer on a topic.
+     * @param topicId The topic's id where the answer is.
+     * @param postId The post's id corresponding to the answer.
+     * @return The topic where the answer is tagged.
+     */
+    def tagPostAsBestAnswer(long topicId, long postId){
+        def topic = this.getTopic(topicId)
+        def post = this.getPost(postId)
+
+        if(post.type == PostType.ANSWER){
+            topic.bestAnswer = post
+            topic.save(flush: true, failOnError: true)
+            log.info("${post.content.author.nickname}'s post has been tagged as best answer on the topic ${topic.title}.")
+            return topic
+        }
+        else{
+            throw new TopicServiceException(TopicServiceExceptionCode.BUSINESS_LOGIC_ERROR, "Only answers can be tagged as best answer.")
+        }
+    }
+
+    /**
+     * Allows to increment the counter of views on a topic.
+     * @param topicId The topic's id where the counter needs to be incremented.
+     * @return The topic where the counter is incremented.
+     */
+    def incrementViewsCount(long topicId){
+        def topic = this.getTopic(topicId)
+        topic.views += 1
+        topic.save(flush: true, failOnError: true)
+    }
 }
