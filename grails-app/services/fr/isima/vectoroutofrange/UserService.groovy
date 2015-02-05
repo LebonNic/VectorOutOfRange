@@ -6,6 +6,21 @@ import grails.transaction.Transactional
 class UserService implements Observer{
 
     /**
+     * Retrieves a user from the database.
+     * @param userId The id of the user to get.
+     * @return The user identified by the id.
+     */
+    def getUser(long userId){
+        def user = User.get(userId)
+        if(user){
+            return user
+        }
+        else {
+            throw new UserServiceException(UserServiceExceptionCode.USER_NOT_FOUND, "The user's id passed to the method UserService.getUser doesn't exist.")
+        }
+    }
+
+    /**
      * Creates and saves a new user in the database.
      * @param username The name of the user.
      * @param password The password of the user.
@@ -19,6 +34,31 @@ class UserService implements Observer{
         def user = new User(username: username, password: password, userInformation: userInformation)
         user.save(flush: true, failOnError: true)
         log.info("User ${nickname} has been created.")
+        return user
+    }
+
+    /**
+     * Updates a user.
+     * @param userId The user's id who has to be updated.
+     * @param firstName The new user's first name.
+     * @param lastName The new user's last name.
+     * @param nickname The new user's nickname.
+     * @param website The new user's website.
+     * @param location The new user's location.
+     * @param about The new user's description.
+     * @return The updated user.
+     */
+    def updateUser(long userId, String firstName, String lastName, String nickname, String website, String location, String about){
+        def user = this.getUser(userId)
+        user.userInformation.firstName = firstName
+        user.userInformation.lastName = lastName
+        user.userInformation.nickname = nickname
+        user.userInformation.website = website
+        user.userInformation.location = location
+        user.userInformation.about = about
+        user.save(flush: true, failOnError: true)
+        log.info("User ${user.userInformation.nickname} (username : ${user.username}) has been updated.")
+
         return user
     }
 
@@ -67,6 +107,7 @@ class UserService implements Observer{
             }
         }
     }
+
 
     /**
      * Decreases the reputation of a user for a downvote on an answer.

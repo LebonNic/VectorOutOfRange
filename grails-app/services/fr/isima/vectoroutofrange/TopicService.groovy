@@ -192,6 +192,12 @@ class TopicService extends Subject{
         return post
     }
 
+    /**
+     * Deletes a post. If the post is a question, the associated topic is also suppressed
+     * with all its content (comments, answer, votes, etc...) .
+     * @param postId The id of the post to suppress.
+     * @return ???
+     */
     def deletePost(long postId){
         def postToDelete = this.getPost(postId)
 
@@ -218,9 +224,14 @@ class TopicService extends Subject{
             topic.delete()
         }
 
+        log.debug("call .delete().")
         postToDelete.delete()
     }
 
+    /**
+     * Removes associations between the classes Message, Vote and Post in order to allow the post's suppression.
+     * @param post The post to be processed.
+     */
     def private deleteContentAssociateToPost(Post post){
 
         // Delete the content
@@ -232,7 +243,7 @@ class TopicService extends Subject{
         for(message in post.history){
             log.debug("Deletes an history message from ${message.author.nickname}.")
             message.author.removeFromMessages(message)
-            message.delete()
+            //message.delete()
         }
 
         // Delete the votes

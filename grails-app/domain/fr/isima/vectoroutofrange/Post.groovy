@@ -16,6 +16,10 @@ class Post {
 
     static mappedBy = [content: "none", history: "none", comments: "parentPost"]
 
+    static mapping = {
+        content lazy: false
+    }
+
     static belongsTo = [topic: Topic]
 
     static constraints = {

@@ -17,6 +17,7 @@ class BootStrap {
         def jeanNic = userService.createUser("jeannic", "pwd", "Jean", "Nic", "JeanNic")
         jeanNic.userInformation.addToBadges(welcomeBadge)
         jeanNic.save(flush: true, failOnError: true)
+        userService.updateUser(1, "Jean", "Nic", "JeanNic", "www.jeannic.com", "France", "This is JeanNic, can you beat this ?")
 
         def badAss = userService.createUser("badass", "pwd", "Bad", "Ass", "BadAss")
         badAss.userInformation.addToBadges(welcomeBadge)
@@ -43,8 +44,6 @@ class BootStrap {
         topicService.addAnswer(1, goodGuy.id, "Oui il existe des bugs non corrigés dans la gestion de l'héritage faite par GORM...")
         topicService.addComment(3, badAss.id, "Your answer is damn shit mothafuka !")
         topicService.addComment(3, badAss.id, "You noob !")
-
-        topicService.deletePost(1)
 
         log.info("End of BootStrap ! =)")
     }
