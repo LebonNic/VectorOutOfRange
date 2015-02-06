@@ -12,7 +12,7 @@
     <markdown:renderHtml><g:if test="${tag.definition}">${tag.definition}</g:if><g:else><g:message
             code="voor.tag.has.no.definition" args="[tag.name]"/>.</g:else>
     </markdown:renderHtml>
-    <sec:access expression="hasRole('MODERATE_TAG')">
+    <sec:ifAllGranted roles="MODERATE_TAG">
         <a class="action-link" href="${createLink(controller: 'tag', action: 'edit', id: tag.id)}"
            title="${message(code: 'voor.tag.edit')}">
             <i class="fa fa-pencil"></i>
@@ -20,7 +20,7 @@
         <a id="delete-tag" class="action-link" title="${message(code: 'voor.tag.delete')}">
             <i class="fa fa-times"></i>
         </a>
-    </sec:access>
+    </sec:ifAllGranted>
 </div>
 
 <h3><g:message code="voor.topic.questions"/></h3>

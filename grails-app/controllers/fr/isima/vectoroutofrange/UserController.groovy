@@ -23,7 +23,7 @@ class UserController {
         render(view: 'view', model: [user: User.get(Long.parseLong((String) params.id))])
     }
 
-    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    @Secured(['IS_AUTHENTICATED_FULLY'])
     def edit() {
         render(view: 'edit', model: [user: User.get(Long.parseLong((String) params.id))])
     }
@@ -64,7 +64,7 @@ class UserController {
         }
     }
 
-    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    @Secured(['ROLE_MODERATE_USER'])
     def delete() {
         // TODO: Add deleteUser to userService
         render(status: 404)

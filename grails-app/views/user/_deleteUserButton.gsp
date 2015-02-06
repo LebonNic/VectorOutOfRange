@@ -1,5 +1,6 @@
+<%@ page import="grails.plugin.springsecurity.SpringSecurityUtils" %>
 <sec:ifLoggedIn>
-    <g:if test="${user.id == sec.loggedInUserInfo(field: 'id').toLong()}">
+    <g:if test="${SpringSecurityUtils.ifAllGranted('ROLE_MODERATE_USER')}">
         <a id="delete-user-button" class="action-link">
             <i class="fa fa-times" title="${message(code: 'voor.user.delete')}"></i>
         </a>
