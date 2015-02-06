@@ -32,7 +32,7 @@
         <aside class="left-off-canvas-menu">
             <ul class="off-canvas-list">
                 <li><label><g:message code="voor.layout.menu"/></label></li>
-                <sec:ifLoggedIn>
+                <sec:access expression="hasRole('ROLE_CREATE_POST')">
                 <li class="has-submenu"><a href="#"><g:message code="voor.layout.questions"/></a>
                     <ul class="left-submenu">
                         <li class="back"><a href="#"><g:message code="voor.layout.back"/></a></li>
@@ -40,13 +40,14 @@
                         <li><a href="${createLink(controller: 'topic')}"><g:message code="voor.layout.browse.questions"/></a></li>
                     </ul>
                 </li>
-                </sec:ifLoggedIn>
-                <sec:ifNotLoggedIn>
+                </sec:access>
+                <sec:noAccess expression="hasRole('ROLE_CREATE_POST')">
                     <li><a href="${createLink(controller: 'topic')}"><g:message code="voor.layout.browse.questions"/></a></li>
-                </sec:ifNotLoggedIn>
+                </sec:noAccess>
                 <li><a href="${createLink(controller: 'tag', action: 'index')}"><g:message code="voor.layout.tags"/></a></li>
                 <li><a href="${createLink(controller: 'user', action: 'index')}"><g:message code="voor.layout.users"/></a></li>
                 <li><a href="${createLink(controller: 'badge', action: 'index')}"><g:message code="voor.layout.badges"/></a></li>
+                <li><a href="${createLink(controller: 'permission', action: 'index')}"><g:message code="voor.layout.permissions"/></a></li>
                 <li><label><g:message code="voor.layout.profile"/></label></li>
                 <sec:ifLoggedIn>
                     <li><a href="${createLink(controller: 'user', action: 'view', id: sec.loggedInUserInfo(field: 'id'))}"><sec:loggedInUserInfo field="username"/></a></li>

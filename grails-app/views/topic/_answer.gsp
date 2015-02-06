@@ -2,6 +2,7 @@
     <div class="row">
         <div class="large-1 small-12 columns">
             <voor:voter post="${answer}"/>
+
             <voor:editPostButton post="${answer}"/>
             <voor:deletePostButton post="${answer}"/>
             <voor:chooseBestAnswer post="${answer}"/>

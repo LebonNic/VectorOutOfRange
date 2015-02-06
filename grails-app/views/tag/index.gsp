@@ -19,5 +19,7 @@
     </div>
 </g:each>
 
+<voor:paginate controller="tag" action="index" total="${tagCount}"/>
+
 </body>
 </html>

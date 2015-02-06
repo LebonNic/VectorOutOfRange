@@ -14,7 +14,7 @@ class TagController {
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def index() {
-        render(view: 'index', model: [tags: Tag.getAll()])
+        render(view: 'index', model: [tags: Tag.list(params), tagCount: Tag.count()])
     }
 
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
@@ -22,12 +22,12 @@ class TagController {
         render(view: 'view', model: [tag: Tag.get((String) params.id)])
     }
 
-    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    @Secured(['ROLE_MODERATE_TAG'])
     def edit() {
         render(view: 'edit', model: [tag: Tag.get((String) params.id)])
     }
 
-    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    @Secured(['ROLE_MODERATE_TAG'])
     def save() {
         try {
             Tag tag = tagService.updateTag(Long.parseLong((String) params.id),
@@ -39,7 +39,7 @@ class TagController {
         }
     }
 
-    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    @Secured(['ROLE_MODERATE_TAG'])
     def delete() {
         try {
             tagService.deleteTag(Long.parseLong((String) params.id))

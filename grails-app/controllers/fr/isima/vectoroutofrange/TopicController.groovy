@@ -2,8 +2,6 @@ package fr.isima.vectoroutofrange
 
 import grails.plugin.springsecurity.annotation.Secured
 
-import javax.annotation.PostConstruct
-
 class TopicController {
 
     def topicService
@@ -36,17 +34,17 @@ class TopicController {
         }
     }
 
-    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    @Secured(['ROLE_CREATE_POST'])
     def edit() {
         render(view: 'edit', model: [post: Post.get(Long.parseLong((String) params.id))])
     }
 
-    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    @Secured(['ROLE_CREATE_POST'])
     def create() {
         render(view: 'create')
     }
 
-    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    @Secured(['ROLE_CREATE_POST'])
     def save() {
         String title = params.title
         String text = params.text
@@ -56,7 +54,7 @@ class TopicController {
         if (user != null) {
             try {
                 if (params.id) {
-                    Post post = topicService.correctPost(Long.parseLong((String) params.id), user.id, (String) params.text)
+                    Post post = (Post) topicService.correctPost(Long.parseLong((String) params.id), user.id, (String) params.text)
                     render(status: 200, text: post.topic.id)
                 } else {
                     Topic topic = topicService.createNewTopic(user.id, title, text, tags)
@@ -70,7 +68,7 @@ class TopicController {
         }
     }
 
-    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    @Secured(['ROLE_VOTE_UP'])
     def upvote() {
         User user = (User) springSecurityService.currentUser
         if (user != null) {
@@ -86,7 +84,7 @@ class TopicController {
         }
     }
 
-    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    @Secured(['ROLE_VOTE_DOWN'])
     def downvote() {
         User user = (User) springSecurityService.currentUser
         if (user != null) {
@@ -102,7 +100,7 @@ class TopicController {
         }
     }
 
-    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    @Secured(['ROLE_CREATE_POST'])
     def answer() {
         String text = params.text
         long id = Long.parseLong((String) params.id);
@@ -121,7 +119,7 @@ class TopicController {
         }
     }
 
-    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    @Secured(['ROLE_CREATE_COMMENT'])
     def comment() {
         String text = params.text
         long id = Long.parseLong((String) params.id);
@@ -140,7 +138,7 @@ class TopicController {
         }
     }
 
-    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    @Secured(['ROLE_CREATE_POST'])
     def delete() {
         try {
             topicService.deletePost(Long.parseLong((String) params.id))
@@ -151,10 +149,11 @@ class TopicController {
         }
     }
 
-    @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
+    @Secured(['ROLE_CREATE_POST'])
     def chooseAnswer() {
         try {
             // TODO: remove when service is modified
+            // TODO: check if current user is question author
             def id = Long.parseLong((String) params.id)
             def topicId = Post.get(id).topic.id
             topicService.tagPostAsBestAnswer(topicId, id)

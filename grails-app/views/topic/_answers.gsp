@@ -10,14 +10,17 @@
     <voor:answer answer="${answer}"/>
 </g:each>
 
-<form id="add-answer-form">
-    <div class="row">
-        <div class="large-12 columns">
-            <label><g:message code="voor.topic.your.answer"/>
-                <textarea id="answer-text" class="answer-textarea"></textarea>
-            </label>
-            <button id="add-answer-button" type="button" class="tiny button right" disabled><g:message
-                    code="voor.topic.post.your.answer"/></button>
+<sec:access expression="hasRole('ROLE_CREATE_POST')">
+    <form id="add-answer-form">
+        <div class="row">
+            <div class="large-12 columns">
+                <label><g:message code="voor.topic.your.answer"/>
+                    <textarea id="answer-text" class="answer-textarea"></textarea>
+                </label>
+                <button id="add-answer-button" type="button" class="tiny button right" disabled>
+                    <g:message code="voor.topic.post.your.answer"/>
+                </button>
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+</sec:access>

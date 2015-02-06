@@ -1,17 +1,16 @@
 package fr.isima.vectoroutofrange
 
 class Role {
+    String authority
+    String name
+    String description
+    int requiredReputation
 
-	public static final String ADMIN = "ROLE_ADMIN"
-	public static final String USER = "ROLE_USER"
+    static mapping = {
+        cache true
+    }
 
-	String authority
-
-	static mapping = {
-		cache true
-	}
-
-	static constraints = {
-		authority blank: false, unique: true
-	}
+    static constraints = {
+        authority blank: false, unique: true
+    }
 }
