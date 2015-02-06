@@ -6,6 +6,7 @@ class UserInformation {
     String lastName
     String nickname
     int reputation
+    int editedPosts
 
     String website
     String location

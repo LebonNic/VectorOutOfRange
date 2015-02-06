@@ -7,14 +7,7 @@ import javax.annotation.PostConstruct
 class TopicController {
 
     def topicService
-    def userService
     def springSecurityService
-
-    @PostConstruct
-    void init() {
-        log.info("Post construction of the TopicController.")
-        topicService.addObserver(userService)
-    }
 
     static allowedMethods = [index       : 'GET',
                              view        : 'GET',

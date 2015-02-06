@@ -8,10 +8,16 @@ class TagService {
     /**
      * Retrieves the tag corresponding to the id passed as parameter.
      * @param tagId The id of the tag.
+     * @param lock Tells the method to lock the loaded object.
      * @return The retrieved tag.
      */
-    def getTag(long tagId){
-        def tag = Tag.get(tagId)
+    def getTag(long tagId, boolean lock = false){
+        def tag
+
+        if(lock)
+            tag = Tag.lock(tagId)
+        else
+            tag = Tag.get(tagId)
 
         if(tag){
             return tag

@@ -10,10 +10,17 @@ class TopicService extends Subject{
     /**
      * Gets the user corresponding to the id passed as parameter.
      * @param userId The user's id to retrieve from the database.
+     * @param lock Tells the method to lock the loaded object.
      * @return The user corresponding to the id.
      */
-    def getUser(long userId){
-        def user = User.get(userId)
+    def getUser(long userId, boolean lock = false){
+        def user
+
+        if (lock)
+            user = User.lock(userId)
+        else
+            user = User.get(userId)
+
         if(user){
             return user
         }
@@ -25,10 +32,17 @@ class TopicService extends Subject{
     /**
      * Gets the post corresponding to the id passed as parameter.
      * @param postId The post's id to retrieve from the database.
+     * @param lock Tells the method to lock the loaded object.
      * @return The post corresponding to the id.
      */
-    def getPost(long postId){
-        def post = Post.get(postId)
+    def getPost(long postId, boolean lock = false){
+        def post
+
+        if(lock)
+            post = Post.lock(postId)
+        else
+            post = Post.get(postId)
+
         if(post){
             return post
         }
@@ -40,10 +54,17 @@ class TopicService extends Subject{
     /**
      * Gets the topic corresponding to the id passed as parameter.
      * @param topicId The topic's id to retrieve from the database.
+     * @param lock Tells the method to lock the loaded object.
      * @return The topic corresponding to the id.
      */
-    def getTopic(long topicId){
-        def topic = Topic.get(topicId)
+    def getTopic(long topicId, boolean lock = false){
+        def topic
+
+        if(lock)
+            topic = Topic.lock(topicId)
+        else
+            topic = Topic.get(topicId)
+
         if(topic){
             return topic
         }
@@ -209,6 +230,10 @@ class TopicService extends Subject{
 
         else if(postToDelete.type == PostType.ANSWER){
             log.info("Deletes a answer from ${postToDelete.content.author.nickname}.")
+            if(postToDelete.id == postToDelete.topic.bestAnswer.id){
+                log.debug("Deletes the best answer.")
+                postToDelete.topic.bestAnswer = null
+            }
             postToDelete.topic.removeFromAnswers(postToDelete)
             this.deleteContentAssociateToPost(postToDelete)
         }
@@ -351,6 +376,7 @@ class TopicService extends Subject{
             topic.bestAnswer = post
             topic.save(flush: true, failOnError: true)
             log.info("${post.content.author.nickname}'s post has been tagged as best answer on the topic ${topic.title}.")
+            this.notifyObservers(new TopicServiceEvent(actor: null, post: post, topic: topic), TopicServiceEventCode.POST_TAGGED_AS_BEST_ANSWER)
             return topic
         }
         else{
@@ -364,8 +390,11 @@ class TopicService extends Subject{
      * @return The topic where the counter is incremented.
      */
     def incrementViewsCount(long topicId){
-        def topic = this.getTopic(topicId)
+        def topic = this.getTopic(topicId, true)
         topic.views += 1
         topic.save(flush: true, failOnError: true)
+        this.notifyObservers(new TopicServiceEvent(actor: null, post: topic.question, topic: topic), TopicServiceEventCode.VIEWS_COUNT_INCREMENTED)
+
+        return topic
     }
 }

@@ -3,15 +3,22 @@ package fr.isima.vectoroutofrange
 import grails.transaction.Transactional
 
 @Transactional
-class UserService implements Observer{
+class UserService extends Subject implements Observer{
 
     /**
      * Retrieves a user from the database.
      * @param userId The id of the user to get.
+     * @param lock Tells the method to lock the loaded object.
      * @return The user identified by the id.
      */
-    def getUser(long userId){
-        def user = User.get(userId)
+    def getUser(long userId, boolean lock = false){
+        def user
+
+        if(lock)
+            user = User.lock(userId)
+        else
+            user = User.get(userId)
+
         if(user){
             return user
         }
@@ -30,10 +37,11 @@ class UserService implements Observer{
      * @return The new created user.
      */
     def createUser(String username, String password, String firstName, String lastName, String nickname){
-        def userInformation = new UserInformation(firstName: firstName, lastName: lastName, nickname: nickname, reputation: 1)
+        def userInformation = new UserInformation(firstName: firstName, lastName: lastName, nickname: nickname, reputation: 1, editedPostsCount: 0)
         def user = new User(username: username, password: password, userInformation: userInformation)
         user.save(flush: true, failOnError: true)
         log.info("User ${nickname} has been created.")
+        this.notifyObservers(new UserServiceEvent(user: user), UserServiceEventCode.NEW_USER_CREATED)
         return user
     }
 
@@ -59,6 +67,7 @@ class UserService implements Observer{
             user.userInformation.location = location
             user.userInformation.about = about
             user.save(flush: true, failOnError: true)
+            this.notifyObservers(new UserServiceEvent(user: user), UserServiceEventCode.USER_UPDATED)
             log.info("User ${user.userInformation.nickname} (username : ${user.username}) has been updated.")
         } catch (Exception e) {
             user.errors.each {
@@ -87,26 +96,6 @@ class UserService implements Observer{
             def topicEvent = (TopicServiceEvent) event
 
             switch (code){
-                case TopicServiceEventCode.NEW_TOPIC_CREATED:
-                    log.info("UserService is trying to update user ${topicEvent.actor.userInformation.nickname} (potential reward for a topic creation).")
-                    //TODO Add the code to manage a user when he creates a new topic.
-                    break
-
-                case TopicServiceEventCode.NEW_COMMENT_ON_POST:
-                    log.info("UserService is trying to update user ${topicEvent.actor.userInformation.nickname} (potential reward for a comment).")
-                    //TODO Add the code to manage a user when he creates a new post.
-                    break
-
-                case TopicServiceEventCode.NEW_ANSWER_ON_TOPIC:
-                    log.info("UserService is trying to update user ${topicEvent.actor.userInformation.nickname} (potential reward for an answer).")
-                    //TODO Add the code to manage a user when he answers a question.
-                    break
-
-                case TopicServiceEventCode.POST_CORRECTED:
-                    log.info("UserService is trying to update user ${topicEvent.actor.userInformation.nickname} (potential reward for a post correction).")
-                    //TODO Add the code to manage a user when he corrects a post.
-                    break
-
                 case TopicServiceEventCode.POST_UPVOTED:
                     this.increaseAuthorReputation(event)
                     break
