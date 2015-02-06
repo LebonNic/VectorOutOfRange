@@ -230,9 +230,11 @@ class TopicService extends Subject{
 
         else if(postToDelete.type == PostType.ANSWER){
             log.info("Deletes a answer from ${postToDelete.content.author.nickname}.")
-            if(postToDelete.id == postToDelete.topic.bestAnswer.id){
-                log.debug("Deletes the best answer.")
-                postToDelete.topic.bestAnswer = null
+            if(postToDelete.topic.bestAnswer){
+                if(postToDelete.id == postToDelete.topic.bestAnswer.id){
+                    log.debug("Deletes the best answer.")
+                    postToDelete.topic.bestAnswer = null
+                }
             }
             postToDelete.topic.removeFromAnswers(postToDelete)
             this.deleteContentAssociateToPost(postToDelete)
@@ -326,7 +328,7 @@ class TopicService extends Subject{
      * @return The user's vote.
      */
     def voteForPost(long postId, long voterId, VoteType type){
-        def voter = this.getUser(voterId)
+        def voter = this.getUser(voterId, true)
         def post = this.getPost(postId)
 
         def Vote vote = getUserVoteOnPost(post.id, voter.id)

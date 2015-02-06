@@ -73,7 +73,7 @@ class BadgeService implements Observer {
             if(!isBadgeAlreadyUnlock(user, badge)){
                 user.addToBadges(badge)
                 log.info("User ${user.nickname} has just unlocked a new Badge : ${badge.name}.")
-                user.save(flush: true, failOnError: true)
+                user.save(failOnError: true)
             }
         }
         else{
@@ -142,7 +142,7 @@ class BadgeService implements Observer {
                     break
 
                 case TopicServiceEventCode.NEW_COMMENT_ON_POST:
-                    log.debug("New comment on post sa mere !")
+                    log.debug("New comment on post !")
                     def author = topicEvent.actor.userInformation
                     this.checkForCommentatorBadge(author)
                     break
@@ -185,6 +185,8 @@ class BadgeService implements Observer {
         //Bit of hack here...
         corrector.editedPosts += 1
         corrector.save(flush: true, failOnError: true)
+
+        log.debug("User ${corrector.nickname} has editied : ${corrector.editedPosts} posts.")
 
         if(corrector.editedPosts >= 1 && corrector.editedPosts < 80){
             this.unlockBadge('editor', corrector)
@@ -230,8 +232,10 @@ class BadgeService implements Observer {
      * @return The rewarded user or nothing.
      */
     def private checkForGuruBadge(Post answer, UserInformation author){
-        if(answer.id == answer.topic.bestAnswer.id && answer.getScore() >= 40)
-            this.unlockBadge('guru', author)
+        if(answer.topic.bestAnswer){
+            if(answer.id == answer.topic.bestAnswer.id && answer.getScore() >= 40)
+                this.unlockBadge('guru', author)
+        }
     }
 
     /**
