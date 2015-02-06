@@ -8,6 +8,10 @@ class BadgeController {
 
     static allowedMethods = [index: 'GET']
 
+    /**
+     * Display badge list view.
+     * @return Badge list view.
+     */
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def index() {
         render(view: 'index', model: [bronzeBadges: Badge.findAll {
