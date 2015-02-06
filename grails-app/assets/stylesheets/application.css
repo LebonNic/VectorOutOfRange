@@ -198,6 +198,16 @@ code {
     font-size: 0.8em;
 }
 
+.user-profile textarea {
+    font-size: 0.8em;
+    height: 16em;
+    margin-bottom: 0.25em;
+}
+
+.user-profile .label {
+    width: 100%;
+}
+
 .user-activities {
     list-style: none;
 }
@@ -312,6 +322,7 @@ code {
 .question-textarea {
     height: 16em;
     margin-bottom: 1em;
+    font-size: 0.875rem;
 }
 
 .tag-textarea {
@@ -320,7 +331,7 @@ code {
 }
 
 .answer-textarea {
-    height: 16em;
+    height: 8em;
     margin-bottom: 0.25em;
 }
 
@@ -385,5 +396,5 @@ code {
 }
 
 .best-answer {
-    font-size: 32px;
+    color: #008CBA;
 }

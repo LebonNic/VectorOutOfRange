@@ -9,11 +9,11 @@
 
 <form id="post-question-form">
     <div class="row collapse prefix-radius">
-        <div class="large-1 small-1 columns">
+        <div class="large-1 small-2 columns">
             <span class="prefix"><g:message code="voor.topic.title"/></span>
         </div>
 
-        <div class="large-11 small-11 columns">
+        <div class="large-11 small-10 columns">
             <input id="question-title" type="text" placeholder="<g:message code="voor.topic.title"/>"/>
         </div>
     </div>
@@ -25,11 +25,11 @@
     </div>
 
     <div class="row collapse">
-        <div class="small-11 large-11 columns">
+        <div class="small-10 large-11 columns">
             <input id="tag-name-input" type="text" placeholder="<g:message code="voor.topic.tag.name"/>"/>
         </div>
 
-        <div class="small-1 large-1 columns">
+        <div class="small-2 large-1 columns">
             <a class="button prefix" id="add-tag-button" disabled><g:message code="voor.topic.add.tag"/></a>
         </div>
     </div>

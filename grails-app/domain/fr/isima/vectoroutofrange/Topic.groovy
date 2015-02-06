@@ -11,6 +11,10 @@ class Topic {
 
     static mappedBy = [question: "none", answers: "none", bestAnswer: "none"]
 
+    static mapping = {
+        sort 'question.content.date': 'desc'
+    }
+
     static constraints = {
         answers nullable: true
         tags nullable: true
