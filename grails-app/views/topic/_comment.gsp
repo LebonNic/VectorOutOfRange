@@ -6,7 +6,7 @@
     </div>
 
     <div class="large-11 columns">
-        <p class="text-justify">${comment.content.text}</p>
+        <markdown:renderHtml>${comment.content.text}</markdown:renderHtml>
         <voor:userBadge post="${comment}"/>
     </div>
 </div>

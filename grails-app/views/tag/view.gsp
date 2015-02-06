@@ -2,16 +2,15 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
+    <asset:stylesheet href="highlight.js"/>
 </head>
 
 <body>
 <h3><g:message code="voor.tag.about"/> <span class="label radius">${tag.name}</span></h3>
 
 <div class="row panel">
-    <p class="text-justify">
-        <g:if test="${tag.definition}">${tag.definition}</g:if>
-        <g:else><g:message code="voor.tag.has.no.definition" args="[tag.name]"/>.</g:else>
-    </p>
+    <markdown:renderHtml><g:if test="${tag.definition}">${tag.definition}</g:if><g:else><g:message code="voor.tag.has.no.definition" args="[tag.name]"/>.</g:else>
+    </markdown:renderHtml>
     <a class="action-link" href="${createLink(controller: 'tag', action: 'edit', id: tag.id)}" title="${message(code: 'voor.tag.edit')}">
         <i class="fa fa-pencil"></i>
     </a>
@@ -37,6 +36,7 @@
         });
     });
 </script>
-
+<asset:javascript src="highlight.js"/>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>

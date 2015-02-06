@@ -8,9 +8,7 @@
         </div>
 
         <div class="large-11 small-12 columns">
-            <p class="text-justify">
-                ${answer.content.text}
-            </p>
+            <markdown:renderHtml>${answer.content.text}</markdown:renderHtml>
 
             <div class="row">
                 <div class="large-3 small-12 columns right">

@@ -15,7 +15,7 @@
         <div class="large-11 small-12 columns">
             <a href="${createLink(controller: 'topic', action: 'view', id: topic.id)}"><h5>${topic.title}</h5></a>
 
-            <p class="text-justify">${topic.question.content.text}</p>
+            <markdown:renderHtml>${topic.question.content.text}</markdown:renderHtml>
 
             <div class="row">
                 <!-- Topic's tags -->
