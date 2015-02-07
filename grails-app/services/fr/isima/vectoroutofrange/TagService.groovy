@@ -34,7 +34,7 @@ class TagService {
      * @return The new tag.
      */
     def createTag(String name, String definition = ""){
-        def tag = new Tag(name: name, definition: definition).save(flush: true, failOnError: true)
+        def tag = new Tag(name: name, definition: definition).save( failOnError: true)
         return tag
     }
 
@@ -50,7 +50,7 @@ class TagService {
 
         tag.name = newName
         tag.definition = newDefinition
-        tag.save(flush: true, failOnError: true)
+        tag.save( failOnError: true)
 
         return tag
     }
@@ -65,7 +65,7 @@ class TagService {
 
         for(topic in tag.topics){
             topic.tags.remove(tag)
-            topic.save(flush: true, failOnError: true)
+            topic.save( failOnError: true)
         }
 
         tag.delete()

@@ -75,8 +75,9 @@ class BadgeService implements Observer {
                 log.info("User ${user.nickname} has just unlocked a new Badge : ${badge.name}.")
                 user.save(failOnError: true)
             }
-        } else {
-            throw new BadgeServiceException(BadgeServiceExceptionCode.BADGE_NOT_FOUND, "The badge's key passed to the method BadgeService.unlockBadge doesn't exist.")
+        }
+        else{
+            throw new BadgeServiceException(BadgeServiceExceptionCode.BADGE_NOT_FOUND, "The badge's key \"${badgeKey}\" passed to the method BadgeService.unlockBadge doesn't exist.")
         }
     }
 

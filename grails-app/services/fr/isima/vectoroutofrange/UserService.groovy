@@ -5,6 +5,18 @@ import grails.transaction.Transactional
 @Transactional
 class UserService extends Subject implements Observer{
 
+    def rolesMap = [:]
+
+    void init() {
+        this.rolesMap['createPostPermission'] = new Role(authority: 'ROLE_CREATE_POST', name: 'Create posts', description: 'Ask a question or contribute an answer', requiredReputation: 1).save(failOnError: true)
+        this.rolesMap['voteUpPermission'] = new Role(authority: 'ROLE_VOTE_UP', name: 'Vote up', description: 'Indicate when questions and answers are useful', requiredReputation: 15).save(failOnError: true)
+        this.rolesMap['createCommentPermission'] = new Role(authority: 'ROLE_CREATE_COMMENT', name: 'Create comments', description: 'Add comments on questions and answers', requiredReputation: 15).save(failOnError: true)
+        this.rolesMap['voteDownPermission'] = new Role(authority: 'ROLE_VOTE_DOWN', name: 'Vote down', description: 'Indicate when questions and answers are not useful', requiredReputation: 125).save(failOnError: true)
+        this.rolesMap['moderateTagPermission'] = new Role(authority: 'ROLE_MODERATE_TAG', name: 'Moderate tag', description: 'Edit and delete tags', requiredReputation: 1500).save(failOnError: true)
+        this.rolesMap['moderatePostPermission'] = new Role(authority: 'ROLE_MODERATE_POST', name: 'Moderate posts', description: 'Edit and delete posts', requiredReputation: 10000).save(failOnError: true)
+        this.rolesMap['moderateUserPermission'] = new Role(authority: 'ROLE_MODERATE_USER', name: 'Moderate users', description: 'Edit and delete users', requiredReputation: 20000).save(failOnError: true)
+    }
+
     /**
      * Retrieves a user from the database.
      * @param userId The id of the user to get.
@@ -37,12 +49,62 @@ class UserService extends Subject implements Observer{
      * @return The new created user.
      */
     def createUser(String username, String password, String firstName, String lastName, String nickname){
+        log.info("Creation of user ${nickname}.")
         def userInformation = new UserInformation(firstName: firstName, lastName: lastName, nickname: nickname, reputation: 1, editedPostsCount: 0)
         def user = new User(username: username, password: password, userInformation: userInformation)
-        user.save(flush: true, failOnError: true)
-        log.info("User ${nickname} has been created.")
+        user.save( failOnError: true)
+        this.grantRoleToUser(user, 'createPostPermission')
+        // just to try...
+        this.grantRoleToUser(user, 'voteUpPermission')
+        log.debug("User ${nickname} has been created.")
         this.notifyObservers(new UserServiceEvent(user: user), UserServiceEventCode.NEW_USER_CREATED)
         return user
+    }
+
+    /**
+     * Gives a role to the user passed as parameter.
+     * @param user The user who should get a new role.
+     * @param roleKey A string corresponding to a role's key in the UserService's map
+     * @return ???
+     */
+    def private grantRoleToUser(User user, String roleKey){
+        def Role role = (Role) this.rolesMap[roleKey]
+
+        if(role){
+            if(!UserRole.exists(user.id, role.id)){
+                UserRole.create(user, role, true)
+                log.info("User ${user.userInformation.nickname} has been given a new privilege : ${role.name}.")
+            }
+            else {
+                log.debug("User ${user.userInformation.nickname} has already the role : ${role.name}.")
+            }
+        }
+        else {
+            throw new UserServiceException(UserServiceExceptionCode.USER_ROLE_NOT_FOUND, "The role's key \" ${roleKey}\" passed to the method UserService.grantRoleToUser doesn't exist")
+        }
+    }
+
+    /**
+     * Removes a role to the user passed as parameter.
+     * @param user The user who should lose his role.
+     * @param roleKey A string corresponding to a role's key in the UserService's map
+     * @return ???
+     */
+    def private removeRoleToUser(User user, String roleKey){
+        def role = (Role) this.rolesMap[roleKey]
+
+        if(role){
+            if(UserRole.exists(user.id, role.id)){
+                UserRole.remove(user, role)
+                log.info("User ${user.userInformation.nickname} has lost privilege : ${role.name}.")
+            }
+            else{
+                log.debug("Can't remove \"${role.name}\" privilege to user ${user.userInformation.nickname} because he has not this role yet.")
+            }
+        }
+        else{
+            throw new UserServiceException(UserServiceExceptionCode.USER_ROLE_NOT_FOUND, "The role's key \" ${roleKey}\" passed to the method UserService.removeRoleToUser doesn't exist")
+        }
     }
 
     /**
@@ -57,7 +119,7 @@ class UserService extends Subject implements Observer{
      * @return The updated user.
      */
     def updateUser(long userId, String firstName, String lastName, String nickname, String website, String location, String about){
-        def user = this.getUser(userId)
+        def User user = this.getUser(userId)
 
         try {
             user.userInformation.firstName = firstName
@@ -66,7 +128,7 @@ class UserService extends Subject implements Observer{
             user.userInformation.website = website
             user.userInformation.location = location
             user.userInformation.about = about
-            user.save(flush: true, failOnError: true)
+            user.save( failOnError: true)
             this.notifyObservers(new UserServiceEvent(user: user), UserServiceEventCode.USER_UPDATED)
             log.info("User ${user.userInformation.nickname} (username : ${user.username}) has been updated.")
         } catch (Exception e) {
@@ -80,6 +142,57 @@ class UserService extends Subject implements Observer{
         }
 
         return user
+    }
+
+    /**
+     * Checks if the user passed as parameter has earned enough reputation to get a new role.
+     * @param user The user who has to be checked.
+     * @return ???
+     */
+    def private checkRolesToGrantForUser(User user){
+        def reputation = user.userInformation.reputation
+        if(reputation >= 15 && reputation < 125){
+            this.grantRoleToUser(user, 'voteUpPermission')
+            this.grantRoleToUser(user, 'createCommentPermission')
+        }
+        else if(reputation >= 125 && reputation < 1500){
+            this.grantRoleToUser(user, 'voteDownPermission')
+        }
+        else if(reputation >= 1500 && reputation < 10000){
+            this.grantRoleToUser(user, 'moderateTagPermission')
+        }
+        else if(reputation >= 10000 && reputation < 20000){
+            this.grantRoleToUser(user, 'moderatePostPermission')
+        }
+        else if(reputation >= 20000){
+            this.grantRoleToUser(user, 'moderateUserPermission')
+        }
+    }
+
+    /**
+     * Checks if the user passed as parameter should lose his roles.
+     * @param user The user who has to be checked.
+     * @return ???
+     */
+    def private checkRolesToRemoveForUser(User user){
+        def reputation = user.userInformation.reputation
+
+        if(reputation < 15){
+            this.removeRoleToUser(user, 'voteUpPermission')
+            this.removeRoleToUser(user, 'createCommentPermission')
+        }
+        else if(reputation >= 15 && reputation < 125){
+            this.removeRoleToUser(user, 'voteDownPermission')
+        }
+        else if(reputation >= 125 && reputation < 1500){
+            this.removeRoleToUser(user, 'moderateTagPermission')
+        }
+        else if (reputation >= 1500 && reputation < 10000){
+            this.removeRoleToUser(user, 'moderatePostPermission')
+        }
+        else if(reputation >= 10000 && reputation < 20000){
+            this.removeRoleToUser(user, 'moderateUserPermission')
+        }
     }
 
     /**
@@ -97,17 +210,19 @@ class UserService extends Subject implements Observer{
 
             switch (code){
                 case TopicServiceEventCode.POST_UPVOTED:
-                    this.increaseAuthorReputation(event)
+                    this.increaseAuthorReputation(topicEvent)
+                    this.checkRolesToGrantForUser(topicEvent.post.content.author.user)
                     break
 
                 case TopicServiceEventCode.POST_DOWNVOTED:
-                    this.decreaseVoterReputation(event)
-                    this.decreaseAuthorReputation(event)
+                    this.decreaseVoterReputation(topicEvent)
+                    this.decreaseAuthorReputation(topicEvent)
+                    this.checkRolesToRemoveForUser(topicEvent.actor)
+                    this.checkRolesToRemoveForUser(topicEvent.post.content.author.user)
                     break
             }
         }
     }
-
 
     /**
      * Decreases the reputation of a user for a downvote on an answer.
@@ -124,7 +239,7 @@ class UserService extends Subject implements Observer{
             if(voter.userInformation.reputation < 1)
                 voter.userInformation.reputation = 1
 
-            voter.save(flush: true, failOnError: true)
+            voter.save( failOnError: true)
         }
     }
 
@@ -149,7 +264,7 @@ class UserService extends Subject implements Observer{
         if(author.reputation < 1)
             author.reputation = 1
 
-        author.save(flush: true, failOnError: true)
+        author.save( failOnError: true)
     }
 
     /**
@@ -169,6 +284,6 @@ class UserService extends Subject implements Observer{
             log.info("User ${author.nickname} gains 10 points of reputation for an upvote on his answer.")
         }
 
-        author.save(flush: true, failOnError: true)
+        author.save( failOnError: true)
     }
 }
