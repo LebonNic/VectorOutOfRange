@@ -6,7 +6,8 @@ package fr.isima.vectoroutofrange
 enum UserServiceExceptionCode{
     USER_NOT_FOUND,
     USER_WEBSITE_INVALID,
-    USER_NICKNAME_INVALID
+    USER_NICKNAME_INVALID,
+    USER_ROLE_NOT_FOUND
 }
 
 /**

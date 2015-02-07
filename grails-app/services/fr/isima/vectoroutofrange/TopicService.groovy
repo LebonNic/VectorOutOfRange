@@ -118,12 +118,12 @@ class TopicService extends Subject{
             newTopic.addToTags(tag)
         }
 
-        newPost.save(flush: true, failOnError: true)
+        newPost.save( failOnError: true)
         newPost.topic = newTopic
-        newTopic.save(flush: true, failOnError: true)
+        newTopic.save( failOnError: true)
 
         questionText.post = newPost
-        questionText.save(flush: true, failOnError: true)
+        questionText.save( failOnError: true)
 
         log.info("Creation of the topic ${title} by ${author.userInformation.nickname}.")
         this.notifyObservers(new TopicServiceEvent(actor: author, post: newPost, topic: newTopic), TopicServiceEventCode.NEW_TOPIC_CREATED)
@@ -147,10 +147,10 @@ class TopicService extends Subject{
             author.userInformation.addToMessages(commentText)
             def commentPost = new Post(topic: postToComment.topic, content: commentText, type: PostType.COMMENT)
             postToComment.addToComments(commentPost)
-            postToComment.save(flush: true, failOnError: true)
+            postToComment.save( failOnError: true)
 
             commentText.post = commentPost
-            commentText.save(flush: true, failOnError: true)
+            commentText.save( failOnError: true)
 
             log.info("User ${author.userInformation.nickname} posted a comment on a topic entitled ${postToComment.topic.title}.")
             this.notifyObservers(new TopicServiceEvent(actor: author, post: postToComment, topic: postToComment.topic),  TopicServiceEventCode.NEW_COMMENT_ON_POST)
@@ -177,10 +177,10 @@ class TopicService extends Subject{
         author.userInformation.addToMessages(answerText)
         def answerPost = new Post(topic: topicToAnswer, content: answerText, type: PostType.ANSWER)
         topicToAnswer.addToAnswers(answerPost)
-        topicToAnswer.save(flush: true, failOnError: true)
+        topicToAnswer.save( failOnError: true)
 
         answerText.post = answerPost
-        answerText.save(flush: true, failOnError: true)
+        answerText.save( failOnError: true)
 
         log.info("User ${author.userInformation.nickname} answered the question posted on the topic ${topicToAnswer.title}.")
         this.notifyObservers(new TopicServiceEvent(actor: author, post: answerPost, topic: topicToAnswer),  TopicServiceEventCode.NEW_ANSWER_ON_TOPIC)
@@ -202,10 +202,10 @@ class TopicService extends Subject{
         def correctedMessage = new Message(text: text, date: new Date(), author: author.userInformation)
         author.userInformation.addToMessages(correctedMessage)
         post.replaceCurrentContent(correctedMessage)
-        post.save(flush: true, failOnError: true)
+        post.save( failOnError: true)
 
         correctedMessage.post = post
-        correctedMessage.save(flush: true, failOnError: true)
+        correctedMessage.save( failOnError: true)
 
         log.info("User ${author.userInformation.nickname} corrected a post on the topic ${post.topic.title}.")
         this.notifyObservers(new TopicServiceEvent(actor: author, post: post, topic: post.topic),  TopicServiceEventCode.POST_CORRECTED)
@@ -341,7 +341,7 @@ class TopicService extends Subject{
             else
                 vote.type = type
 
-            vote.save(flush: true, failOnError: true)
+            vote.save( failOnError: true)
             log.info("User ${voter.userInformation.nickname} updated his vote for a post on the topic ${post.topic.title}.")
         }
 
@@ -350,7 +350,7 @@ class TopicService extends Subject{
             vote = new Vote(type: type, date: new Date(), author: voter.userInformation)
             voter.userInformation.addToVotes(vote)
             post.addToVotes(vote)
-            post.save(flush: true, failOnError: true)
+            post.save( failOnError: true)
             log.info("User ${voter.userInformation.nickname} voted for a post on the topic ${post.topic.title}.")
         }
 
@@ -376,7 +376,7 @@ class TopicService extends Subject{
 
         if(post.type == PostType.ANSWER){
             topic.bestAnswer = post
-            topic.save(flush: true, failOnError: true)
+            topic.save( failOnError: true)
             log.info("${post.content.author.nickname}'s post has been tagged as best answer on the topic ${topic.title}.")
             this.notifyObservers(new TopicServiceEvent(actor: null, post: post, topic: topic), TopicServiceEventCode.POST_TAGGED_AS_BEST_ANSWER)
             return topic
@@ -394,7 +394,7 @@ class TopicService extends Subject{
     def incrementViewsCount(long topicId){
         def topic = this.getTopic(topicId, true)
         topic.views += 1
-        topic.save(flush: true, failOnError: true)
+        topic.save( failOnError: true)
         this.notifyObservers(new TopicServiceEvent(actor: null, post: topic.question, topic: topic), TopicServiceEventCode.VIEWS_COUNT_INCREMENTED)
 
         return topic
