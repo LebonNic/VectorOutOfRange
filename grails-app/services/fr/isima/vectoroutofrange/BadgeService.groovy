@@ -17,47 +17,47 @@ class BadgeService implements Observer {
      */
     @PostConstruct
     void init(){
-        this.badgesMap['newby'] = new Badge(name: "Newby", description: "Congratulation, you just joined the wonderful community of vector::out_of_range!", type: BadgeType.BRONZE).save(flush: true, failOnError: true)
+        this.badgesMap['newby'] = new Badge(name: "Newby", description: "Congratulation, you just joined the wonderful community of vector::out_of_range!", type: BadgeType.BRONZE).save(failOnError: true)
 
-        this.badgesMap['niceQuestion'] = new Badge(name: "Nice Question", description: "Question score of 10 or more", type: BadgeType.BRONZE).save(flush: true, failOnError: true)
-        this.badgesMap['goodQuestion'] = new Badge(name: "Good Question", description: "Question score of 25 or more", type: BadgeType.SILVER).save(flush: true, failOnError: true)
-        this.badgesMap['greatQuestion'] = new Badge(name: "Great Question", description: "Question score of 100 or more", type: BadgeType.GOLD).save(flush: true, failOnError: true)
-        this.badgesMap['ultimateBadge'] = new Badge(name: "The Ultimate Question of Life the Universe and Everything", description: "Question score of 500 or more", type: BadgeType.PLATINUM).save(flush: true, failOnError: true)
+        this.badgesMap['niceQuestion'] = new Badge(name: "Nice Question", description: "Question score of 10 or more", type: BadgeType.BRONZE).save( failOnError: true)
+        this.badgesMap['goodQuestion'] = new Badge(name: "Good Question", description: "Question score of 25 or more", type: BadgeType.SILVER).save( failOnError: true)
+        this.badgesMap['greatQuestion'] = new Badge(name: "Great Question", description: "Question score of 100 or more", type: BadgeType.GOLD).save( failOnError: true)
+        this.badgesMap['ultimateBadge'] = new Badge(name: "The Ultimate Question of Life the Universe and Everything", description: "Question score of 500 or more", type: BadgeType.PLATINUM).save(failOnError: true)
 
-        this.badgesMap['popularQuestion'] = new Badge(name: "Popular question", description: "Asked a question with 1,000 views", type: BadgeType.BRONZE).save(flush: true, failOnError: true)
-        this.badgesMap['notableQuestion'] = new Badge(name: "Notable question", description: "Asked a question with 2,500 views", type: BadgeType.SILVER).save(flush: true, failOnError: true)
-        this.badgesMap['famousQuestion'] = new Badge(name: "Famous question", description: "Asked a question with 10,000 views", type: BadgeType.BRONZE).save(flush: true, failOnError: true)
-        this.badgesMap['acclaimedQuestion'] = new Badge(name: "Acclaimed question", description: "Asked a question with 50,000 views", type: BadgeType.PLATINUM).save(flush: true, failOnError: true)
+        this.badgesMap['popularQuestion'] = new Badge(name: "Popular question", description: "Asked a question with 1,000 views", type: BadgeType.BRONZE).save( failOnError: true)
+        this.badgesMap['notableQuestion'] = new Badge(name: "Notable question", description: "Asked a question with 2,500 views", type: BadgeType.SILVER).save( failOnError: true)
+        this.badgesMap['famousQuestion'] = new Badge(name: "Famous question", description: "Asked a question with 10,000 views", type: BadgeType.BRONZE).save( failOnError: true)
+        this.badgesMap['acclaimedQuestion'] = new Badge(name: "Acclaimed question", description: "Asked a question with 50,000 views", type: BadgeType.PLATINUM).save( failOnError: true)
 
-        this.badgesMap['studentQuestion'] = new Badge(name: "Student", description: "Asked first question with score of 1 or more", type: BadgeType.BRONZE).save(flush: true, failOnError: true)
+        this.badgesMap['studentQuestion'] = new Badge(name: "Student", description: "Asked first question with score of 1 or more", type: BadgeType.BRONZE).save( failOnError: true)
 
-        this.badgesMap['explainer'] = new Badge(name: "Explainer", description: "Edited and answered 1 question", type: BadgeType.BRONZE).save(flush: true, failOnError: true)
-        this.badgesMap['refiner'] = new Badge(name: "Refiner", description: "Edited and answered 50 question", type: BadgeType.SILVER).save(flush: true, failOnError: true)
-        this.badgesMap['illuminator'] = new Badge(name: "Illuminator", description: "Edited and answered 500 question", type: BadgeType.GOLD).save(flush: true, failOnError: true)
+        this.badgesMap['explainer'] = new Badge(name: "Explainer", description: "Edited and answered 1 question", type: BadgeType.BRONZE).save( failOnError: true)
+        this.badgesMap['refiner'] = new Badge(name: "Refiner", description: "Edited and answered 50 question", type: BadgeType.SILVER).save( failOnError: true)
+        this.badgesMap['illuminator'] = new Badge(name: "Illuminator", description: "Edited and answered 500 question", type: BadgeType.GOLD).save( failOnError: true)
 
-        this.badgesMap['guru'] = new Badge(name: "Guru", description: "Accepted answer and score of 40 or more", type: BadgeType.SILVER).save(flush: true, failOnError: true)
+        this.badgesMap['guru'] = new Badge(name: "Guru", description: "Accepted answer and score of 40 or more", type: BadgeType.SILVER).save( failOnError: true)
 
-        this.badgesMap['niceAnswer'] = new Badge(name: "Nice Answer", description: "Answer score of 10 or more", type: BadgeType.BRONZE).save(flush: true, failOnError: true)
-        this.badgesMap['goodAnswer'] = new Badge(name: "Good Answer", description: "Answer score of 25 or more", type: BadgeType.SILVER).save(flush: true, failOnError: true)
-        this.badgesMap['greatAnswer'] = new Badge(name: "Great Answer", description: "Answer score of 100 or more", type: BadgeType.GOLD).save(flush: true, failOnError: true)
-        this.badgesMap['fortyTwo'] = new Badge(name: "42", description: "Answer score of 500 or more", type: BadgeType.PLATINUM).save(flush: true, failOnError: true)
+        this.badgesMap['niceAnswer'] = new Badge(name: "Nice Answer", description: "Answer score of 10 or more", type: BadgeType.BRONZE).save( failOnError: true)
+        this.badgesMap['goodAnswer'] = new Badge(name: "Good Answer", description: "Answer score of 25 or more", type: BadgeType.SILVER).save( failOnError: true)
+        this.badgesMap['greatAnswer'] = new Badge(name: "Great Answer", description: "Answer score of 100 or more", type: BadgeType.GOLD).save( failOnError: true)
+        this.badgesMap['fortyTwo'] = new Badge(name: "42", description: "Answer score of 500 or more", type: BadgeType.PLATINUM).save( failOnError: true)
 
-        this.badgesMap['populist'] = new Badge(name: "Populist", description: "Highest scoring answer that outscored an accepted answer with score of more than 10 by more than 2x", type: BadgeType.GOLD).save(flush: true, failOnError: true)
-        this.badgesMap['reversal'] = new Badge(name: "Reversal", description: "Provided answer of +20 score to a question of -5 score", type: BadgeType.GOLD).save(flush: true, failOnError: true)
-        this.badgesMap['selfLearner'] = new Badge(name: "Self-Learner", description: "Answered your own question with score of 3 or more", type: BadgeType.BRONZE).save(flush: true, failOnError: true)
-        this.badgesMap['teacher'] = new Badge(name: "Teacher", description: "Answered first question with score of 1 or more", type: BadgeType.BRONZE).save(flush: true, failOnError: true)
-        this.badgesMap['autobiographer'] = new Badge(name: "Autobiographer", description: "Completed &laquo; About Me &raquo; section of user profile", type: BadgeType.BRONZE).save(flush: true, failOnError: true)
-        this.badgesMap['commentator'] = new Badge(name: "Commentator", description: "Left 10 comments", type: BadgeType.BRONZE).save(flush: true, failOnError: true)
-        this.badgesMap['pundit'] = new Badge(name: "Pundit", description: "Left 10 comments with score of 5 or more", type: BadgeType.SILVER).save(flush: true, failOnError: true)
+        this.badgesMap['populist'] = new Badge(name: "Populist", description: "Highest scoring answer that outscored an accepted answer with score of more than 10 by more than 2x", type: BadgeType.GOLD).save( failOnError: true)
+        this.badgesMap['reversal'] = new Badge(name: "Reversal", description: "Provided answer of +20 score to a question of -5 score", type: BadgeType.GOLD).save( failOnError: true)
+        this.badgesMap['selfLearner'] = new Badge(name: "Self-Learner", description: "Answered your own question with score of 3 or more", type: BadgeType.BRONZE).save( failOnError: true)
+        this.badgesMap['teacher'] = new Badge(name: "Teacher", description: "Answered first question with score of 1 or more", type: BadgeType.BRONZE).save( failOnError: true)
+        this.badgesMap['autobiographer'] = new Badge(name: "Autobiographer", description: "Completed &laquo; About Me &raquo; section of user profile", type: BadgeType.BRONZE).save( failOnError: true)
+        this.badgesMap['commentator'] = new Badge(name: "Commentator", description: "Left 10 comments", type: BadgeType.BRONZE).save( failOnError: true)
+        this.badgesMap['pundit'] = new Badge(name: "Pundit", description: "Left 10 comments with score of 5 or more", type: BadgeType.SILVER).save( failOnError: true)
 
-        this.badgesMap['critic'] = new Badge(name: "Critic", description: "First down vote", type: BadgeType.BRONZE).save(flush: true, failOnError: true)
-        this.badgesMap['supporter'] = new Badge(name: "Supporter", description: "First up vote", type: BadgeType.BRONZE).save(flush: true, failOnError: true)
-        this.badgesMap['disciplined'] = new Badge(name: "Disciplined", description: "Deleted own post with score of 3 or higher", type: BadgeType.BRONZE).save(flush: true, failOnError: true)
-        this.badgesMap['peerPressure'] = new Badge(name: "Peer Pressure", description: "Deleted own post with score of -3 or lower", type: BadgeType.BRONZE).save(flush: true, failOnError: true)
+        this.badgesMap['critic'] = new Badge(name: "Critic", description: "First down vote", type: BadgeType.BRONZE).save( failOnError: true)
+        this.badgesMap['supporter'] = new Badge(name: "Supporter", description: "First up vote", type: BadgeType.BRONZE).save( failOnError: true)
+        this.badgesMap['disciplined'] = new Badge(name: "Disciplined", description: "Deleted own post with score of 3 or higher", type: BadgeType.BRONZE).save( failOnError: true)
+        this.badgesMap['peerPressure'] = new Badge(name: "Peer Pressure", description: "Deleted own post with score of -3 or lower", type: BadgeType.BRONZE).save( failOnError: true)
 
-        this.badgesMap['editor'] = new Badge(name: "Editor", description: "First edit", type: BadgeType.BRONZE).save(flush: true, failOnError: true)
-        this.badgesMap['strunkAndWhite'] = new Badge(name: "Strunk & White", description: "Edited 80 posts", type: BadgeType.SILVER).save(flush: true, failOnError: true)
-        this.badgesMap['copyEditor'] = new Badge(name: "Copy Editor", description: "Edited 500 posts", type: BadgeType.GOLD).save(flush: true, failOnError: true)
+        this.badgesMap['editor'] = new Badge(name: "Editor", description: "First edit", type: BadgeType.BRONZE).save( failOnError: true)
+        this.badgesMap['strunkAndWhite'] = new Badge(name: "Strunk & White", description: "Edited 80 posts", type: BadgeType.SILVER).save( failOnError: true)
+        this.badgesMap['copyEditor'] = new Badge(name: "Copy Editor", description: "Edited 500 posts", type: BadgeType.GOLD).save( failOnError: true)
     }
 
     /**
@@ -184,7 +184,7 @@ class BadgeService implements Observer {
     def privateCheckForPostEditionReward(UserInformation corrector){
         //Bit of hack here...
         corrector.editedPosts += 1
-        corrector.save(flush: true, failOnError: true)
+        corrector.save( failOnError: true)
 
         log.debug("User ${corrector.nickname} has editied : ${corrector.editedPosts} posts.")
 
