@@ -14,14 +14,8 @@ class BadgeController {
      */
     @Secured(['IS_AUTHENTICATED_ANONYMOUSLY'])
     def index() {
-        render(view: 'index', model: [bronzeBadges: Badge.findAll {
-            type == BadgeType.BRONZE
-        }, silverBadges: Badge.findAll {
-            type == BadgeType.SILVER
-        }, goldBadges: Badge.findAll {
-            type == BadgeType.GOLD
-        }, platinumBadges: Badge.findAll {
-            type == BadgeType.PLATINUM
-        }, user: (User) springSecurityService.currentUser])
+        render(view: 'index', model: [
+                user: (User) springSecurityService.currentUser
+        ])
     }
 }

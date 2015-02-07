@@ -120,6 +120,8 @@
     </div>
 </div>
 
+<voor:badges user="${user}"/>
+
 <voor:timeline user="${user}"/>
 
 <script type="text/javascript">
