@@ -80,7 +80,7 @@ class TopicTagLib {
      */
     def bounty = { attrs ->
         out << render(template: '/topic/bounty', model: [
-                value: attrs['value']
+                value: Integer.parseInt((String) attrs['value'])
         ])
     }
 
