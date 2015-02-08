@@ -1,4 +1,5 @@
 <%@ page import="fr.isima.vectoroutofrange.PostType" %>
+
 <div class="row user-profile">
     <div class="large-2 small-4 columns text-center">
         <div class="user-avatar">
@@ -57,6 +58,7 @@
             </div>
         </div>
 
+    <!-- Private information -->
         <sec:ifLoggedIn>
             <g:if test="${user.id == sec.loggedInUserInfo(field: 'id').toLong()}">
                 <div class="row">
@@ -116,7 +118,6 @@
 
         <voor:editUserButton user="${user}"/>
         <voor:deleteUserButton user="${user}"/>
-
     </div>
 </div>
 

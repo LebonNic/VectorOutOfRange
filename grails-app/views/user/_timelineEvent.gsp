@@ -1,4 +1,5 @@
 <%@ page import="fr.isima.vectoroutofrange.PostType" %>
+
 <div class="cd-timeline-block">
     <g:if test="${message.post.type == PostType.QUESTION}">
         <g:if test="${message.post.history[0] == message || message.post.history.empty}">

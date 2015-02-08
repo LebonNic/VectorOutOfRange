@@ -1,7 +1,6 @@
 <g:if test="${post.topic.bestAnswer == null}">
     <sec:ifLoggedIn>
-        <g:if test="${(!post.topic.question.history.empty && sec.loggedInUserInfo(field: 'id').asType(Long.class) == post.topic.question.history[0].author.user.id) ||
-                sec.loggedInUserInfo(field: 'id').asType(Long.class) == post.topic.question.content.author.user.id}">
+        <g:if test="${sec.loggedInUserInfo(field: 'id').toLong() == post.topic.question.creator.id}">
             <a id="${post.id}" class="choose-best-answer action-link">
                 <i class="fa fa-check" title="<g:message code="voor.topic.choose.as.best.answer"/>"></i>
             </a>

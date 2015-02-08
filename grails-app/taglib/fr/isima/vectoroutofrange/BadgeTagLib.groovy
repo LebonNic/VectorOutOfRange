@@ -4,6 +4,10 @@ class BadgeTagLib {
 
     static namespace = 'voor'
 
+    /**
+     * Display available badges.
+     * @param user If specified, display user's badge.
+     */
     def badges = { attrs ->
         User user = (User) attrs['user']
         out << render(template: '/badge/badges', model: [
@@ -15,11 +19,15 @@ class BadgeTagLib {
         ])
     }
 
+    /**
+     * Display a badge.
+     * @param badge REQUIRED Badge to display.
+     * @param user If specified, display the amount of badge of this kind received by the user.
+     */
     def badge = { attrs ->
         out << render(template: '/badge/badge', model: [
                 user : (User) attrs['user'],
-                badge: (Badge) attrs['badge'],
-                type : (String) attrs['type']
+                badge: (Badge) attrs['badge']
         ])
     }
 }

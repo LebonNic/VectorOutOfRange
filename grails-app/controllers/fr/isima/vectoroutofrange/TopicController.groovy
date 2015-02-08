@@ -37,7 +37,9 @@ class TopicController {
         try {
             long id = Long.parseLong((String) params.id)
             topicService.incrementViewsCount(id)
-            render(view: 'view', model: [topic: topicService.getTopic(id)])
+            render(view: 'view', model: [
+                    topic: topicService.getTopic(id)
+            ])
         } catch (TopicServiceException e) {
             render(status: 404, text: e.getCode())
         }
@@ -49,7 +51,19 @@ class TopicController {
      */
     @Secured(['ROLE_CREATE_POST'])
     def edit() {
-        render(view: 'edit', model: [post: Post.get(Long.parseLong((String) params.id))])
+        try {
+            User user = (User) springSecurityService.currentUser
+            long id = Long.parseLong((String) params.id)
+            Post post = topicService.getPost(id)
+
+            if (post.creator.id == user.id || SpringSecurityUtils.ifAllGranted('ROLE_MODERATE_POST')) {
+                render(view: 'edit', model: [post: Post.get(Long.parseLong((String) params.id))])
+            } else {
+                render(status: 403)
+            }
+        } catch (TopicServiceException e) {
+            render(status: 404, text: e.getCode())
+        }
     }
 
     /**
@@ -67,13 +81,20 @@ class TopicController {
      */
     @Secured(['ROLE_CREATE_POST'])
     def save() {
-        String text = params.text
-        User user = (User) springSecurityService.currentUser
-
         try {
+            String text = (String) params.text
+            User user = (User) springSecurityService.currentUser
+
             if (params.id) {
-                Post post = (Post) topicService.correctPost(Long.parseLong((String) params.id), user.id, (String) params.text)
-                render(status: 200, text: post.topic.id)
+                long id = Long.parseLong((String) params.id)
+                Post post = topicService.getPost(id)
+
+                if (post.creator.id == user.id || SpringSecurityUtils.ifAllGranted('ROLE_MODERATE_POST')) {
+                    topicService.correctPost(id, user.id, text)
+                    render(status: 200, text: post.topic.id)
+                } else {
+                    render(status: 403)
+                }
             } else {
                 String title = params.title
                 List<String> tags = params.list('tags[]')
@@ -91,9 +112,8 @@ class TopicController {
      */
     @Secured(['ROLE_VOTE_UP'])
     def upvote() {
-        User user = (User) springSecurityService.currentUser
-
         try {
+            User user = (User) springSecurityService.currentUser
             long id = Long.parseLong((String) params.id)
             topicService.voteForPost(id, user.id, VoteType.UPVOTE)
             render(status: 201, text: topicService.getScoreForPost(id))
@@ -108,9 +128,8 @@ class TopicController {
      */
     @Secured(['ROLE_VOTE_DOWN'])
     def downvote() {
-        User user = (User) springSecurityService.currentUser
-
         try {
+            User user = (User) springSecurityService.currentUser
             long id = Long.parseLong((String) params.id)
             topicService.voteForPost(id, user.id, VoteType.DOWNVOTE)
             render(status: 201, text: topicService.getScoreForPost(id))
@@ -125,11 +144,10 @@ class TopicController {
      */
     @Secured(['ROLE_CREATE_POST'])
     def answer() {
-        String text = params.text
-        long id = Long.parseLong((String) params.id);
-        User user = (User) springSecurityService.currentUser
-
         try {
+            String text = params.text
+            long id = Long.parseLong((String) params.id)
+            User user = (User) springSecurityService.currentUser
             Post answer = topicService.addAnswer(id, user.id, text);
             render(status: 201, text: answer.id)
         } catch (TopicServiceException e) {
@@ -143,23 +161,20 @@ class TopicController {
      */
     @Secured(['IS_AUTHENTICATED_FULLY'])
     def comment() {
-        String text = params.text
-        long id = Long.parseLong((String) params.id);
-        Post post = Post.get(id);
-        User user = (User) springSecurityService.currentUser
+        try {
+            long id = Long.parseLong((String) params.id)
+            Post post = topicService.getPost(id)
+            User user = (User) springSecurityService.currentUser
 
-        if ((post.history.empty && post.content.author.user.id == user.id) ||
-                post.history[0].author.user.id == user.id ||
-                SpringSecurityUtils.ifAllGranted('ROLE_CREATE_COMMENT')) {
-            try {
+            if (post.creator == user.id || SpringSecurityUtils.ifAllGranted('ROLE_CREATE_COMMENT')) {
+                String text = (String) params.text
                 Post comment = topicService.addComment(id, user.id, text);
-
                 render(status: 201, text: comment.id)
-            } catch (TopicServiceException e) {
-                render(status: 404, text: e.getCode())
+            } else {
+                render(403)
             }
-        } else {
-            render(403)
+        } catch (TopicServiceException e) {
+            render(status: 404, text: e.getCode())
         }
     }
 
@@ -170,9 +185,16 @@ class TopicController {
     @Secured(['ROLE_CREATE_POST'])
     def delete() {
         try {
-            topicService.deletePost(Long.parseLong((String) params.id))
+            User user = (User) springSecurityService.currentUser
+            long id = Long.parseLong((String) params.id)
+            Post post = topicService.getPost(id)
 
-            render(status: 205)
+            if (post.creator.id == user.id || SpringSecurityUtils.ifAllGranted('ROLE_MODERATE_POST')) {
+                topicService.deletePost(id)
+                render(status: 205)
+            } else {
+                render(status: 403)
+            }
         } catch (TopicServiceException e) {
             render(status: 404, text: e.getCode())
         }
@@ -187,9 +209,9 @@ class TopicController {
         try {
             User user = (User) springSecurityService.currentUser
             long id = Long.parseLong((String) params.id)
-            Topic topic = Post.get(id).topic
-            if ((topic.question.history.empty && topic.question.content.author.user.id == user.id) ||
-                    (topic.question.history[0].author.id == user.id)) {
+            Topic topic = topicService.getPost(id).topic
+
+            if (topic.question.creator == user.id) {
                 topicService.tagPostAsBestAnswer(topic.id, id)
                 render(status: 200)
             } else {

@@ -13,12 +13,12 @@
         <div class="cd-timeline-block">
             <div class="cd-timeline-img">
                 <sec:ifLoggedIn>
-                    <sec:access expression="hasRole('${permission.authority}')">
+                    <sec:ifAllGranted roles="${permission.authority}">
                         <i class="fa fa-check"></i>
-                    </sec:access>
-                    <sec:noAccess expression="hasRole('${permission.authority}')">
+                    </sec:ifAllGranted>
+                    <sec:ifNotGranted roles="${permission.authority}">
                         <i class="fa fa-times"></i>
-                    </sec:noAccess>
+                    </sec:ifNotGranted>
                 </sec:ifLoggedIn>
                 <sec:ifNotLoggedIn>
                     <i class="fa fa-times"></i>

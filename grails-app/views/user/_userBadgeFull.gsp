@@ -1,4 +1,5 @@
 <%@ page import="fr.isima.vectoroutofrange.PostType; fr.isima.vectoroutofrange.BadgeType" %>
+
 <div class="user-badge">
     <g:if test="${post}">
         <span>

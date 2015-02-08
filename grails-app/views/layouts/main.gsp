@@ -32,30 +32,74 @@
         <aside class="left-off-canvas-menu">
             <ul class="off-canvas-list">
                 <li><label><g:message code="voor.layout.menu"/></label></li>
-                <sec:access expression="hasRole('ROLE_CREATE_POST')">
-                <li class="has-submenu"><a href="#"><g:message code="voor.layout.questions"/></a>
-                    <ul class="left-submenu">
-                        <li class="back"><a href="#"><g:message code="voor.layout.back"/></a></li>
-                        <li><a href="${createLink(controller: 'topic', action: 'create')}"><g:message code="voor.layout.ask.question"/></a></li>
-                        <li><a href="${createLink(controller: 'topic')}"><g:message code="voor.layout.browse.questions"/></a></li>
-                    </ul>
+                <sec:ifAllGranted roles="ROLE_CREATE_POST">
+                    <li class="has-submenu"><a href="#"><g:message code="voor.layout.questions"/></a>
+                        <ul class="left-submenu">
+                            <li class="back"><a href="#"><g:message code="voor.layout.back"/></a></li>
+                            <li>
+                                <a href="${createLink(controller: 'topic', action: 'create')}">
+                                    <g:message code="voor.layout.ask.question"/>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="${createLink(controller: 'topic')}">
+                                    <g:message code="voor.layout.browse.questions"/>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </sec:ifAllGranted>
+                <sec:ifNotGranted roles="ROLE_CREATE_POST">
+                    <li>
+                        <a href="${createLink(controller: 'topic')}">
+                            <g:message code="voor.layout.browse.questions"/>
+                        </a>
+                    </li>
+                </sec:ifNotGranted>
+                <li>
+                    <a href="${createLink(controller: 'tag', action: 'index')}">
+                        <g:message code="voor.layout.tags"/>
+                    </a>
                 </li>
-                </sec:access>
-                <sec:noAccess expression="hasRole('ROLE_CREATE_POST')">
-                    <li><a href="${createLink(controller: 'topic')}"><g:message code="voor.layout.browse.questions"/></a></li>
-                </sec:noAccess>
-                <li><a href="${createLink(controller: 'tag', action: 'index')}"><g:message code="voor.layout.tags"/></a></li>
-                <li><a href="${createLink(controller: 'user', action: 'index')}"><g:message code="voor.layout.users"/></a></li>
-                <li><a href="${createLink(controller: 'badge', action: 'index')}"><g:message code="voor.layout.badges"/></a></li>
-                <li><a href="${createLink(controller: 'permission', action: 'index')}"><g:message code="voor.layout.permissions"/></a></li>
+                <li>
+                    <a href="${createLink(controller: 'user', action: 'index')}">
+                        <g:message code="voor.layout.users"/>
+                    </a>
+                </li>
+                <li>
+                    <a href="${createLink(controller: 'badge', action: 'index')}">
+                        <g:message code="voor.layout.badges"/>
+                    </a>
+                </li>
+                <li>
+                    <a href="${createLink(controller: 'permission', action: 'index')}">
+                        <g:message code="voor.layout.permissions"/>
+                    </a>
+                </li>
                 <li><label><g:message code="voor.layout.profile"/></label></li>
                 <sec:ifLoggedIn>
-                    <li><a href="${createLink(controller: 'user', action: 'view', id: sec.loggedInUserInfo(field: 'id'))}"><sec:loggedInUserInfo field="username"/></a></li>
-                    <li><a id="logout-button"><g:message code="voor.layout.log.out"/></a></li>
+                    <li>
+                        <a href="${createLink(controller: 'user', action: 'view', id: sec.loggedInUserInfo(field: 'id'))}">
+                            <sec:loggedInUserInfo field="username"/>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="logout-button">
+                            <g:message code="voor.layout.log.out"/>
+                        </a>
+                    </li>
                 </sec:ifLoggedIn>
                 <sec:ifNotLoggedIn>
-                    <li><a href="${createLink(controller: 'login')}"><g:message code="voor.layout.log.in"/></a></li>
-                    <li><a href="${createLink(controller: 'user', action: 'create')}"><g:message code="voor.layout.sign.in"/></a></li>
+                    <li>
+                        <a href="${createLink(controller: 'login')}">
+                            <g:message code="voor.layout.log.in"/>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${createLink(controller: 'user', action: 'create')}">
+                            <g:message code="voor.layout.sign.in"/>
+                        </a>
+                    </li>
                 </sec:ifNotLoggedIn>
             </ul>
         </aside>
@@ -70,11 +114,11 @@
 <script>
     $(document).foundation();
     $(".inner-wrap").css("minHeight", $("body").height());
-    $("#logout-button").click(function() {
+    $("#logout-button").click(function () {
         $.ajax({
             url: "${createLink(controller: 'logout')}",
             type: 'POST'
-        }).success(function() {
+        }).success(function () {
             window.location.href = "${createLink(uri: '/')}";
         })
     });

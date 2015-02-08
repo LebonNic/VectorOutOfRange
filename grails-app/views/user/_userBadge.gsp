@@ -1,4 +1,5 @@
 <%@ page import="fr.isima.vectoroutofrange.PostType" %>
+
 <span class="secondary label">
     <g:if test="${post}">
         <g:if test="${post.type == PostType.QUESTION}">

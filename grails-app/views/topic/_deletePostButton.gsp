@@ -1,8 +1,8 @@
 <%@ page import="grails.plugin.springsecurity.SpringSecurityUtils" %>
+
 <sec:ifLoggedIn>
     <g:if test="${SpringSecurityUtils.ifAllGranted('ROLE_MODERATE_POST') ||
-            (!post.history.empty && sec.loggedInUserInfo(field: 'id').asType(Long.class) == post.history[0].author.user.id) ||
-            (sec.loggedInUserInfo(field: 'id').asType(Long.class) == post.content.author.user.id)}">
+            (sec.loggedInUserInfo(field: 'id').toLong() == post.creator.id)}">
         <a class="action-link" data-reveal-id="delete-post-modal-${post.id}">
             <i class="fa fa-times" title="<g:message code="voor.topic.delete.post"/>"></i>
         </a>

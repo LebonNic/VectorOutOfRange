@@ -17,9 +17,20 @@
            title="${message(code: 'voor.tag.edit')}">
             <i class="fa fa-pencil"></i>
         </a>
-        <a id="delete-tag" class="action-link" title="${message(code: 'voor.tag.delete')}">
-            <i class="fa fa-times"></i>
+        <a class="action-link" data-reveal-id="delete-tag-modal">
+            <i class="fa fa-times" title="<g:message code="voor.tag.delete"/>"></i>
         </a>
+
+        <div id="delete-tag-modal" class="reveal-modal" data-reveal>
+            <h3><g:message code="voor.tag.delete.confirmation"/></h3>
+
+            <p><g:message code="voor.tag.delete.confirmation.message"/></p>
+            <a class="close-reveal-modal">&#215;</a>
+
+            <a id="delete-tag" class="small button right">
+                <g:message code="voor.confirm"/>
+            </a>
+        </div>
     </sec:ifAllGranted>
 </div>
 
@@ -29,7 +40,7 @@
     <g:render template="/topic/topic" model="[topic: topic]"/>
 </g:each>
 
-<sec:access expression="hasRole('MODERATE_TAG')">
+<sec:ifAllGranted roles="MODERATE_TAG">
     <script type="text/javascript">
         var deleteTag = $("#delete-tag");
         deleteTag.click(function () {
@@ -41,8 +52,11 @@
             });
         });
     </script>
-</sec:access>
+</sec:ifAllGranted>
+
 <asset:javascript src="highlight.js"/>
+
 <script>hljs.initHighlightingOnLoad();</script>
+
 </body>
 </html>

@@ -2,17 +2,12 @@ package fr.isima.vectoroutofrange
 
 class UtilTagLib {
 
-    static namespace = "voor"
+    static namespace = 'voor'
 
+    /**
+     * Pagination with custom design. "Inspired" by Twitter Bootstrap TagLib.
+     */
     def paginate = { attrs ->
-
-//        def configTabLib = grailsApplication.config.grails.plugins.twitterbootstrap.fixtaglib
-//        if (!configTabLib) {
-//            def renderTagLib = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.UrlMappingTagLib')
-//            renderTagLib.paginate.call(attrs)
-//            return
-//        }
-
         def writer = out
         if (attrs.total == null) {
             throwTagError("Tag [paginate] is missing required attribute [total]")

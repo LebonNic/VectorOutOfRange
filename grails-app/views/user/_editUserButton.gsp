@@ -1,4 +1,5 @@
 <%@ page import="grails.plugin.springsecurity.SpringSecurityUtils" %>
+
 <sec:ifLoggedIn>
     <g:if test="${user.id == sec.loggedInUserInfo(field: 'id').toLong() ||
             SpringSecurityUtils.ifAllGranted('ROLE_MODERATE_USER')}">

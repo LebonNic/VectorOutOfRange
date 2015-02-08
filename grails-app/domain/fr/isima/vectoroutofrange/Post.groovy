@@ -61,4 +61,16 @@ class Post {
 
         return score
     }
+
+    /**
+     * Get post creator.
+     * @return User who created this post.
+     */
+    def getCreator() {
+        if (history.empty) {
+            return content.author.user
+        } else {
+            return history.getAt(0).author.user
+        }
+    }
 }
