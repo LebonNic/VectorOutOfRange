@@ -11,13 +11,13 @@ class UserService extends Subject implements Observer{
      * Initialises a map containing all the roles available on the site.
      */
     void init() {
-        this.rolesMap['createPostPermission'] = new Role(authority: 'ROLE_CREATE_POST', name: 'Create posts', description: 'Ask a question or contribute an answer', requiredReputation: 1).save(flush: true, failOnError: true)
-        this.rolesMap['voteUpPermission'] = new Role(authority: 'ROLE_VOTE_UP', name: 'Vote up', description: 'Indicate when questions and answers are useful', requiredReputation: 15).save(flush: true, failOnError: true)
-        this.rolesMap['createCommentPermission'] = new Role(authority: 'ROLE_CREATE_COMMENT', name: 'Create comments', description: 'Add comments on questions and answers', requiredReputation: 15).save(flush: true, failOnError: true)
-        this.rolesMap['voteDownPermission'] = new Role(authority: 'ROLE_VOTE_DOWN', name: 'Vote down', description: 'Indicate when questions and answers are not useful', requiredReputation: 125).save(flush: true, failOnError: true)
-        this.rolesMap['moderateTagPermission'] = new Role(authority: 'ROLE_MODERATE_TAG', name: 'Moderate tag', description: 'Edit and delete tags', requiredReputation: 1500).save(flush: true, failOnError: true)
-        this.rolesMap['moderatePostPermission'] = new Role(authority: 'ROLE_MODERATE_POST', name: 'Moderate posts', description: 'Edit and delete posts', requiredReputation: 10000).save(flush: true, failOnError: true)
-        this.rolesMap['moderateUserPermission'] = new Role(authority: 'ROLE_MODERATE_USER', name: 'Moderate users', description: 'Edit and delete users', requiredReputation: 20000).save(flush: true, failOnError: true)
+        this.rolesMap['createPostPermission'] = new Role(authority: 'ROLE_CREATE_POST', name: 'voor.permission.createPost.name', description: 'voor.permission.createPost.description', requiredReputation: 1).save(flush: true, failOnError: true)
+        this.rolesMap['voteUpPermission'] = new Role(authority: 'ROLE_VOTE_UP', name: 'voor.permission.voteUp.name', description: 'voor.permission.voteUp.description', requiredReputation: 15).save(flush: true, failOnError: true)
+        this.rolesMap['createCommentPermission'] = new Role(authority: 'ROLE_CREATE_COMMENT', name: 'voor.permission.createComment.name', description: 'voor.permission.createComment.description', requiredReputation: 15).save(flush: true, failOnError: true)
+        this.rolesMap['voteDownPermission'] = new Role(authority: 'ROLE_VOTE_DOWN', name: 'voor.permission.voteDown.name', description: 'voor.permission.voteDown.description', requiredReputation: 125).save(flush: true, failOnError: true)
+        this.rolesMap['moderateTagPermission'] = new Role(authority: 'ROLE_MODERATE_TAG', name: 'voor.permission.moderateTag.name', description: 'voor.permission.moderateTag.description', requiredReputation: 1500).save(flush: true, failOnError: true)
+        this.rolesMap['moderatePostPermission'] = new Role(authority: 'ROLE_MODERATE_POST', name: 'voor.permission.moderatePost.name', description: 'voor.permission.moderatePost.description', requiredReputation: 10000).save(flush: true, failOnError: true)
+        this.rolesMap['moderateUserPermission'] = new Role(authority: 'ROLE_MODERATE_USER', name: 'voor.permission.moderateUser.name', description: 'voor.permission.moderateUser.description', requiredReputation: 20000).save(flush: true, failOnError: true)
     }
 
     /**
