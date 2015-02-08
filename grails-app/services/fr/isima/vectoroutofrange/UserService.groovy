@@ -7,6 +7,9 @@ class UserService extends Subject implements Observer{
 
     def rolesMap = [:]
 
+    /**
+     * Initialises a map containing all the roles available on the site.
+     */
     void init() {
         this.rolesMap['createPostPermission'] = new Role(authority: 'ROLE_CREATE_POST', name: 'Create posts', description: 'Ask a question or contribute an answer', requiredReputation: 1).save(flush: true, failOnError: true)
         this.rolesMap['voteUpPermission'] = new Role(authority: 'ROLE_VOTE_UP', name: 'Vote up', description: 'Indicate when questions and answers are useful', requiredReputation: 15).save(flush: true, failOnError: true)
@@ -50,12 +53,32 @@ class UserService extends Subject implements Observer{
      */
     def createUser(String username, String password, String firstName, String lastName, String nickname){
         log.info("Creation of user ${nickname}.")
-        def userInformation = new UserInformation(firstName: firstName, lastName: lastName, nickname: nickname, reputation: 1, editedPostsCount: 0)
+        def userInformation = new UserInformation(firstName: firstName, lastName: lastName, nickname: nickname, reputation: 1, editedPostsCount: 0, isAdmin: false)
         def user = new User(username: username, password: password, userInformation: userInformation)
         user.save(flush: true, failOnError: true)
         this.grantRoleToUser(user, 'createPostPermission')
         this.notifyObservers(new UserServiceEvent(user: user), UserServiceEventCode.NEW_USER_CREATED)
         return user
+    }
+
+    /**
+     * Transforms a lambda user in god.
+     * @param userId The user's id who is going to be transformed.
+     * @return A new god !
+     */
+    def grantUserAdminRole(long userId){
+        def admin = this.getUser(userId)
+        this.grantRoleToUser(admin, 'createPostPermission')
+        this.grantRoleToUser(admin, 'voteUpPermission')
+        this.grantRoleToUser(admin, 'createCommentPermission')
+        this.grantRoleToUser(admin, 'voteDownPermission')
+        this.grantRoleToUser(admin, 'moderateTagPermission')
+        this.grantRoleToUser(admin, 'moderatePostPermission')
+        this.grantRoleToUser(admin, 'moderateUserPermission')
+        admin.userInformation.isAdmin = true
+        admin.save(flush: true, failOnError: true)
+        log.info("User ${admin.userInformation.nickname} became an admin.")
+        return admin
     }
 
     /**
@@ -147,22 +170,28 @@ class UserService extends Subject implements Observer{
      * @return ???
      */
     def private checkRolesToGrantForUser(User user){
-        def reputation = user.userInformation.reputation
-        if(reputation >= 15 && reputation < 125){
-            this.grantRoleToUser(user, 'voteUpPermission')
-            this.grantRoleToUser(user, 'createCommentPermission')
+
+        if(!user.userInformation.isAdmin){
+            def reputation = user.userInformation.reputation
+            if(reputation >= 15 && reputation < 125){
+                this.grantRoleToUser(user, 'voteUpPermission')
+                this.grantRoleToUser(user, 'createCommentPermission')
+            }
+            else if(reputation >= 125 && reputation < 1500){
+                this.grantRoleToUser(user, 'voteDownPermission')
+            }
+            else if(reputation >= 1500 && reputation < 10000){
+                this.grantRoleToUser(user, 'moderateTagPermission')
+            }
+            else if(reputation >= 10000 && reputation < 20000){
+                this.grantRoleToUser(user, 'moderatePostPermission')
+            }
+            else if(reputation >= 20000){
+                this.grantRoleToUser(user, 'moderateUserPermission')
+            }
         }
-        else if(reputation >= 125 && reputation < 1500){
-            this.grantRoleToUser(user, 'voteDownPermission')
-        }
-        else if(reputation >= 1500 && reputation < 10000){
-            this.grantRoleToUser(user, 'moderateTagPermission')
-        }
-        else if(reputation >= 10000 && reputation < 20000){
-            this.grantRoleToUser(user, 'moderatePostPermission')
-        }
-        else if(reputation >= 20000){
-            this.grantRoleToUser(user, 'moderateUserPermission')
+        else {
+            log.debug("No privileges to grant. User \"${user.userInformation.nickname}\" is a sort of Chuck Norris and has already every privileges.")
         }
     }
 
@@ -172,23 +201,28 @@ class UserService extends Subject implements Observer{
      * @return ???
      */
     def private checkRolesToRemoveForUser(User user){
-        def reputation = user.userInformation.reputation
+        if(!user.userInformation.isAdmin){
+            def reputation = user.userInformation.reputation
 
-        if(reputation < 15){
-            this.removeRoleToUser(user, 'voteUpPermission')
-            this.removeRoleToUser(user, 'createCommentPermission')
-        }
-        else if(reputation >= 15 && reputation < 125){
-            this.removeRoleToUser(user, 'voteDownPermission')
-        }
-        else if(reputation >= 125 && reputation < 1500){
-            this.removeRoleToUser(user, 'moderateTagPermission')
-        }
-        else if (reputation >= 1500 && reputation < 10000){
-            this.removeRoleToUser(user, 'moderatePostPermission')
-        }
-        else if(reputation >= 10000 && reputation < 20000){
-            this.removeRoleToUser(user, 'moderateUserPermission')
+            if(reputation < 15){
+                this.removeRoleToUser(user, 'voteUpPermission')
+                this.removeRoleToUser(user, 'createCommentPermission')
+            }
+            else if(reputation >= 15 && reputation < 125){
+                this.removeRoleToUser(user, 'voteDownPermission')
+            }
+            else if(reputation >= 125 && reputation < 1500){
+                this.removeRoleToUser(user, 'moderateTagPermission')
+            }
+            else if (reputation >= 1500 && reputation < 10000){
+                this.removeRoleToUser(user, 'moderatePostPermission')
+            }
+            else if(reputation >= 10000 && reputation < 20000){
+                this.removeRoleToUser(user, 'moderateUserPermission')
+            }
+            else {
+                log.debug("Ahah user \"${user.userInformation.nickname}\" is god and can't lose his privileges !")
+            }
         }
     }
 
@@ -242,7 +276,7 @@ class UserService extends Subject implements Observer{
         answerAuthor.userInformation.reputation += 15
         questionAuthor.save(failOnError: true)
         log.info("User \"${questionAuthor.userInformation.nickname}\" gains 2 points of reputation for accepting an answer on one of his topics.")
-        log.info("User \"${questionAuthor.userInformation.nickname}\" gains 15 points of reputation because one of his answers has been accepted.")
+        log.info("User \"${answerAuthor.userInformation.nickname}\" gains 15 points of reputation because one of his answers has been accepted.")
     }
 
     /**

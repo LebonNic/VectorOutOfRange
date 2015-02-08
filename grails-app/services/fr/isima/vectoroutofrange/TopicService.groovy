@@ -341,7 +341,7 @@ class TopicService extends Subject{
             else
                 vote.type = type
 
-            vote.save( failOnError: true)
+            vote.save(flush: true, failOnError: true)
             log.info("User ${voter.userInformation.nickname} updated his vote for a post on the topic ${post.topic.title}.")
         }
 
@@ -350,7 +350,7 @@ class TopicService extends Subject{
             vote = new Vote(type: type, date: new Date(), author: voter.userInformation)
             voter.userInformation.addToVotes(vote)
             post.addToVotes(vote)
-            post.save( failOnError: true)
+            post.save(flush: true, failOnError: true)
             log.info("User ${voter.userInformation.nickname} voted for a post on the topic ${post.topic.title}.")
         }
 
@@ -377,7 +377,7 @@ class TopicService extends Subject{
             topic.bestAnswer = post
             topic.save( failOnError: true)
             log.info("${post.content.author.nickname}'s post has been tagged as best answer on the topic ${topic.title}.")
-            this.notifyObservers(new TopicServiceEvent(actor: post.content.author.user, post: post, topic: topic), TopicServiceEventCode.POST_TAGGED_AS_BEST_ANSWER)
+            this.notifyObservers(new TopicServiceEvent(actor: post.topic.question.content.author.user, post: post, topic: topic), TopicServiceEventCode.POST_TAGGED_AS_BEST_ANSWER)
             return topic
         }
         else{

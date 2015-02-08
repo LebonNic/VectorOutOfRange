@@ -12,6 +12,8 @@ class UserInformation {
     String location
     String about
 
+    boolean isAdmin
+
     List<Badge> badges
 
     static belongsTo = [user: User]
