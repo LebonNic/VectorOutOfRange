@@ -211,7 +211,7 @@ class TopicController {
             long id = Long.parseLong((String) params.id)
             Topic topic = topicService.getPost(id).topic
 
-            if (topic.question.creator == user.id) {
+            if (topic.question.creator.id == user.id) {
                 topicService.tagPostAsBestAnswer(id)
                 render(status: 200)
             } else {
