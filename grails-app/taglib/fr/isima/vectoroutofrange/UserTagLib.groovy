@@ -109,4 +109,24 @@ class UserTagLib {
                 message: (Message) attrs['message']
         ])
     }
+
+    /**
+     * Display a timeline showing user's votes.
+     * @param user REQUIRED a user.
+     */
+    def voteTimeline = { attrs ->
+        out << render(template: '/user/voteTimeline', model: [
+                user: (User) attrs['user']
+        ])
+    }
+
+    /**
+     * Display a vote event on the timeline.
+     * @param vote REQUIRED A vote.
+     */
+    def voteTimelineEvent = { attrs ->
+        out << render(template: '/user/voteTimelineEvent', model: [
+                vote: (Vote) attrs['vote']
+        ])
+    }
 }

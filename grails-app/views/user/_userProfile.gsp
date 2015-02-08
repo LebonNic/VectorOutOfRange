@@ -121,9 +121,27 @@
     </div>
 </div>
 
-<voor:badges user="${user}"/>
+<ul class="tabs" data-tab>
+    <li class="tab-title active"><a href="#tab-timeline"><g:message code="voor.user.actions"/></a></li>
+    <li class="tab-title"><a href="#tab-vote-timeline"><g:message code="voor.user.votes"/></a></li>
+    <li class="tab-title"><a href="#tab-badges"><g:message code="voor.user.badges"/></a></li>
+</ul>
 
-<voor:timeline user="${user}"/>
+<div class="tabs-content">
+    <div class="content active" id="tab-timeline">
+        <voor:timeline user="${user}"/>
+    </div>
+
+    <div class="content" id="tab-vote-timeline">
+        <voor:voteTimeline user="${user}"/>
+    </div>
+
+    <div class="content" id="tab-badges">
+        <voor:badges user="${user}"/>
+    </div>
+</div>
+
+
 
 <script type="text/javascript">
     var deleteUserButton = $("#delete-user-button");
