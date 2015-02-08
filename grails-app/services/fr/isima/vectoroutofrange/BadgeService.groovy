@@ -147,7 +147,7 @@ class BadgeService implements Observer {
 
                 case TopicServiceEventCode.POST_CORRECTED:
                     def corrector = topicEvent.actor.userInformation
-                    this.privateCheckForPostEditionReward(corrector)
+                    this.CheckForPostEditionReward(corrector)
                     break
 
             }
@@ -179,7 +179,7 @@ class BadgeService implements Observer {
      * @param corrector The user who could be rewarded.
      * @return The rewarded user or nothing.
      */
-    def privateCheckForPostEditionReward(UserInformation corrector) {
+    def private CheckForPostEditionReward(UserInformation corrector) {
         //Bit of hack here...
         corrector.editedPosts += 1
         corrector.save(failOnError: true)
