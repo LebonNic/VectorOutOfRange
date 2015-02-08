@@ -9,12 +9,13 @@ import spock.lang.Specification
 @TestFor(TopicService)
 class TopicServiceSpec extends Specification {
 
-    def setup() {
-    }
+    def userService
 
-    def cleanup() {
-    }
-
-    void "test something"() {
+    void "test that creating new topic creates new tags"() {
+        when:
+        def user = userService.createUser('user', 'pwd', 'John', 'Doe', 'JohnDoe')
+        service.createNewTopic(user.id, 'Foo', 'Bar', ['Foo', 'Bar'])
+        then:
+        Tag.count() == 2
     }
 }
