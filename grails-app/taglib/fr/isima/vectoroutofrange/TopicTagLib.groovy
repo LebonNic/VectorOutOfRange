@@ -30,7 +30,7 @@ class TopicTagLib {
      */
     def comments = { attrs ->
         Post post = (Post) attrs['post']
-        List<Post> comments = post.comments
+        def comments = post.comments
 
         comments.sort { a, b -> a.content.date <=> b.content.date }
 
@@ -56,7 +56,7 @@ class TopicTagLib {
      */
     def answers = { attrs ->
         Topic topic = (Topic) attrs['topic']
-        List<Post> answers = topic.answers
+        def answers = topic.answers
 
         answers.sort { -it.score }
         out << render(template: '/topic/answers', model: [
