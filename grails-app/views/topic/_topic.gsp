@@ -1,5 +1,5 @@
 <div class="panel">
-    <voor:bounty value="5"/>
+    <voor:bounty value="15"/>
 
     <div class="row">
         <!-- Topic's statistics -->

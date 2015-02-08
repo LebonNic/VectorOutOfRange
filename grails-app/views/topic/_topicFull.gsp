@@ -1,5 +1,5 @@
 <div class="panel">
-    <voor:bounty value="5"/>
+    <voor:bounty value="15"/>
 
     <div class="row">
         <div class="large-1 small-12 columns">
