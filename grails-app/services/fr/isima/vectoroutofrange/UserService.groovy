@@ -8,13 +8,13 @@ class UserService extends Subject implements Observer{
     def rolesMap = [:]
 
     void init() {
-        this.rolesMap['createPostPermission'] = new Role(authority: 'ROLE_CREATE_POST', name: 'Create posts', description: 'Ask a question or contribute an answer', requiredReputation: 1).save(failOnError: true)
-        this.rolesMap['voteUpPermission'] = new Role(authority: 'ROLE_VOTE_UP', name: 'Vote up', description: 'Indicate when questions and answers are useful', requiredReputation: 15).save(failOnError: true)
-        this.rolesMap['createCommentPermission'] = new Role(authority: 'ROLE_CREATE_COMMENT', name: 'Create comments', description: 'Add comments on questions and answers', requiredReputation: 15).save(failOnError: true)
-        this.rolesMap['voteDownPermission'] = new Role(authority: 'ROLE_VOTE_DOWN', name: 'Vote down', description: 'Indicate when questions and answers are not useful', requiredReputation: 125).save(failOnError: true)
-        this.rolesMap['moderateTagPermission'] = new Role(authority: 'ROLE_MODERATE_TAG', name: 'Moderate tag', description: 'Edit and delete tags', requiredReputation: 1500).save(failOnError: true)
-        this.rolesMap['moderatePostPermission'] = new Role(authority: 'ROLE_MODERATE_POST', name: 'Moderate posts', description: 'Edit and delete posts', requiredReputation: 10000).save(failOnError: true)
-        this.rolesMap['moderateUserPermission'] = new Role(authority: 'ROLE_MODERATE_USER', name: 'Moderate users', description: 'Edit and delete users', requiredReputation: 20000).save(failOnError: true)
+        this.rolesMap['createPostPermission'] = new Role(authority: 'ROLE_CREATE_POST', name: 'Create posts', description: 'Ask a question or contribute an answer', requiredReputation: 1).save(flush: true, failOnError: true)
+        this.rolesMap['voteUpPermission'] = new Role(authority: 'ROLE_VOTE_UP', name: 'Vote up', description: 'Indicate when questions and answers are useful', requiredReputation: 15).save(flush: true, failOnError: true)
+        this.rolesMap['createCommentPermission'] = new Role(authority: 'ROLE_CREATE_COMMENT', name: 'Create comments', description: 'Add comments on questions and answers', requiredReputation: 15).save(flush: true, failOnError: true)
+        this.rolesMap['voteDownPermission'] = new Role(authority: 'ROLE_VOTE_DOWN', name: 'Vote down', description: 'Indicate when questions and answers are not useful', requiredReputation: 125).save(flush: true, failOnError: true)
+        this.rolesMap['moderateTagPermission'] = new Role(authority: 'ROLE_MODERATE_TAG', name: 'Moderate tag', description: 'Edit and delete tags', requiredReputation: 1500).save(flush: true, failOnError: true)
+        this.rolesMap['moderatePostPermission'] = new Role(authority: 'ROLE_MODERATE_POST', name: 'Moderate posts', description: 'Edit and delete posts', requiredReputation: 10000).save(flush: true, failOnError: true)
+        this.rolesMap['moderateUserPermission'] = new Role(authority: 'ROLE_MODERATE_USER', name: 'Moderate users', description: 'Edit and delete users', requiredReputation: 20000).save(flush: true, failOnError: true)
     }
 
     /**
@@ -52,11 +52,8 @@ class UserService extends Subject implements Observer{
         log.info("Creation of user ${nickname}.")
         def userInformation = new UserInformation(firstName: firstName, lastName: lastName, nickname: nickname, reputation: 1, editedPostsCount: 0)
         def user = new User(username: username, password: password, userInformation: userInformation)
-        user.save( failOnError: true)
+        user.save(flush: true, failOnError: true)
         this.grantRoleToUser(user, 'createPostPermission')
-        // just to try...
-        this.grantRoleToUser(user, 'voteUpPermission')
-        log.debug("User ${nickname} has been created.")
         this.notifyObservers(new UserServiceEvent(user: user), UserServiceEventCode.NEW_USER_CREATED)
         return user
     }
@@ -67,7 +64,7 @@ class UserService extends Subject implements Observer{
      * @param roleKey A string corresponding to a role's key in the UserService's map
      * @return ???
      */
-    def private grantRoleToUser(User user, String roleKey){
+    def grantRoleToUser(User user, String roleKey){
         def Role role = (Role) this.rolesMap[roleKey]
 
         if(role){
@@ -209,6 +206,14 @@ class UserService extends Subject implements Observer{
             def topicEvent = (TopicServiceEvent) event
 
             switch (code){
+                case TopicServiceEventCode.POST_TAGGED_AS_BEST_ANSWER:
+                    def questionAuthor = topicEvent.actor
+                    def answerAuthor = topicEvent.post.content.author.user
+                    this.rewardUsersForBestAnswer(questionAuthor, answerAuthor)
+                    this.checkRolesToGrantForUser(questionAuthor)
+                    this.checkRolesToGrantForUser(answerAuthor)
+                    break
+
                 case TopicServiceEventCode.POST_UPVOTED:
                     this.increaseAuthorReputation(topicEvent)
                     this.checkRolesToGrantForUser(topicEvent.post.content.author.user)
@@ -222,6 +227,22 @@ class UserService extends Subject implements Observer{
                     break
             }
         }
+    }
+
+    /**
+     * Gives reputation points to the author of an post because this one has been accepted as best answer on a topic. It
+     * also gives points to the user who accepted the answer and who is the topic's question author.
+     * @param questionAuthor The user corresponding to the author of a topic's question.
+     * @param answerAuthor The user corresponding to the author of the post tagged as best answer.
+     * @return ???
+     */
+    def private rewardUsersForBestAnswer(User questionAuthor, User answerAuthor){
+        questionAuthor.userInformation.reputation += 2
+        questionAuthor.save(failOnError: true)
+        answerAuthor.userInformation.reputation += 15
+        questionAuthor.save(failOnError: true)
+        log.info("User \"${questionAuthor.userInformation.nickname}\" gains 2 points of reputation for accepting an answer on one of his topics.")
+        log.info("User \"${questionAuthor.userInformation.nickname}\" gains 15 points of reputation because one of his answers has been accepted.")
     }
 
     /**
