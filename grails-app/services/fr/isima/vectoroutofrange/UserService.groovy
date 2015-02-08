@@ -64,7 +64,7 @@ class UserService extends Subject implements Observer{
      * @param roleKey A string corresponding to a role's key in the UserService's map
      * @return ???
      */
-    def private grantRoleToUser(User user, String roleKey){
+    def grantRoleToUser(User user, String roleKey){
         def Role role = (Role) this.rolesMap[roleKey]
 
         if(role){

@@ -13,13 +13,23 @@ class BootStrap {
         topicService.addObserver(badgeService)
         userService.addObserver(badgeService)
 
+
+
         // Use a service to create new users
         def jeanNic = userService.createUser("jeannic", "pwd", "Jean", "Nic", "JeanNic")
         userService.updateUser(1, "Jean", "Nic", "JeanNic", "http://www.jeannic.com", "France", "This is JeanNic, can you beat this ?")
 
         def badAss = userService.createUser("badass", "pwd", "Bad", "Ass", "BadAss")
-
         def goodGuy = userService.createUser("goodguy", "pwd", "Good", "Guy", "GoodGuy")
+        def admin = userService.createUser('admin', 'Süp3rÜb3rC0mp73xP4s5w0Rd', 'Ad', 'Min', 'Your God')
+
+        userService.grantRoleToUser(admin, 'createPostPermission')
+        userService.grantRoleToUser(admin, 'voteUpPermission')
+        userService.grantRoleToUser(admin, 'createCommentPermission')
+        userService.grantRoleToUser(admin, 'voteDownPermission')
+        userService.grantRoleToUser(admin, 'moderateTagPermission')
+        userService.grantRoleToUser(admin, 'moderatePostPermission')
+        userService.grantRoleToUser(admin, 'moderateUserPermission')
 
         // User a service to manage topics
         def tags = []
