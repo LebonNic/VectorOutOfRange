@@ -212,7 +212,7 @@ class TopicController {
             Topic topic = topicService.getPost(id).topic
 
             if (topic.question.creator == user.id) {
-                topicService.tagPostAsBestAnswer(topic.id, id)
+                topicService.tagPostAsBestAnswer(id)
                 render(status: 200)
             } else {
                 render(status: 403)
