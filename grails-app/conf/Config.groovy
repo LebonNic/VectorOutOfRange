@@ -104,7 +104,7 @@ log4j.main = {
     //}
 
     info 'grails.app'
-    debug 'grails.app'
+    //debug 'grails.app'
 
     error 'org.codehaus.groovy.grails.web.servlet',        // controllers
             'org.codehaus.groovy.grails.web.pages',          // GSP

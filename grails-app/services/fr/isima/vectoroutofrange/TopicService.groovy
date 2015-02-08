@@ -366,19 +366,18 @@ class TopicService extends Subject{
 
     /**
      * Allows to tag a post as the best answer on a topic.
-     * @param topicId The topic's id where the answer is.
      * @param postId The post's id corresponding to the answer.
      * @return The topic where the answer is tagged.
      */
-    def tagPostAsBestAnswer(long topicId, long postId){
-        def topic = this.getTopic(topicId)
-        def post = this.getPost(postId)
+    def tagPostAsBestAnswer(long postId){
+        def Post post = this.getPost(postId)
+        def topic = post.topic
 
         if(post.type == PostType.ANSWER){
             topic.bestAnswer = post
             topic.save( failOnError: true)
             log.info("${post.content.author.nickname}'s post has been tagged as best answer on the topic ${topic.title}.")
-            this.notifyObservers(new TopicServiceEvent(actor: null, post: post, topic: topic), TopicServiceEventCode.POST_TAGGED_AS_BEST_ANSWER)
+            this.notifyObservers(new TopicServiceEvent(actor: post.content.author.user, post: post, topic: topic), TopicServiceEventCode.POST_TAGGED_AS_BEST_ANSWER)
             return topic
         }
         else{
