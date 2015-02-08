@@ -80,7 +80,7 @@ class TopicTagLib {
      */
     def bounty = { attrs ->
         out << render(template: '/topic/bounty', model: [
-                value: (Integer) attrs['value']
+                value: attrs['value']
         ])
     }
 
@@ -90,7 +90,7 @@ class TopicTagLib {
      */
     def voteCount = { attrs ->
         out << render(template: '/topic/voteCount', model: [
-                value: (Integer) attrs['value']
+                value: attrs['value']
         ])
     }
 
@@ -100,7 +100,7 @@ class TopicTagLib {
      */
     def answerCount = { attrs ->
         out << render(template: '/topic/answerCount', model: [
-                value: (Integer) attrs['value']
+                value: attrs['value']
         ])
     }
 
@@ -110,7 +110,7 @@ class TopicTagLib {
      */
     def viewCount = { attrs ->
         out << render(template: '/topic/viewCount', model: [
-                value: (Integer) attrs['value']
+                value: attrs['value']
         ])
     }
 
